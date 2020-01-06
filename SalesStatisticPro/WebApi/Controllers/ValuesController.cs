@@ -7,6 +7,9 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
+    /// <summary>
+    /// 测试控制器
+    /// </summary>
     public class ValuesController : ApiController
     {
         // GET api/values
@@ -34,6 +37,7 @@ namespace WebApi.Controllers
         // DELETE api/values/5
         public void Delete(int id)
         {
+
         }
     }
 }

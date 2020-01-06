@@ -1,0 +1,87 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="$(SolutionDir)\EntitiesModels\bin\Debug\EntitiesModels.dll" #>
+<#@ import namespace="System.IO" #>
+<#@ Import Namespace="System.Linq" #>
+<#@ Import Namespace="System.Text" #>
+<#@ import namespace="System.Reflection" #>
+<#@ Import Namespace="System.Collections.Generic" #>
+<#@ Import Namespace="EntitiesModels.Models" #>
+<#@ Import Namespace="EntitiesModels.T4" #>
+<#@ include file="T4Toolbox.tt" #>
+<#@ include file="IBLLTemplate.tt" #>
+<#@ include file="BLLTemplate.tt" #>
+<#@ include file="IRepositoryTemplate.tt" #>
+<#@ include file="RepositoryTemplate.tt" #>
+<#@ include file="DBContextTemplate.tt" #>
+<#
+    ////脚本运行路径
+    string currentPath = Path.GetDirectoryName(Host.TemplateFile);
+    //输入文件路径
+    string projectPath =currentPath.Substring(0, currentPath.IndexOf(@"\T4"));
+    
+    // //解决方案路径
+    string solutionPath = currentPath.Substring(0, currentPath.IndexOf(@"\WebApi"));
+   
+    //包含实体定义的DLL所在位置
+    string modelFile= Path.Combine(solutionPath, @"EntitiesModels\bin\Debug\EntitiesModels.dll");
+    //加载实体程序集
+    byte[] fileData= File.ReadAllBytes(modelFile);
+    Assembly assembly = Assembly.Load(fileData);
+    //反射出所有继承了Entity的实体类
+    IEnumerable<Type> modelTypes = assembly.GetTypes().Where(m =>!m.IsAbstract&& !m.IsInterface);
+    List<T4ModelInfo> NamesList=new List<T4ModelInfo>();
+    foreach(Type modelType in modelTypes)
+    {
+        if(modelType.BaseType.Name=="BaseEntity")
+        {
+
+            T4ModelInfo model = new T4ModelInfo(modelType);
+
+            NamesList.Add(model);
+
+            //业务操作接口
+            IBLLTemplate irep0= new IBLLTemplate(model);
+            var path0 = model.UseModuleDir 
+                ? string.Format(@"{0}\IBLL\{1}", projectPath, model.ModuleName)
+                : string.Format(@"{0}\IBLL", projectPath);
+            irep0.Output.Encoding = Encoding.UTF8;
+            irep0.RenderToFile(Path.Combine(path0, irep0.FileName));
+
+            //业务操作
+            BLLTemplate irep1= new BLLTemplate(model);
+            var path1 = model.UseModuleDir 
+                ? string.Format(@"{0}\BLL\{1}", projectPath, model.ModuleName)
+                : string.Format(@"{0}\BLL", projectPath);
+            irep1.Output.Encoding = Encoding.UTF8;
+            irep1.RenderToFile(Path.Combine(path1, irep1.FileName));
+
+            //实体仓储操作接口
+            IRepositoryTemplate irep2= new IRepositoryTemplate(model);
+            var path2 = model.UseModuleDir 
+                ? string.Format(@"{0}\IRepository\{1}", projectPath, model.ModuleName)
+                : string.Format(@"{0}\IRepository", projectPath);
+      
+            irep2.Output.Encoding = Encoding.UTF8;
+            irep2.RenderToFile(Path.Combine(path2, irep2.FileName));
+
+            //实体仓储操作
+            RepositoryTemplate irep3= new RepositoryTemplate(model);
+            var path3 = model.UseModuleDir 
+                ? string.Format(@"{0}\Repository\{1}", projectPath, model.ModuleName)
+                  :string.Format(@"{0}\Repository", projectPath);
+            irep3.Output.Encoding = Encoding.UTF8;
+            irep3.RenderToFile(Path.Combine(path3, irep3.FileName));
+        }
+
+    }
+
+     //输入文件路径
+            string outputPath1 = Path.Combine(projectPath, @"EntitiesModels");
+            DBContextTemplate dbt=new DBContextTemplate(NamesList);
+            dbt.Output.Encoding = Encoding.UTF8;
+            dbt.RenderToFile(Path.Combine(outputPath1, "Context.cs"));
+    
+
+#>

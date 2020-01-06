@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DCA00954-825A-43AD-B3ED-CD54B38D77FD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FXKJ.Infrastructure.Entities</RootNamespace>
+    <AssemblyName>FXKJ.Infrastructure.Entities</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enum\OperateType.cs" />
+    <Compile Include="Enum\ResultSign.cs" />
+    <Compile Include="HttpResponse\HttpReponseModel.cs" />
+    <Compile Include="HttpResponse\HttpReponseMessage.cs" />
+    <Compile Include="QueryModel\ConditionItem.cs" />
+    <Compile Include="QueryModel\QueryMethod.cs" />
+    <Compile Include="QueryModel\QueryOrder.cs" />
+    <Compile Include="DynamicPropertyModel.cs" />
+    <Compile Include="EntityBase.cs" />
+    <Compile Include="ModelDes.cs" />
+    <Compile Include="MvcRote.cs" />
+    <Compile Include="NameValue.cs" />
+    <Compile Include="ParamColumnModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryModel\QueryModel.cs" />
+    <Compile Include="SelectValue.cs" />
+    <Compile Include="Tree\Define_Sys_Menu.cs" />
+    <Compile Include="Tree\StaticTreeEntity.cs" />
+    <Compile Include="Tree\TreeEntity.cs" />
+    <Compile Include="Tree\WdTreeEntity.cs" />
+    <Compile Include="Tree\WdTreePermission.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Attrbute\FXKJ.Infrastructure.Attributes.csproj">
+      <Project>{E893565E-D273-4F47-AFAF-8B2A85E553D6}</Project>
+      <Name>FXKJ.Infrastructure.Attributes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HttpRequestModel\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
