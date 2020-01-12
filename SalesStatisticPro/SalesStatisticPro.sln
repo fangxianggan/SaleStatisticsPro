@@ -29,25 +29,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.Config"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.WebApi", "..\FXKJ.Infrastructure.WebApi\FXKJ.Infrastructure.WebApi.csproj", "{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "vue-admin-template-4.2.1", "..\vue-admin-template-4.2.1\", "{079C25F3-BEF5-4E99-A6D7-931D3F9FC940}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "vue-admin", "..\vue-admin\", "{BA76B190-ADC3-4716-B40B-734679593220}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_56261"
-		Debug.AspNetCompiler.PhysicalPath = "..\vue-admin-template-4.2.1\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56261\"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52571"
+		Debug.AspNetCompiler.PhysicalPath = "..\vue-admin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52571\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_56261"
-		Release.AspNetCompiler.PhysicalPath = "..\vue-admin-template-4.2.1\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56261\"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52571"
+		Release.AspNetCompiler.PhysicalPath = "..\vue-admin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52571\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "56261"
-		SlnRelativePath = "..\vue-admin-template-4.2.1\"
+		VWDPort = "52571"
 	EndProjectSection
 EndProject
 Global
@@ -108,10 +107,10 @@ Global
 		{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{079C25F3-BEF5-4E99-A6D7-931D3F9FC940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{079C25F3-BEF5-4E99-A6D7-931D3F9FC940}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{079C25F3-BEF5-4E99-A6D7-931D3F9FC940}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{079C25F3-BEF5-4E99-A6D7-931D3F9FC940}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{BA76B190-ADC3-4716-B40B-734679593220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA76B190-ADC3-4716-B40B-734679593220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA76B190-ADC3-4716-B40B-734679593220}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA76B190-ADC3-4716-B40B-734679593220}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
