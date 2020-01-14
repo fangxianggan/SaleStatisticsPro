@@ -5,11 +5,12 @@ import request from '@/utils/request'
  * 获取所有的销售订单
  * @param {any} params
  */
-export function getSaleOrderList(params)
+export function getSaleOrderList(query)
 {
+  console.log(query);
   return request({
-    url: '/sale/getSaleOrderList',
+    url: '/SaleOrder/GetList',
     method: 'post',
-    params
+    params:query
   })
 }

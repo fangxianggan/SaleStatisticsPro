@@ -40,26 +40,39 @@ namespace WebApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            // config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+
             // 对 JSON 数据使用混合大小写。驼峰式,但是是javascript 首字母小写形式. 
-            //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            // config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             // 对 JSON 数据使用混合大小写。跟属性名同样的大小输出 <Ps, 可选>
             //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
 
-            var jsonFormatter = new JsonMediaTypeFormatter();
+#if DEBUG
+
+            //debugger 环境
+            config.Formatters.Clear();
+            config.Formatters.Add(new JsonMediaTypeFormatter());
+
+#else
+  //release 环境
+
+              var jsonFormatter = new JsonMediaTypeFormatter();
             var settings = jsonFormatter.SerializerSettings;
             settings.NullValueHandling = NullValueHandling.Ignore;
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             settings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             config.Services.Replace(typeof(IContentNegotiator), new JsonContentNegotiator(jsonFormatter));
+#endif
 
-            
+
+
         }
     }
 
-   /// <summary>
-   /// 
-   /// </summary>
+    /// <summary>
+    /// 
+    /// </summary>
     public class JsonContentNegotiator : IContentNegotiator
     {
         private readonly JsonMediaTypeFormatter _jsonFormatter;

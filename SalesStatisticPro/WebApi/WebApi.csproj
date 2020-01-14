@@ -203,6 +203,7 @@
     <Compile Include="IRepository\ISaleOrderInfoRepository.generated.cs" />
     <Compile Include="IRepository\ISaleOrderRepository.generated.cs" />
     <Compile Include="IRepository\ITransferBinRepository.generated.cs" />
+    <Compile Include="Model\Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\BusinessRepository.generated.cs" />
     <Compile Include="Repository\ProdoctRepository.generated.cs" />

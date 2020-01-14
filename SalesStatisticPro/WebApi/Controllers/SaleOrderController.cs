@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WebApi.IBLL;
+using WebApi.Model;
 
 namespace WebApi.Controllers
 {
@@ -43,6 +44,7 @@ namespace WebApi.Controllers
 
         public async Task<HttpReponseModel<List<SaleOrder>>> GetPageList(QueryModel query)
         {
+           
             return await _saleOrderBLL.GetPageListLogic(query);
         }
 
@@ -53,9 +55,13 @@ namespace WebApi.Controllers
             return "value";
         }
 
-        // POST: api/SaleOrder
-        public void Post([FromBody]string value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sale"></param>
+        public void Post(Test sale)
         {
+
         }
 
         // PUT: api/SaleOrder/5

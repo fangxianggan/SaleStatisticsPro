@@ -63,10 +63,10 @@ export const constantRoutes = [
     meta: { title: '订单管理', icon: 'example' },
     children: [
       {
-        path: 'table',
+        path: 'saleorder',
         name: '统计订单',
-        component: () => import('@/views/table/index'),
-        meta: { title: '统计订单', icon: 'table' }
+        component: () => import('@/views/saleorder/index'),
+        meta: { title: '统计订单', icon: 'saleorder' }
       },
       {
         path: 'tree',
