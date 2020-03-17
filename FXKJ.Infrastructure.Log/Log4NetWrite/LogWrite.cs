@@ -33,7 +33,7 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
         /// <param name="folderName">文件夹名字</param>
         /// <param name="message">日志内容</param>
         /// <param name="path">日志存放磁盘路径</param>
-        [Obsolete]
+      
         public static void WriteLog(string folderName,
             string message,
             string path = "")

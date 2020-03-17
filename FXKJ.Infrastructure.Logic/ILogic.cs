@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
-using FXKJ.Infrastructure.Entities.HttpResponse;
+﻿using FXKJ.Infrastructure.Entities.HttpResponse;
+using FXKJ.Infrastructure.Entities.QueryModel;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.Logic
 {
     /// <summary>
-    /// 业务逻辑基类
+    /// 业务逻辑基类:异步
     /// </summary>
     /// <typeparam name="T">实体信息</typeparam>
     public interface ILogic<T> where T : class
@@ -14,61 +18,79 @@ namespace FXKJ.Infrastructure.Logic
         /// </summary>
         /// <param name="entity">新增实体</param>
         /// <returns></returns>
-        HttpReponseModel Insert(T entity);
-
-        /// <summary>
-        /// Dapper批量新增
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        HttpReponseModel InsertMultipleDapper(IEnumerable<T> list);
+        HttpReponseModel<T> AddLogic(T entity);
 
         /// <summary>
         /// SqlBulkCopy批量新增
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        HttpReponseModel InsertMultiple(IEnumerable<T> list);
+        HttpReponseModel<List<T>> AddListLogic(IEnumerable<T> list);
 
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="current">更新实体</param>
         /// <returns></returns>
-        HttpReponseModel Update(T current);
+        HttpReponseModel<T> UpdateLogic(T entity);
+
 
         /// <summary>
-        /// 删除
+        /// 更新
         /// </summary>
-        /// <param name="entity">实体</param>
+        /// <param name="current">更新实体</param>
         /// <returns></returns>
-        HttpReponseModel Delete(T entity);
+        HttpReponseModel<List<T>> UpdateListLogic(IEnumerable<T> list);
+
 
         /// <summary>
         /// 根据主键删除
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
-        HttpReponseModel Delete(object id);
+        HttpReponseModel<int> DeleteLogic(params object[] keyValues);
+
 
         /// <summary>
-        /// 删除匹配项
+        /// 
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="whereLambda"></param>
         /// <returns></returns>
-        HttpReponseModel DeleteBatch(string ids);
-
-        /// <summary>
-        /// 获取集合数据
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<T> GetAllEnumerable();
-
+        HttpReponseModel<int> DeleteLogic(Expression<Func<T, bool>> whereLambda);
+        
+      
         /// <summary>
         /// 根据主键获取数据
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="keyValues"></param>
         /// <returns></returns>
-        T GetById(object id);
+        HttpReponseModel<T> GetEntityLogic(params object[] keyValues);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="whereLambda"></param>
+        /// <returns></returns>
+        HttpReponseModel<T> GetEntityLogic(Expression<Func<T, bool>> whereLambda);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="whereLambda"></param>
+        /// <returns></returns>
+        HttpReponseModel<List<T>> GetListLogic(Expression<Func<T, bool>> whereLambda);
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="queryParam"></param>
+        /// <returns></returns>
+        HttpReponseModel<List<T>> GetPageListLogic(QueryModel queryParam);
+        
+
+        
     }
 }

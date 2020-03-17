@@ -568,7 +568,7 @@ namespace FXKJ.Infrastructure.Dapper
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
-            WriteSqlLog(log);
+           // WriteSqlLog(log);
             return result;
         }
 
@@ -708,11 +708,12 @@ namespace FXKJ.Infrastructure.Dapper
                 OperateSql = sql,
                 Parameter = parms == null ? "" : parms.ToString()
             };
-            var result = dbs.DbConnecttion.Query<T>(sql, (object)parms);
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
             WriteSqlLog(log);
+            var result = dbs.DbConnecttion.Query<T>(sql, (object)parms);
+           
             return result;
         }
 
@@ -731,8 +732,31 @@ namespace FXKJ.Infrastructure.Dapper
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
-            WriteSqlLog(log);
+           // WriteSqlLog(log);
             return result;
+        }
+
+
+
+        public static DataTable SqlWithParamsToDataTable(this DbBase dbs, string sql, dynamic parms)
+        {
+            DataTable dataTable = new DataTable();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            SqlLog log = new SqlLog
+            {
+                CreateTime = DateTime.Now,
+                OperateSql = sql,
+                Parameter = parms == null ? "" : parms.ToString()
+            };
+            WriteSqlLog(log);
+            var result = dbs.DbConnecttion.ExecuteReader(sql, (object)parms);
+            stopwatch.Stop();
+            log.EndDateTime = DateTime.Now;
+            log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
+            dataTable.Load(result);
+            // WriteSqlLog(log);
+            return dataTable;
         }
 
 

@@ -1,5 +1,8 @@
-﻿using FXKJ.Infrastructure.Entities.QueryModel;
+﻿using FXKJ.Infrastructure.Core.Extensions;
+using FXKJ.Infrastructure.Entities.QueryModel;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.Core.Util
 {
-    public  static class QueryableSearcherUtil<T>
+    public static class QueryableSearcherUtil<T>
     {
 
         public static IQueryable<T> Search(IQueryable<T> list, IEnumerable<ConditionItem> itemsList)
@@ -23,18 +26,18 @@ namespace FXKJ.Infrastructure.Core.Util
             //传到Where中当做参数，类型为Expression<Func<T,bool>>
             return list.Where(expression);
         }
-        public static  Expression GetExpressoinBody(ParameterExpression param, IEnumerable<ConditionItem> items)
+        public static Expression GetExpressoinBody(ParameterExpression param, IEnumerable<ConditionItem> items)
         {
             var list = new List<Expression>();
             //OrGroup为空的情况下，即为And组合
-            var andList = items.Where(c => string.IsNullOrEmpty(c.OrGroup));
+            var andList = items.Where(c => c.Operator=="And");
             //将And的子Expression以AndAlso拼接
             if (andList.Count() != 0)
             {
                 list.Add(GetGroupExpression(param, andList, Expression.AndAlso));
             }
             //其它的则为Or关系，不同Or组间以And分隔
-            var orGroupByList = items.Where(c => !string.IsNullOrEmpty(c.OrGroup)).GroupBy(c => c.OrGroup);
+            var orGroupByList = items.Where(c => c.Operator=="Or").GroupBy(c => c.Operator);
             //拼接子Expression的Or关系
             foreach (IGrouping<string, ConditionItem> group in orGroupByList)
             {
@@ -92,13 +95,14 @@ namespace FXKJ.Infrastructure.Core.Util
         }
 
 
-        public  static readonly Dictionary<QueryMethod, Func<Expression, Expression, Expression>> ExpressionDict =
+        public static readonly Dictionary<QueryMethod, Func<Expression, Expression, Expression>> ExpressionDict =
                  new Dictionary<QueryMethod, Func<Expression, Expression, Expression>>
                      {
                      {
                          QueryMethod.Equal,
                          (left, right) => { return Expression.Equal(left, right); }
                          },
+                      
                      {
                          QueryMethod.GreaterThan,
                          (left, right) => { return Expression.GreaterThan(left, right); }
@@ -191,7 +195,9 @@ namespace FXKJ.Infrastructure.Core.Util
             #region 数组
             if (item.Method == QueryMethod.StdIn)
             {
-                var arr = (item.Value as Array);
+
+                var val = item.Value.ToString();
+                var arr = JsonUtil.JsonDeserializeObject<string[]>(val);
                 var expList = new List<Expression>();
                 //确保可用
                 if (arr != null)

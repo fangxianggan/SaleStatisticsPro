@@ -117,43 +117,35 @@ namespace FXKJ.Infrastructure.Core.Extensions
         }
         #endregion
 
-        //#region 集合列表类型映射
-        ///// <summary>
-        ///// 集合列表类型映射
-        ///// </summary>
-        //public static List<TDestination> MapToList<TSource, TDestination>(this IEnumerable<TSource> source)
-        //{
-        //    //IEnumerable<T> 类型需要创建元素的映射
-        //    Mapper.Map<TSource, TDestination>(source);
-        //    return Mapper.Map<List<TDestination>>(source);
-        //}
-        //#endregion
+        /// <summary>
+        /// 将List转换为Datatable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static DataTable MapToTable<T>(this IEnumerable list)
+        {
+            if (list == null)
+                return default(DataTable);
 
-        //#region 类型映射
-        ///// <summary>
-        ///// 类型映射
-        ///// </summary>
-        //public static TDestination MapTo<TSource, TDestination>(this TSource source,
-        //    TDestination destination)
-        //    where TSource : class
-        //    where TDestination : class
-        //{
-        //    if (source == null) return destination;
-        //    Mapper.CreateMap<TSource, TDestination>();
-        //    return Mapper.Map(source, destination);
-        //}
-        //#endregion
+            //创建属性的集合
+            List<PropertyInfo> pList = new List<PropertyInfo>();
+            //获得反射的入口
+            System.Type type = typeof(T);
+            DataTable dt = new DataTable();
+            //把所有的public属性加入到集合 并添加DataTable的列
+            Array.ForEach<PropertyInfo>(type.GetProperties(), p => { pList.Add(p); dt.Columns.Add(p.Name, p.PropertyType); });
+            foreach (var item in list)
+            {
+                //创建一个DataRow实例
+                DataRow row = dt.NewRow();
+                //给row 赋值
+                pList.ForEach(p => row[p.Name] = p.GetValue(item, null));
+                //加入到DataTable
+                dt.Rows.Add(row);
+            }
+            return dt;
+        }
 
-        //#region DataReader映射
-        ///// <summary>
-        ///// DataReader映射
-        ///// </summary>
-        //public static IEnumerable<T> DataReaderMapTo<T>(this IDataReader reader)
-        //{
-        //    Mapper.Reset();
-        //    Mapper.CreateMap<IDataReader, IEnumerable<T>>();
-        //    return Mapper.Map<IDataReader, IEnumerable<T>>(reader);
-        //}
-        //#endregion
     }
 }

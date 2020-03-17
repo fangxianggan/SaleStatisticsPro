@@ -1,29 +1,49 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using FXKJ.Infrastructure.DataAccess;
+using FXKJ.Infrastructure.Logic;
+using FXKJ.Infrastructure.WebApi.BLL;
+using FXKJ.Infrastructure.WebApi.IBLL;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Web.Compilation;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using WebApi.App_Start;
+using WebApi.BLL;
+using WebApi.IBLL;
+using WebApi.IRepository;
+using WebApi.Repository;
 
 namespace WebApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class WebApiApplication : System.Web.HttpApplication
     {
+        /// <summary>
+        /// 
+        /// </summary>
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-          
 
             //程序启动注入
-            AutoFacBootStrapper.CoreAutoFacInit();
+             AutoFacBootStrapper.CoreAutoFacInit();
+
+            //dto模型注册
+            AutoMapperConfig.Register();
 
 
         }
 
+
+       
         /// <summary>
         /// 
         /// </summary>
@@ -44,19 +64,27 @@ namespace WebApi
                 var container = builder.Build();
                 //注册api容器需要使用HttpConfiguration对象
                 config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-               
-            }
+
+              
+            
+
+        }
 
             private static void SetupResolveRules(ContainerBuilder builder)
             {
-            
-                #region IOC注册区域
+
+                //泛型类 接口注入方式
+                builder.RegisterGeneric(typeof(AsyncLogic<>)).As(typeof(IAsyncLogic<>)).InstancePerDependency();
+                builder.RegisterGeneric(typeof(AsyncEFRepository<>)).As(typeof(IAsyncEFRepository<>)).InstancePerDependency();
+                builder.RegisterGeneric(typeof(Logic<>)).As(typeof(ILogic<>)).InstancePerDependency();
+                builder.RegisterGeneric(typeof(EFRepository<>)).As(typeof(IEFRepository<>)).InstancePerDependency();
                 var assemblys = BuildManager.GetReferencedAssemblies().Cast<Assembly>().ToList();
                 builder.RegisterAssemblyTypes(assemblys.ToArray()).Where(t => t.Name.EndsWith("BLL")).AsImplementedInterfaces();
                 builder.RegisterAssemblyTypes(assemblys.ToArray()).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
-                #endregion
+
 
               
+
             }
         }
     }

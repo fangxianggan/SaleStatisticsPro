@@ -99,6 +99,9 @@ namespace FXKJ.Infrastructure.Auth
             return prin;
             #endregion
 
+
+
+
             if (request == null)
                 throw new ArgumentNullException("request");
 

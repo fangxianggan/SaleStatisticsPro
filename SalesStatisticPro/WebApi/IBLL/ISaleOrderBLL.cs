@@ -1,28 +1,55 @@
-﻿using EntitiesModels.DtoModels;
-using EntitiesModels.Models;
-using FXKJ.Infrastructure.Entities.Enum;
+﻿
+using EntitiesModels.DtoModels;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
-using FXKJ.Infrastructure.Logic;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WebApi.IBLL
 {
     /// <summary>
-    /// 销售订单的接口
+    ///   业务层接口——SaleOrder
     /// </summary>
-    public partial interface ISaleOrderBLL 
+    public partial interface ISaleOrderBLL
     {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="operateType"></param>
-        /// <param name="saleOrderModels"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        Task<HttpReponseModel<SaleOrder>> AddOrEditSaleOrderList(OperateType operateType, List<RequestSaleOrderModel> saleOrderModels);
+        HttpReponseModel<SaleOrderViewModel> SaveData(SaleOrderViewModel model);
+
+       
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        HttpReponseModel<List<SaleOrderViewModel>> GetSaleOrderViewModePageList(QueryModel query);
+
+        /// <summary>
+        /// /
+        /// </summary>
+        /// <param name="sOrderNum"></param>
+        /// <returns></returns>
+        HttpReponseModel<int> GetDel(string sOrderNum);
+
+        /// <summary>
+        /// 订单详情是不是已经签收
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        HttpReponseModel<int> GetSaleOrderInfoDoSign(string orderNumber);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        HttpReponseModel<int> GetSaleOrderInfoLock(string orderNumber);
+
+        HttpReponseModel<FileStreamViewModel> GetSaleListViewModelExportExcel(QueryModel model);
     }
 }
+

@@ -24,13 +24,21 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>NetDLL\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>NetDLL\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="JWT, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>NetDLL\JWT.dll</HintPath>
@@ -43,6 +51,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\SalesStatisticPro\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\SalesStatisticPro\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -51,6 +60,9 @@
     </Reference>
     <Reference Include="System.Web.Http.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\SalesStatisticPro\packages\Microsoft.AspNet.WebApi.Cors.5.2.7\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\FXKJ.Infrastructure.Core\NetDLL\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -61,22 +73,46 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseApiController.cs" />
+    <Compile Include="BLL\TokenBLL.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Filter\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Filter\ApiExceptionAttribute.cs" />
+    <Compile Include="Filter\ApiDCTAttribute.cs" />
+    <Compile Include="Filter\ApiFilterAttribute.cs" />
+    <Compile Include="IBLL\ITokenBLL.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Token\AuthInfo.cs" />
     <Compile Include="Models\Token\LoginRequest.cs" />
-    <Compile Include="Models\Token\TokenInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NetDLL\Autofac.dll" />
+    <Content Include="NetDLL\Autofac.Integration.Mvc.dll" />
     <Content Include="NetDLL\JWT.dll" />
     <Content Include="NetDLL\System.Net.Http.Formatting.dll" />
     <Content Include="NetDLL\System.Web.Http.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
+      <Project>{77CF037D-57B0-4338-93EC-7415DD9B40CE}</Project>
+      <Name>FXKJ.Infrastructure.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Entities\FXKJ.Infrastructure.Entities.csproj">
+      <Project>{DCA00954-825A-43AD-B3ED-CD54B38D77FD}</Project>
+      <Name>FXKJ.Infrastructure.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Log\FXKJ.Infrastructure.Log.csproj">
+      <Project>{3BEF85F5-E1D8-4526-AE3A-416C19D32E81}</Project>
+      <Name>FXKJ.Infrastructure.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalesStatisticPro\NetRedisUtil\NetRedisUtil.csproj">
+      <Project>{7F890A1A-EE96-486F-957F-9656A4E308DE}</Project>
+      <Name>NetRedisUtil</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

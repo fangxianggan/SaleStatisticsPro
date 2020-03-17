@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -40,65 +43,115 @@ namespace WebApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            // config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
 
-            // 对 JSON 数据使用混合大小写。驼峰式,但是是javascript 首字母小写形式. 
-            // config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            InitJsonConfig.Init(config);
 
-            // 对 JSON 数据使用混合大小写。跟属性名同样的大小输出 <Ps, 可选>
-            //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
+        }
+    }
 
-#if DEBUG
 
-            //debugger 环境
-            config.Formatters.Clear();
-            config.Formatters.Add(new JsonMediaTypeFormatter());
+    /// <summary>
+    /// 
+    /// </summary>
+    public class InitJsonConfig
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        public static void Init(HttpConfiguration config)
+        {
 
-#else
-  //release 环境
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings()
+            {
+                // 解决json序列化时的循环引用问题
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                // 对 JSON 数据使用混合大小写。驼峰式,但是是javascript 首字母小写形式.
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                //日期格式化问题
+                DateFormatString = "yyyy-MM-dd HH:mm:ss",
+            };
 
-              var jsonFormatter = new JsonMediaTypeFormatter();
-            var settings = jsonFormatter.SerializerSettings;
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            settings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-            config.Services.Replace(typeof(IContentNegotiator), new JsonContentNegotiator(jsonFormatter));
-#endif
-
+           // config.Formatters.FormUrlEncodedFormatter.MediaTypeMappings.Add(new QueryStringMapping("t", "steam", "application/octet-stream"));
 
 
         }
     }
 
+
+
+
     /// <summary>
     /// 
     /// </summary>
-    public class JsonContentNegotiator : IContentNegotiator
+    public class NullToEmptyStringResolver : DefaultContractResolver
     {
-        private readonly JsonMediaTypeFormatter _jsonFormatter;
-
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="formatter"></param>
-        public JsonContentNegotiator(JsonMediaTypeFormatter formatter)
-        {
-            _jsonFormatter = formatter;
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="request"></param>
-        /// <param name="formatters"></param>
+        /// <param name="memberSerialization"></param>
         /// <returns></returns>
-        public ContentNegotiationResult Negotiate(Type type, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var result = new ContentNegotiationResult(_jsonFormatter, new MediaTypeHeaderValue("application/json"));
-            return result;
+            return type.GetProperties()
+                .Select(p =>
+                {
+                    var jp = base.CreateProperty(p, memberSerialization);
+                    jp.ValueProvider = new NullToEmptyStringValueProvider(p);
+                    return jp;
+                }).ToList();
         }
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class NullToEmptyStringValueProvider : IValueProvider
+    {
+        PropertyInfo _MemberInfo;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberInfo"></param>
+        public NullToEmptyStringValueProvider(PropertyInfo memberInfo)
+        {
+            _MemberInfo = memberInfo;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public object GetValue(object target)
+        {
+            object result = _MemberInfo.GetValue(target);
+            if (_MemberInfo.PropertyType == typeof(string) && result == null) result = "";
+            else if (_MemberInfo.PropertyType == typeof(String[]) && result == null) result = new string[] { };
+            else if (_MemberInfo.PropertyType == typeof(Nullable<Int32>) && result == null) result = 0;
+            else if (_MemberInfo.PropertyType == typeof(Nullable<Decimal>) && result == null) result = 0.00M;
+            //if (result == null) 
+            //	result = "";
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="value"></param>
+        public void SetValue(object target, object value)
+        {
+            _MemberInfo.SetValue(target, value);
+        }
+
+    }
+
+
 
 
 }

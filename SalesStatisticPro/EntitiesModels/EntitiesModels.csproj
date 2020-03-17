@@ -51,17 +51,113 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
-    <Compile Include="DtoModels\RequestSaleOrderModel.cs" />
+    <Compile Include="DtoEnum\OrderEnum.cs" />
+    <Compile Include="DtoModels\DashboardViewModel.cs" />
+    <Compile Include="DtoModels\FileStreamViewModel.cs" />
+    <Compile Include="DtoModels\ProductStockViewModel.cs" />
+    <Compile Include="DtoModels\ProductViewModel.cs" />
+    <Compile Include="DtoModels\PurchaseOrderInfoViewModel.cs" />
+    <Compile Include="DtoModels\RegisterViewModel.cs" />
+    <Compile Include="DtoModels\SaleOrderStatisticsViewModel.cs" />
+    <Compile Include="DtoModels\PurchaseOrderStatisticsViewModel.cs" />
+    <Compile Include="DtoModels\PurchaseOrderViewModel.cs" />
+    <Compile Include="DtoModels\SaleOrderInfoViewModel.cs" />
+    <Compile Include="DtoModels\SaleOrderViewModel.cs" />
+    <Compile Include="DtoModels\SelectViewModel.cs" />
+    <Compile Include="DtoModels\ProductStatisticsViewModel.cs" />
+    <Compile Include="Migrations\202002040941411_InitialCreate.cs" />
+    <Compile Include="Migrations\202002040941411_InitialCreate.Designer.cs">
+      <DependentUpon>202002040941411_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002090817234_InitialCreate2020-02-09.cs" />
+    <Compile Include="Migrations\202002090817234_InitialCreate2020-02-09.Designer.cs">
+      <DependentUpon>202002090817234_InitialCreate2020-02-09.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002211446194_abc.cs" />
+    <Compile Include="Migrations\202002211446194_abc.Designer.cs">
+      <DependentUpon>202002211446194_abc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002211532364_a.cs" />
+    <Compile Include="Migrations\202002211532364_a.Designer.cs">
+      <DependentUpon>202002211532364_a.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002220706227_ac.cs" />
+    <Compile Include="Migrations\202002220706227_ac.Designer.cs">
+      <DependentUpon>202002220706227_ac.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002221417253_acd.cs" />
+    <Compile Include="Migrations\202002221417253_acd.Designer.cs">
+      <DependentUpon>202002221417253_acd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002221419003_acdfd.cs" />
+    <Compile Include="Migrations\202002221419003_acdfd.Designer.cs">
+      <DependentUpon>202002221419003_acdfd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002221441538_acdfdd.cs" />
+    <Compile Include="Migrations\202002221441538_acdfdd.Designer.cs">
+      <DependentUpon>202002221441538_acdfdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002230603353_zx.cs" />
+    <Compile Include="Migrations\202002230603353_zx.Designer.cs">
+      <DependentUpon>202002230603353_zx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002230736073_zxf.cs" />
+    <Compile Include="Migrations\202002230736073_zxf.Designer.cs">
+      <DependentUpon>202002230736073_zxf.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002260503415_2_1.cs" />
+    <Compile Include="Migrations\202002260503415_2_1.Designer.cs">
+      <DependentUpon>202002260503415_2_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002270346483_2-2.cs" />
+    <Compile Include="Migrations\202002270346483_2-2.Designer.cs">
+      <DependentUpon>202002270346483_2-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003040916401_3v.cs" />
+    <Compile Include="Migrations\202003040916401_3v.Designer.cs">
+      <DependentUpon>202003040916401_3v.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003041420105_vv.cs" />
+    <Compile Include="Migrations\202003041420105_vv.Designer.cs">
+      <DependentUpon>202003041420105_vv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003041432267_vvv.cs" />
+    <Compile Include="Migrations\202003041432267_vvv.Designer.cs">
+      <DependentUpon>202003041432267_vvv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003041433565_vvvo.cs" />
+    <Compile Include="Migrations\202003041433565_vvvo.Designer.cs">
+      <DependentUpon>202003041433565_vvvo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003050956453_ccc.cs" />
+    <Compile Include="Migrations\202003050956453_ccc.Designer.cs">
+      <DependentUpon>202003050956453_ccc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003061350074_bbba.cs" />
+    <Compile Include="Migrations\202003061350074_bbba.Designer.cs">
+      <DependentUpon>202003061350074_bbba.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003170629278_axsss.cs" />
+    <Compile Include="Migrations\202003170629278_axsss.Designer.cs">
+      <DependentUpon>202003170629278_axsss.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\Business.cs" />
-    <Compile Include="Models\Prodoct.cs" />
-    <Compile Include="Models\ProductType.cs" />
+    <Compile Include="Models\MerchantRole.cs" />
+    <Compile Include="Models\MerchantInfo.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\PurchaseOrderInfo.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\SaleOrder.cs" />
     <Compile Include="Models\SaleOrderInfo.cs" />
+    <Compile Include="Models\SqlLog.cs" />
+    <Compile Include="Models\SysConfig.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\ExpressCompany.cs" />
     <Compile Include="Models\TransferBin.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="T4\T4ModelInfo.cs" />
   </ItemGroup>
@@ -69,10 +165,69 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202002040941411_InitialCreate.resx">
+      <DependentUpon>202002040941411_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002090817234_InitialCreate2020-02-09.resx">
+      <DependentUpon>202002090817234_InitialCreate2020-02-09.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002211446194_abc.resx">
+      <DependentUpon>202002211446194_abc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002211532364_a.resx">
+      <DependentUpon>202002211532364_a.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002220706227_ac.resx">
+      <DependentUpon>202002220706227_ac.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002221417253_acd.resx">
+      <DependentUpon>202002221417253_acd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002221419003_acdfd.resx">
+      <DependentUpon>202002221419003_acdfd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002221441538_acdfdd.resx">
+      <DependentUpon>202002221441538_acdfdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002230603353_zx.resx">
+      <DependentUpon>202002230603353_zx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002230736073_zxf.resx">
+      <DependentUpon>202002230736073_zxf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002260503415_2_1.resx">
+      <DependentUpon>202002260503415_2_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002270346483_2-2.resx">
+      <DependentUpon>202002270346483_2-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003040916401_3v.resx">
+      <DependentUpon>202003040916401_3v.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003041420105_vv.resx">
+      <DependentUpon>202003041420105_vv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003041432267_vvv.resx">
+      <DependentUpon>202003041432267_vvv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003041433565_vvvo.resx">
+      <DependentUpon>202003041433565_vvvo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003050956453_ccc.resx">
+      <DependentUpon>202003050956453_ccc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003061350074_bbba.resx">
+      <DependentUpon>202003061350074_bbba.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003170629278_axsss.resx">
+      <DependentUpon>202003170629278_axsss.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="NetDLL\EntityFramework.dll" />
     <Content Include="NetDLL\EntityFramework.SqlServer.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

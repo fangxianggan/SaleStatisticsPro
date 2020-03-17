@@ -1,7 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-
+import {  Message } from 'element-ui'
 const state = {
   token: getToken(),
   name: '',
@@ -23,17 +23,30 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { UserName, Password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ UserName: UserName.trim(), Password: Password }).then(response => {
-        const  data   = response
-        console.log(data);
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+      login(userInfo).then(res => {
+        let type;
+        if (res.resultSign != 0 && res.code == 200) {
+          switch (res.resultSign) {
+            case 0:  type = "success"; break;
+            case 1: type = "warning"; break;
+            case 2: type = "error"; break;
+            case 3: type = "info"; break;
+            default:type = "info"; break;
+          }
+          Message({
+            message: res.message ,
+            type: type,
+            duration: 5 * 1000
+          })
+          return false;
+        } 
+        commit('SET_TOKEN', res.token)
+        setToken(res.token)
         resolve()
       }).catch(error => {
         reject(error)
-      })
+      });
     })
   },
 
@@ -41,17 +54,17 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const  data  = response
-
-        if (!data) {
+        const d = response.data
+       // console.log(d);
+        if (!d) {
           reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+      //  const { name, avatar } = data
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
+        commit('SET_NAME', d.name)
+        commit('SET_AVATAR', d.avatar)
+        resolve(d)
       }).catch(error => {
         reject(error)
       })

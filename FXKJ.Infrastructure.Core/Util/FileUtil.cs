@@ -887,9 +887,6 @@ namespace FXKJ.Infrastructure.Core.Util
         }
         #endregion
 
-      
-
-      
 
         #region 获取指定目录中的子目录列表
         /// <summary>

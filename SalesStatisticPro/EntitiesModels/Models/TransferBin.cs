@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EntitiesModels.Models
 {
@@ -19,13 +15,13 @@ namespace EntitiesModels.Models
         /// 转运仓编码
         /// </summary>
         /// 
-        [MaxLength(32)]
+        [MaxLength(64),Required,DisplayName("转运仓编码")]
         public string TransferBinCode { set; get; }
 
         /// <summary>
         /// 转运仓名称
         /// </summary>
-        [MaxLength(64)]
+        [MaxLength(64),Required,DisplayName("转运仓名称")]
         public  string TransferBinName {set;get;}
 
     }

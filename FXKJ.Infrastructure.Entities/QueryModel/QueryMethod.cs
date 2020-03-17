@@ -77,5 +77,13 @@ namespace FXKJ.Infrastructure.Entities.QueryModel
         Time=17,
         //数组
         StdIn=18,
+        /// <summary>
+        /// 在什么之间
+        /// </summary>
+        Between=19,
+        /// <summary>
+        /// 处理时间段
+        /// </summary>
+        BetweenTime=20,
     }
 }

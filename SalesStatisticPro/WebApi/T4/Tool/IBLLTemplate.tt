@@ -20,7 +20,7 @@ public class IBLLTemplate : CSharpTemplate
     {
         get
         { 
-            return string.Format("I{0}BLL.generated.cs", _model.Name);
+            return string.Format("_I{0}BLL.cs", _model.Name);
         }
     }
 
@@ -35,7 +35,7 @@ public class IBLLTemplate : CSharpTemplate
 //       如存在本生成代码外的新需求，请在相同命名空间下创建同名分部类进行实现。
 // </auto-generated>
 //
-// <copyright file="I<#= _model.Name #>BLL.generated.cs">
+// <copyright file="I<#= _model.Name #>BLL.cs">
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
@@ -43,14 +43,65 @@ public class IBLLTemplate : CSharpTemplate
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
-using FXKJ.Infrastructure.Logic;
+using FXKJ.Infrastructure.Entities.HttpResponse;
+using FXKJ.Infrastructure.Entities.QueryModel;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 namespace WebApi.IBLL
 {
     /// <summary>
     ///   业务层接口——<#= _model.Description #>
     /// </summary>
-    public partial interface I<#= _model.Name #>BLL :IAsyncLogic<<#= _model.Name #>> 
-    { }
+    public partial interface I<#= _model.Name #>BLL
+    {
+
+       
+
+        /// <summary>
+        ///获取分页数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        HttpReponseModel<List<<#= _model.Name #>>> GetPageList(QueryModel model);
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        HttpReponseModel<int> DelData(params object[] keyValues);
+
+        /// <summary>
+        /// 添加 修改 当条数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        HttpReponseModel<<#= _model.Name #>> SaveData(<#= _model.Name #> entity);
+
+        /// <summary>
+        /// 添加 修改 多条数据
+        /// </summary>
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        HttpReponseModel<List<<#= _model.Name #>>> SaveData(List<<#= _model.Name #>> entityList);
+
+        /// <summary>
+        /// 获取实体数据
+        /// </summary>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        HttpReponseModel<<#= _model.Name #>> GetModel(params object[] keyValues);
+
+         /// <summary>
+        /// 获取list数组
+        /// </summary>
+        /// <param name="whereLambda"></param>
+        /// <returns></returns>
+        HttpReponseModel<List<<#= _model.Name #>>> GetList(Expression<Func<<#= _model.Name #>, bool>> whereLambda);
+       
+    }
 }
 
 <#+

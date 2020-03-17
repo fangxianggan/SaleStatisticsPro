@@ -13,7 +13,7 @@ namespace FXKJ.Infrastructure.DataAccess
     ///     DapperRepository仓储,T代表实体信息,规范约束为T必须继承IEntityBase接口
     /// </summary>
     /// <typeparam name="T">实体</typeparam>
-    public class DapperAsyncRepository<T> : BaseRepository, IAsyncRepository<T> where T : class, new()
+    public class DapperAsyncRepository<T> : BaseRepository, IAsyncEFRepository<T> where T : class, new()
     {
         public Task<T> Add(T entity)
         {

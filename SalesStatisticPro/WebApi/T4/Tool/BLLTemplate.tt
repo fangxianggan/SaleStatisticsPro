@@ -20,7 +20,7 @@ public class BLLTemplate : CSharpTemplate
     {
         get
         { 
-            return string.Format("{0}BLL.generated.cs", _model.Name);
+            return string.Format("_{0}BLL.cs", _model.Name);
         }
     }
 
@@ -35,7 +35,7 @@ public class BLLTemplate : CSharpTemplate
 //       如存在本生成代码外的新需求，请在相同命名空间下创建同名分部类进行实现。
 // </auto-generated>
 //
-// <copyright file="I<#= _model.Name #>BLL.generated.cs">
+// <copyright file="<#= _model.Name #>BLL.cs">
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
@@ -45,22 +45,110 @@ public class BLLTemplate : CSharpTemplate
 using EntitiesModels.Models;
 using FXKJ.Infrastructure.Logic;
 using WebApi.IRepository;
-namespace WebApi.IBLL
+using WebApi.IBLL;
+using FXKJ.Infrastructure.Entities.HttpResponse;
+using FXKJ.Infrastructure.Entities.QueryModel;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+namespace WebApi.BLL
 {
     /// <summary>
     ///   业务访问——<#= _model.Description #>
     /// </summary>
-    public partial class <#= _model.Name #>BLL : AsyncLogic<<#=_model.Name#>>
+    public partial class <#= _model.Name #>BLL :I<#= _model.Name #>BLL
     { 
-        private readonly I<#= _model.Name#>Repository  _<#= _model._Name#>Repository;
-         /// <summary>
+       private readonly ILogic<<#= _model.Name #>> _logic;
+
+        /// <summary>
         /// 
         /// </summary>
-        /// <param name="<#= _model._Name#>Repository"></param>
-        public <#= _model.Name #>BLL(I<#= _model.Name#>Repository  <#= _model._Name#>Repository):base(<#= _model._Name#>Repository)
+        /// <param name="logic"></param>
+        public <#= _model.Name #>BLL(ILogic<<#= _model.Name #>> logic)
         {
-          _<#= _model._Name#>Repository= <#= _model._Name#>Repository;
+            _logic = logic;
         }
+
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        public HttpReponseModel<int> DelData(params object[] keyValues)
+        {
+            return  _logic.DeleteLogic(keyValues);
+        }
+
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        public HttpReponseModel<<#= _model.Name #>> GetModel(params object[] keyValues)
+        {
+            return  _logic.GetEntityLogic(keyValues);
+        }
+
+        /// <summary>
+        /// 获取分页数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public HttpReponseModel<List<<#= _model.Name #>>> GetPageList(QueryModel model)
+        {
+            return  _logic.GetPageListLogic(model);
+        }
+
+
+       /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="whereLambda"></param>
+        /// <returns></returns>
+        public HttpReponseModel<List<<#= _model.Name #>>> GetList(Expression<Func<<#= _model.Name #>, bool>> whereLambda)
+        {
+            return  _logic.GetListLogic(whereLambda);
+        }
+
+        /// <summary>
+        /// 添加修改 保存单条数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public HttpReponseModel<<#= _model.Name #>> SaveData(<#= _model.Name #> entity)
+        {
+            if (entity.ID == 0)
+            {
+                return  _logic.AddLogic(entity);
+            }
+            else
+            {
+                return  _logic.UpdateLogic(entity);
+            }
+
+        }
+
+        /// <summary>
+        /// 保存数据 多条 新增或是修改
+        /// </summary>
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        public HttpReponseModel<List<<#= _model.Name #>>> SaveData(List<<#= _model.Name #>> entityList)
+        {
+            var entity = entityList.FindLast(p => true);
+            if (entity.ID == 0)
+            {
+                return  _logic.AddListLogic(entityList);
+            }
+            else
+            {
+                return  _logic.UpdateListLogic(entityList);
+            }
+        }
+
+
     }
 }
 

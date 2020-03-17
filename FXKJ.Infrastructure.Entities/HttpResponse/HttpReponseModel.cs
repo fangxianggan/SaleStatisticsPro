@@ -1,9 +1,7 @@
 ﻿using FXKJ.Infrastructure.Entities.Enum;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using System.Web;
 
 namespace FXKJ.Infrastructure.Entities.HttpResponse
 {
@@ -14,16 +12,22 @@ namespace FXKJ.Infrastructure.Entities.HttpResponse
     {
         public HttpReponseModel()
         {
-            ResultSign = ResultSign.Error;
-            Message = HttpReponseMessage.ErrorMsg;
-            Code = 20000;
+            ResultSign = ResultSign.Successful;
+            Message = HttpReponseMessage.SuccessMsg;
+            Code=StatusCode.OK;
+            RequestParams = null;
+            Flag = true;
+            var o = HttpContext.Current.Request.RequestContext.RouteData.Values["X-Token"];
+            if (o != null)
+            {
+                Token = o.ToString();
+            }
+            else {
+                Token = "";
+            }
+            
         }
-        public HttpReponseModel(HttpReponseModel httpReponse)
-        {
-            ResultSign = httpReponse.ResultSign;
-            Message = httpReponse.Message;
-            FormatParams = httpReponse.FormatParams;
-        }
+       
         #region 属性
 
         /// <summary>
@@ -37,14 +41,24 @@ namespace FXKJ.Infrastructure.Entities.HttpResponse
         public string Message { get; set; }
 
         /// <summary>
-        ///     消息的参数
+        ///  传入的参数
         /// </summary>
-        public List<string> FormatParams { get; set; }
+        public object RequestParams { get; set; }
 
         /// <summary>
         /// 状态码
         /// </summary>
-        public int Code { set; get; }
+        public StatusCode Code { set; get; }
+
+        /// <summary>
+        /// 判断执行的是不是成功
+        /// </summary>
+        public bool Flag { set; get; }
+
+        /// <summary>
+        /// token
+        /// </summary>
+        public string Token { set; get; }
         #endregion
     }
 
@@ -59,15 +73,7 @@ namespace FXKJ.Infrastructure.Entities.HttpResponse
             PageIndex = 0;
             PageSize = 0;
             Total = 0;
-        }
-
-        public HttpReponseModel(HttpReponseModel<T> httpReponse)
-        {
-            PageIndex = httpReponse.PageIndex;
-            PageSize = httpReponse.PageSize;
-            Total = httpReponse.Total;
-            Data = httpReponse.Data;
-            PageData = httpReponse.PageData;
+            Data = default(T);
         }
         public int PageIndex { set; get; }
 
@@ -78,11 +84,6 @@ namespace FXKJ.Infrastructure.Entities.HttpResponse
         /// 泛型对象
         /// </summary>
         public T Data { get; set; }
-
-        /// <summary>
-        /// 当前的分页里的数据
-        /// </summary>
-        public List<T> PageData { set; get; }
 
     }
 }

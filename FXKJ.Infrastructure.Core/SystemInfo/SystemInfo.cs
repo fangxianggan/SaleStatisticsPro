@@ -253,7 +253,7 @@ namespace FXKJ.Infrastructure.Core.SystemInfo
                     if ((bool)mo["IPEnabled"] == true)
                     {
                         string mac = mo["MacAddress"].ToString().Replace(':', '-');
-                        System.Array ar = (System.Array)(mo.Properties["IpAddress"].Value);
+                        Array ar = (Array)(mo.Properties["IpAddress"].Value);
                         string ip = ar.GetValue(0).ToString();
                         ipinfos.Add(new IpInfo(ip, mac));
                     }

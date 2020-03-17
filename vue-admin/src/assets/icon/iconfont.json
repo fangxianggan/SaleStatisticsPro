@@ -1,0 +1,16 @@
+{
+  "id": "1695572",
+  "name": "vue统计管理系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "ele-icon",
+  "description": "11111111",
+  "glyphs": [
+    {
+      "icon_id": "2270122",
+      "name": "手机",
+      "font_class": "shouji",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    }
+  ]
+}

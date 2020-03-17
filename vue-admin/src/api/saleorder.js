@@ -1,16 +1,8 @@
+import http from '@/request/http'
 
-import request from '@/utils/request'
-
-/**
- * 获取所有的销售订单
- * @param {any} params
- */
-export function getSaleOrderList(query)
-{
-  console.log(query);
-  return request({
-    url: '/SaleOrder/GetList',
-    method: 'post',
-    params:query
-  })
+//获取订单详情数据
+export function getSaleOrderInfoViewModelList(row) {
+  let url = "/SaleOrder/GetSaleOrderInfoViewModelList";
+  let data = { orderNumber: row.sOrderNum };
+  return http(url, data, { method: "get" })
 }

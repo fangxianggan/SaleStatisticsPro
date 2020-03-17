@@ -157,7 +157,7 @@ namespace FXKJ.Infrastructure.Config
             var queryBuilder = new StringBuilder();
             queryBuilder.Append("SELECT [Code], \n");
             queryBuilder.Append("       [Value] \n");
-            queryBuilder.Append("FROM   Sys_Config \n");
+            queryBuilder.Append("FROM   SysConfig \n");
             return queryBuilder.ToString();
         }
 
@@ -167,7 +167,7 @@ namespace FXKJ.Infrastructure.Config
         /// <returns></returns>
         public static string ReadConnectionString()
         {
-            var configSection = ConfigurationManager.ConnectionStrings["FXKJ"].ConnectionString;
+            var configSection = ConfigurationManager.ConnectionStrings["MyStrConn"].ConnectionString;
             if (configSection == null)
                 throw new ConfigurationErrorsException("没有在配置文件中配置系统配置组件");
             return configSection;

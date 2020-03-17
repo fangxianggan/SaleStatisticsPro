@@ -10,18 +10,15 @@ namespace FXKJ.Infrastructure.WebApi.Models
     {
         public BaseModel()
         {
-            code = 20000;
-            name = "Admin";
-            introduction = "dasasas";
-            avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
+            Name = "Admin";
+            Introduction = "dasasas";
+            Avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 
         }
-        public int code { get; }
+        public string Name { get; }
 
-        public string name { get; }
+        public string Introduction { get; }
 
-        public string introduction { get; }
-
-        public string avatar { get; }
+        public string Avatar { get; }
     }
 }

@@ -14,15 +14,11 @@ namespace FXKJ.Infrastructure.Logic
     /// 异步Logic
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class AsyncLogic<T> : IAsyncLogic<T> where T: class, new()
+    public  class AsyncLogic<T> : IAsyncLogic<T> where T: class, new()
     {
-        private readonly IAsyncRepository<T> _repository;
+        private readonly IAsyncEFRepository<T> _repository;
 
-        public AsyncLogic()
-        {
-           
-        }
-        public AsyncLogic(IAsyncRepository<T> repository)
+        public AsyncLogic(IAsyncEFRepository<T> repository)
         {
             if (repository == null)
             {
@@ -90,6 +86,7 @@ namespace FXKJ.Infrastructure.Logic
         {
             HttpReponseModel<List<T>> httpReponse = new HttpReponseModel<List<T>>();
             httpReponse.Data = await _repository.GetList(whereLambda);
+            
             return httpReponse;
         }
 
@@ -97,6 +94,10 @@ namespace FXKJ.Infrastructure.Logic
         {
             HttpReponseModel<List<T>> httpReponse = new HttpReponseModel<List<T>>();
             httpReponse.Data = await _repository.GetPageList(queryParam);
+            httpReponse.Total = queryParam.Total;
+            httpReponse.PageIndex = queryParam.PageIndex;
+            httpReponse.PageSize = queryParam.PageSize;
+            httpReponse.RequestParams = queryParam;
             return httpReponse;
         }
 

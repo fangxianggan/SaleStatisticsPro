@@ -1,24 +1,37 @@
-import request from '@/utils/request'
-
+import http from '@/request/http'
+import qs from 'qs'
 export function login(data) {
-  return request({
-    url: '/Token/Login',
-    method: 'post',
-    data
+
+  let url = "/Token/Login";
+  return http(url, data) 
+ 
+}
+
+
+/**
+ *  单个参数 post 传递
+ * @param {any} data
+ */
+export function logout(data) {
+  var url = "/Token/Logout";
+  var param = qs.stringify({ "": data });
+  return http(url, param, {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded'
+    }
   })
 }
 
-export function getInfo(token) {
-  return request({
-    url: '/Token/Info',
-    method: 'post',
-    params: { token }
-  })
-}
 
-export function logout() {
-  return request({
-    url: '/Token/Logout',
-    method: 'post'
-  })
+/**
+ *  单个参数 post 传递
+ * @param {any} data
+ */
+export function getInfo(data) {
+  var url = "/Token/GetUserInfo";
+  var param = qs.stringify({ "": data});
+  return http(url, param, {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded'   
+    }})
 }

@@ -42,7 +42,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -54,113 +53,140 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-
   {
-    path: '/example',
+    path: '/order',
     component: Layout,
     redirect: '/example/table',
     name: '订单管理',
     meta: { title: '订单管理', icon: 'example' },
     children: [
       {
-        path: 'saleorder',
-        name: '统计订单',
-        component: () => import('@/views/saleorder/index'),
-        meta: { title: '统计订单', icon: 'saleorder' }
+        path: 'purchaselist',
+        name: '进货列表',
+        component: () => import('@/views/order/purchaselist'),
+        meta: { title: '进货列表', icon: 'tree' }
       },
       {
-        path: 'tree',
-        name: '我的订单',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
+        path: 'salelist',
+        name: '销售列表',
+        component: () => import('@/views/order/salelist'),
+        meta: { title: '销售列表', icon: 'tree' }
+      },
+
     ]
   },
-
   {
-    path: '/form',
+    path: '/report',
     component: Layout,
+    redirect: '/example/table',
+    name: '统计表报',
+    meta: { title: '统计表报', icon: 'example' },
     children: [
       {
-        path: 'index',
-        name: '销售管理',
-        component: () => import('@/views/form/index'),
-        meta: { title: '销售管理', icon: 'form' }
+        path: 'productstatisticslist',
+        name: '产品统计报表',
+        component: () => import('@/views/report/productstatisticslist'),
+        meta: { title: '产品统计报表', icon: 'tree' }
       }
+     
+
     ]
   },
-
   {
-    path: '/nested',
+    path: '/system',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
+    redirect: '/example/table',
+    name: '系统管理',
+    meta: { title: '系统管理', icon: 'form' },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
+        path: 'businesslist',
+        name: '供应商列表',
+        component: () => import('@/views/system/businesslist'),
+        meta: { title: '供应商列表', icon: 'tree' }
+      }, {
+        path: 'userinfolist',
+        name: '用户列表',
+        component: () => import('@/views/system/userinfolist'),
+        meta: { title: '用户列表', icon: 'tree' }
+      },
+      //{
+      //  path: 'brandlist',
+      //  name: '品牌列表',
+      //  component: () => import('@/views/system/brandlist'),
+      //  meta: { title: '品牌列表', icon: 'tree' }
+      //},
+      {
+        path: 'categorylist',
+        name: '产品分类列表',
+        component: () => import('@/views/system/categorylist'),
+        meta: { title: '产品分类列表', icon: 'tree' }
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
+        path: 'productlist',
+        name: '产品列表',
+        component: () => import('@/views/system/productlist'),
+        meta: { title: '产品列表', icon: 'tree' }
+      },
+      //{
+      //  path: 'specslist',
+      //  name: '规格列表',
+      //  component: () => import('@/views/system/specslist'),
+      //  meta: { title: '规格列表', icon: 'tree' }
+      //},
+      {
+        path: 'expresscompanylist',
+        name: '快递公司列表',
+        component: () => import('@/views/system/expresscompanylist'),
+        meta: { title: '快递公司列表', icon: 'tree' }
+      },
+      {
+        path: 'transferbinlist',
+        name: '转运仓列表',
+        component: () => import('@/views/system/transferbinlist'),
+        meta: { title: '转运仓列表', icon: 'tree' }
       }
     ]
   },
-
   {
-    path: 'external-link',
+    path: '/logs',
     component: Layout,
+    redirect: '/example/table',
+    name: '日志管理',
+    meta: { title: '日志管理', icon: 'example' },
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
+        path: 'sqlloglist',
+        name: 'sql日志',
+        component: () => import('@/views/logs/sqlloglist'),
+        meta: { title: 'sql日志', icon: 'tree' }
+      },
+      {
+        path: 'errorloglist',
+        name: 'error日志',
+        component: () => import('@/views/logs/errorloglist'),
+        meta: { title: 'error日志', icon: 'tree' }
+      },
+
     ]
   },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+  {
+    path: '/profile',
+    component: Layout,
+    redirect: '/profile/index',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/profile/index'),
+        name: '个人中心',
+        meta: { title: 'Profile', icon: 'user', noCache: true }
+      }
+    ]
+  }
 ]
 
 const createRouter = () => new Router({

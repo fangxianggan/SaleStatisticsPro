@@ -45,10 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdoRepository.cs" />
+    <Compile Include="EFRepository.cs" />
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DapperAsyncRepository.cs" />
-    <Compile Include="EFRepository.cs" />
-    <Compile Include="IAsyncRepository.cs" />
+    <Compile Include="AsyncEFRepository.cs" />
+    <Compile Include="IEFRepository.cs" />
+    <Compile Include="IAsyncEFRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +66,10 @@
     <ProjectReference Include="..\FXKJ.Infrastructure.Entities\FXKJ.Infrastructure.Entities.csproj">
       <Project>{DCA00954-825A-43AD-B3ED-CD54B38D77FD}</Project>
       <Name>FXKJ.Infrastructure.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalesStatisticPro\EntitiesModels\EntitiesModels.csproj">
+      <Project>{fd648777-7297-496b-b4f1-d5d46dfa60e7}</Project>
+      <Name>EntitiesModels</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

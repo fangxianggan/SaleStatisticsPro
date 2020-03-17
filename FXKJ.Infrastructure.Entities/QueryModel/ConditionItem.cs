@@ -42,10 +42,7 @@ namespace FXKJ.Infrastructure.Entities.QueryModel
         /// </summary>
         public string Prefix { get; set; }
 
-        /// <summary>
-        /// add or  
-        /// </summary>
-        public string OrGroup { get; set; }
+       
 
         /// <summary>
         /// 操作符

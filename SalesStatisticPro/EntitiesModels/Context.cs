@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2019-12-10 01:54
+//        生成时间：2020-03-15 20:51
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -36,14 +36,19 @@ namespace EntitiesModels
        public DbSet<Business> Business { get; set; }
 
                /// <summary>
-       ///   Prodoct
+       ///   MerchantRole
       /// </summary>
-       public DbSet<Prodoct> Prodoct { get; set; }
+       public DbSet<MerchantRole> MerchantRole { get; set; }
 
                /// <summary>
-       ///   ProductType
+       ///   MerchantInfo
       /// </summary>
-       public DbSet<ProductType> ProductType { get; set; }
+       public DbSet<MerchantInfo> MerchantInfo { get; set; }
+
+               /// <summary>
+       ///   Product
+      /// </summary>
+       public DbSet<Product> Product { get; set; }
 
                /// <summary>
        ///   PurchaseOrder
@@ -56,6 +61,11 @@ namespace EntitiesModels
        public DbSet<PurchaseOrderInfo> PurchaseOrderInfo { get; set; }
 
                /// <summary>
+       ///   Role
+      /// </summary>
+       public DbSet<Role> Role { get; set; }
+
+               /// <summary>
        ///   SaleOrder
       /// </summary>
        public DbSet<SaleOrder> SaleOrder { get; set; }
@@ -66,9 +76,34 @@ namespace EntitiesModels
        public DbSet<SaleOrderInfo> SaleOrderInfo { get; set; }
 
                /// <summary>
+       ///   SqlLog
+      /// </summary>
+       public DbSet<SqlLog> SqlLog { get; set; }
+
+               /// <summary>
+       ///   SysConfig
+      /// </summary>
+       public DbSet<SysConfig> SysConfig { get; set; }
+
+               /// <summary>
+       ///   Category
+      /// </summary>
+       public DbSet<Category> Category { get; set; }
+
+               /// <summary>
+       ///   ExpressCompany
+      /// </summary>
+       public DbSet<ExpressCompany> ExpressCompany { get; set; }
+
+               /// <summary>
        ///   TransferBin
       /// </summary>
        public DbSet<TransferBin> TransferBin { get; set; }
+
+               /// <summary>
+       ///   UserInfo
+      /// </summary>
+       public DbSet<UserInfo> UserInfo { get; set; }
 
           }
 }

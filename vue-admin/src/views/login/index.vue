@@ -1,138 +1,261 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <div class="login-wrap" v-show="showLogin">
+      <el-form
+        ref="loginForm"
+        :model="loginForm"
+        :rules="loginRules"
+        class="login-form"
+        auto-complete="on"
+        label-position="left"
+      >
+        <div class="title-container">
+          <h3 class="title">订单统计系统</h3>
+        </div>
 
-      <div class="title-container">
-        <h3 class="title">Login Form</h3>
-      </div>
+        <el-form-item prop="UserName">
+          <span class="svg-container">
+            <svg-icon icon-class="user" />
+          </span>
+          <el-input
+            ref="username"
+            v-model="loginForm.UserName"
+            placeholder="手机号"
+            name="UserName"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+          />
+        </el-form-item>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.UserName"
-          placeholder="Username"
-          name="UserName"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
-      </el-form-item>
+        <el-form-item prop="Password">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input
+            :key="passwordType"
+            ref="password"
+            v-model="loginForm.Password"
+            :type="passwordType"
+            placeholder="密码"
+            name="Password"
+            tabindex="2"
+            auto-complete="on"
+            @keyup.enter.native="handleLogin"
+          />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
+        </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.Password"
-          :type="passwordType"
-          placeholder="Password"
-          name="Password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width:100%;margin-bottom:30px;"
+          @click.native.prevent="handleLogin"
+        >登录</el-button>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+        <div class="tips" style="float:right;">
+          <span style="margin-right:20px;" v-on:click="ToRegister">在线注册</span>
+          <span v-on:click="ToPassword">忘记密码</span>
+        </div>
+      </el-form>
+    </div>
+    <div class="register-wrap" v-show="showRegister">
+      <el-form
+        ref="registerForm"
+        :model="registerForm"
+        :rules="registerRules"
+        class="login-form"
+        auto-complete="on"
+        label-position="left"
+      >
+        <div class="title-container">
+          <h3 class="title">商户注册</h3>
+        </div>
 
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
-
-    </el-form>
+        <el-form-item prop="phoneNumber">
+          <span class="svg-container">
+            <i class="ele-icon-shouji"></i>
+          </span>
+          <el-input
+            ref="phoneNumber"
+            v-model="registerForm.PhoneNumber"
+            placeholder="手机号"
+            name="phoneNumber"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+          />
+        </el-form-item>
+        <el-form-item prop="password">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input
+            :key="passwordType"
+            ref="password"
+            v-model="registerForm.password"
+            :type="passwordType"
+            placeholder="输入密码"
+            name="password"
+            tabindex="2"
+            auto-complete="on"
+          />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
+        </el-form-item>
+           <el-form-item prop="passwordTwo">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input
+            :key="passwordType"
+            ref="passwordTwo"
+            v-model="registerForm.password"
+            :type="passwordType"
+            placeholder="再次输入密码"
+            name="passwordTwo"
+            tabindex="2"
+            auto-complete="on"
+          />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
+        </el-form-item>
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width:100%;margin-bottom:30px;"
+          @click.native.prevent="handleRegister"
+        >注册</el-button>
+        <div class="tips">
+          <span v-on:click="ToLogin">已有账号？马上登录</span>
+        </div>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
-  import { validUsername } from '@/utils/validate'
-  import { login } from '@/api/user'
-
+import { validUsername } from "@/utils/validate";
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error("请输入用户名"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (value.length < 3) {
+        callback(new Error("密码不能少于3位"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
+    const validatePhoneNumber = (rule, value, callback) => {
+      if (value.length != 11) {
+        callback(new Error("手机号有误"));
+      } else {
+        callback();
+      }
+    };
     return {
       loginForm: {
-        UserName: 'admin',
-        Password: '111111'
+        UserName: "",
+        Password: ""
+      },
+      registerForm: {
+        phoneNumber: "",
+        password:"",
+        passwordTwo:""
       },
       loginRules: {
-        UserName: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        Password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        UserName: [
+          { required: true, trigger: "blur", validator: validateUsername }
+        ],
+        Password: [
+          { required: true, trigger: "blur", validator: validatePassword }
+        ]
+      },
+      registerRules: {
+        phoneNumber: [
+          { required: true, trigger: "blur", validator: validatePhoneNumber }
+        ],
+         password: [
+          { required: true, trigger: "blur", validator: validatePassword }
+        ]
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
+      passwordType: "password",
+      redirect: undefined,
+      showLogin: true,
+      showRegister: false
+    };
   },
   watch: {
     $route: {
       handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+        this.redirect = route.query && route.query.redirect;
       },
       immediate: true
     }
   },
   methods: {
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+      if (this.passwordType === "password") {
+        this.passwordType = "";
       } else {
-        this.passwordType = 'password'
+        this.passwordType = "password";
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-        //  login(this.loginForm).then((data) => {
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          this.loading = true;
+          this.$store
+            .dispatch("user/login", this.loginForm)
+            .then(res => {
+              this.$router.push({ path: this.redirect || "/" });
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
         } else {
-          console.log('error submit!!')
-          return false
+          // console.log('error submit!!')
+          return false;
         }
-      })
+      });
+    },
+    handleRegister() {},
+    //注册
+    ToRegister() {
+      this.showRegister = true;
+      this.showLogin = false;
+    },
+    ToPassword() {},
+    ToLogin() {
+      this.showRegister = false;
+      this.showLogin = true;
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -175,9 +298,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;

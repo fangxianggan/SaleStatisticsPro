@@ -1,15 +1,11 @@
-﻿using EntitiesModels.Models;
+﻿using EntitiesModels.DtoModels;
+using EntitiesModels.Models;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WebApi.IBLL;
-using WebApi.Model;
 
 namespace WebApi.Controllers
 {
@@ -17,62 +13,115 @@ namespace WebApi.Controllers
     /// 销售订单
     /// </summary>
     /// 
-    [RoutePrefix("dev-api/SaleOrder")]
-    public class SaleOrderController : ApiController
+
+    public partial class SaleOrderController : ApiController
     {
-        private readonly ISaleOrderBLL _saleOrderBLL;
+       /// <summary>
+       /// 
+       /// </summary>
         private readonly ISaleOrderInfoBLL _saleOrderInfoBLL;
+
+       
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="saleOrderBLL"></param>
         /// <param name="saleOrderInfoBLL"></param>
-        public SaleOrderController(ISaleOrderBLL saleOrderBLL, ISaleOrderInfoBLL saleOrderInfoBLL)
+        /// <param name="saleOrderBLL"></param>
+        public SaleOrderController(ISaleOrderInfoBLL saleOrderInfoBLL, ISaleOrderBLL saleOrderBLL)
+            : this(saleOrderBLL)
         {
-            _saleOrderBLL = saleOrderBLL;
             _saleOrderInfoBLL = saleOrderInfoBLL;
         }
+       
 
+        /// <summary>
+        /// 提交一个订单详情
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SaveData")]
+        public HttpReponseModel<SaleOrderViewModel> Post(SaleOrderViewModel model)
+        {
+            return  _saleOrderBLL.SaveData(model);
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
+        /// 
         [HttpPost]
-        [Route("GetList")]
-
-        public async Task<HttpReponseModel<List<SaleOrder>>> GetPageList(QueryModel query)
+        [Route("GetSaleOrderViewModelPageList")]
+        public HttpReponseModel<List<SaleOrderViewModel>> GetSaleOrderViewModelPageList(QueryModel query)
         {
-           
-            return await _saleOrderBLL.GetPageListLogic(query);
-        }
-
-
-        // GET: api/SaleOrder/5
-        public string Get(int id)
-        {
-            return "value";
+          return   _saleOrderBLL.GetSaleOrderViewModePageList(query);
         }
 
         /// <summary>
-        /// 
+        /// 删除一个订单
         /// </summary>
-        /// <param name="sale"></param>
-        public void Post(Test sale)
+        /// <param name="sOrderNum"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetDel")]
+        public HttpReponseModel<int> Del(string sOrderNum)
         {
-
+            return _saleOrderBLL.GetDel(sOrderNum);
         }
 
-        // PUT: api/SaleOrder/5
-        public void Put(int id, [FromBody]string value)
+
+        /// <summary>
+        /// 获取一个订单详情
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSaleOrderInfoViewModelList")]
+        public HttpReponseModel<List<SaleOrderInfoViewModel>> GetSaleOrderInfoViewModelList(string orderNumber)
         {
+            return _saleOrderInfoBLL.GetSaleOrderInfoViewModelList(orderNumber);
         }
 
-        // DELETE: api/SaleOrder/5
-        public void Delete(int id)
+        /// <summary>
+        /// 判断一个订单详情里单子是不是都已经签收了
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSaleOrderInfoDoSign")]
+        public HttpReponseModel<int> GetSaleOrderInfoDoSign(string orderNumber)
         {
-
+            return _saleOrderBLL.GetSaleOrderInfoDoSign(orderNumber);
         }
+
+        /// <summary>
+        /// 锁定这个销售订单号
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSaleOrderInfoLock")]
+        public HttpReponseModel<int> GetSaleOrderInfoLock(string orderNumber)
+        {
+            return _saleOrderBLL.GetSaleOrderInfoLock(orderNumber);
+        }
+
+
+        /// <summary>
+        /// 导出excel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        [Route("GetSaleListViewModelExportExcel")]
+        public HttpReponseModel<FileStreamViewModel> GetSaleListViewModelExportExcel(QueryModel model)
+        {
+            return _saleOrderBLL.GetSaleListViewModelExportExcel(model);
+        }
+
     }
 }

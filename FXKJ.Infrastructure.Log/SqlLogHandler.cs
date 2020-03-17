@@ -66,12 +66,28 @@ namespace FXKJ.Infrastructure.Log
             try
             {
                 string conStr = GlobalParams.ReadConnectionString();
-
-
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     //插入sql语句
-                    string sqlStr = "insert into [dbo].[Sys_SqlLog] ([SqlLogId],[OperateSql],[EndDateTime],[ElapsedTime],[Parameter],[CreateUserId],[CreateUserCode],[CreateUserName],[CreateTime]) values('" + log.SqlLogId + "','" + log.OperateSql + "','" + log.EndDateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" + log.ElapsedTime + "','" + log.Parameter + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) + "');";
+                    string sqlStr = @"insert into [dbo].[SqlLog] (
+[SqlLogId],
+[OperateSql],
+[EndDateTime],
+[ElapsedTime],
+[Parameter],
+[CreateUserCode],
+[CreateTime],
+[UpdateTime]
+) values('" +
+log.SqlLogId + "','" +
+log.OperateSql + "','" +
+log.EndDateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" +
+log.ElapsedTime + "','" +
+log.Parameter + "','" +
+log.CreateUserCode + "','" +
+log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) +"','"+
+log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) +
+"');";
                     using (SqlCommand cmd = new SqlCommand(sqlStr, con))
                     {
                         con.Open();
@@ -81,7 +97,7 @@ namespace FXKJ.Infrastructure.Log
             }
             catch (Exception ex)
             {
-               
+
             }
             return result;
         }

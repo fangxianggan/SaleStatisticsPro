@@ -21,21 +21,21 @@ namespace FXKJ.Infrastructure.Core.SystemInfo
                 m_IPAddress = ip;
             }
 
-            private String m_MACAddress;
+            private string m_MACAddress;
             /// <summary>
             /// 物理地址
             /// </summary>
-            public String MACAddress
+            public string MACAddress
             {
                 get { return m_MACAddress; }
                 set { m_MACAddress = value; }
             }
 
-            private String m_IPAddress;
+            private string m_IPAddress;
             /// <summary>
             /// IP 地址
             /// </summary>
-            public String IPAddress
+            public string IPAddress
             {
                 get { return m_IPAddress; }
                 set { m_IPAddress = value; }

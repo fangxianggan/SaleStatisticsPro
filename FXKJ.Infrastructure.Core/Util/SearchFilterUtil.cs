@@ -20,10 +20,10 @@ namespace FXKJ.Infrastructure.Core.Util
             var searchCase = string.Empty;
             if (conditions.Count() > 0)
             {
-                string group = " ";
+                
                 foreach (var rule in conditions)
                 {
-                    group += rule.Operator+" ";
+                   string group = " "+rule.Operator+" ";
                     //过滤输入的数据
                     string data = StripSqlInjection(rule.Value.ToString());
                     switch (rule.Method)
@@ -59,7 +59,13 @@ namespace FXKJ.Infrastructure.Core.Util
                             searchCase += group + rule.Field + " >='" + data + "'";
                             break;
                         case QueryMethod.In: //包括
-                            searchCase += group + rule.Field + " in ('" + data + "')";
+                            var arr = data.Split(',');
+                            var inStr = "";
+                            foreach (var item in arr) {
+                                inStr += "'" + data + "',";
+                            }
+                            inStr = inStr.Substring(0, inStr.Length - 1);
+                            searchCase += group + rule.Field + " in (" + inStr + ")";
                             break;
                         case QueryMethod.NotIn: //不包含
                             searchCase += group + rule.Field + " not in ('" + data + "')";
@@ -79,6 +85,16 @@ namespace FXKJ.Infrastructure.Core.Util
                         case QueryMethod.Time://针对时间特别处理
                             searchCase += group + rule.Field + " between '" + data + " 00:00:00' AND '" + data + " 23:59:59'";
                             break;
+                        case QueryMethod.Between:
+                            var start = data.Split(',')[0];
+                            var end = data.Split(',')[1];
+                            searchCase += group + rule.Field + " between '" + start + " ' AND '" + end + " '";
+                            break;
+                        case QueryMethod.BetweenTime:
+                            var start1 = data.Split(',')[0];
+                            var end1 = data.Split(',')[1];
+                            searchCase += group + rule.Field + " between '" + start1 + " 00:00:00' AND '" + end1 + " 23:59:59'";
+                            break;
                     }
                 }
             }
@@ -92,7 +108,7 @@ namespace FXKJ.Infrastructure.Core.Util
         /// <returns></returns>
         public static string ConvertOrderBy(IList<QueryOrder> queryOrders)
         {
-            string mes = "";
+            string mes = " ORDER BY ";
             foreach (var item in queryOrders)
             {
                 var sortType = item.IsDesc == true ? "desc" : "asc";

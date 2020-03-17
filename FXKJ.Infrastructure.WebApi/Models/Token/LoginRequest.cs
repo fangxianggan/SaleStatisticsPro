@@ -22,5 +22,10 @@ namespace FXKJ.Infrastructure.WebApi.Models.Token
         /// </summary>
         public string Password { get; set; }
 
+        /// <summary>
+        /// 跳转地址
+        /// </summary>
+        public string ReturnUrl { set; get; }
+
     }
 }

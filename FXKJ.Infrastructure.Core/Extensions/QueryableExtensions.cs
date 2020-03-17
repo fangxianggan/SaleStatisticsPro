@@ -32,6 +32,7 @@ namespace FXKJ.Infrastructure.Core.Extensions
                 string.IsNullOrWhiteSpace(prefix)
                     ? items.Where(c => string.IsNullOrEmpty(c.Prefix))
                     : items.Where(c => c.Prefix == prefix);
+            filterItems = filterItems.Where(p => !String.IsNullOrEmpty(p.Value.ToString())&&p.Value!=null);
             if (filterItems.Count() == 0) return table;
             return QueryableSearcherUtil<TEntity>.Search(table, filterItems);
         }

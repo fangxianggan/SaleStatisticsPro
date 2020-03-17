@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Web;
 using FXKJ.Infrastructure.Log.Log4NetWrite;
@@ -49,8 +48,8 @@ namespace FXKJ.Infrastructure.Log
                 ExceptionType = exception.GetType().FullName,
                 CreateUserCode = principalUser.Code,
                 CreateUserName = principalUser.Name,
-                ServerHost = String.Format("{0}【{1}】", Dns.GetHostName(), Dns.GetHostByName(Dns.GetHostName()).AddressList[0].ToString()),
-                ClientHost = String.Format("{0}", Dns.GetHostByName(Dns.GetHostName()).AddressList[0].ToString()),
+                ServerHost = string.Format("{0}【{1}】", Dns.GetHostName(), Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString()),
+                ClientHost = string.Format("{0}", Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString()),
                 Runtime = "Web"
             };
             //获取服务器信息
@@ -58,17 +57,16 @@ namespace FXKJ.Infrastructure.Log
             log.RequestUrl = string.Format("{0} ", request.Url);
             log.HttpMethod = request.HttpMethod;
             log.UserAgent = request.UserAgent;
-            var inputStream = request.InputStream;
-            var streamReader = new StreamReader(inputStream);
-            var requestData = HttpUtility.UrlDecode(streamReader.ReadToEnd());
-            log.RequestData = requestData;
+            //var inputStream = request.InputStream;
+            //var streamReader = new StreamReader(inputStream);
+            //var requestData = HttpUtility.UrlDecode(streamReader.ReadToEnd());
+            //log.RequestData = requestData;
             log.InnerException = exception.InnerException != null ? GetExceptionFullMessage(exception.InnerException) : "";
         }
 
         /// <summary>
         /// 重写基类
         /// </summary>
-        [Obsolete]
         public override void WriteLog()
         {
          
@@ -76,7 +74,7 @@ namespace FXKJ.Infrastructure.Log
             base.WriteLog();
 
             //写入数据库
-            WriteExceptionLogData(log);
+           // WriteExceptionLogData(log);
 
             string exceptionHtml = ExceptionHtml(log);
             //是否发送邮件
@@ -94,7 +92,7 @@ namespace FXKJ.Infrastructure.Log
             LogWriter.WriteLog(FolderName.Exception, exceptionHtml);
         }
 
-        private  int WriteExceptionLogData(ExceptionLog log)
+        private int WriteExceptionLogData(ExceptionLog log)
         {
             //写入sql日志
             int result=0;

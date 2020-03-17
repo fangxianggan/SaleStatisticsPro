@@ -12,7 +12,6 @@ namespace FXKJ.Infrastructure.WebApi.Models.Token
     public class AuthInfo:BaseModel
     {
 
-      
         /// <summary>
         /// 用户名
         /// </summary>
@@ -33,6 +32,17 @@ namespace FXKJ.Infrastructure.WebApi.Models.Token
         /// </summary>
         public DateTime? ExpiryDateTime { get; set; }
 
-        
+
+        /// <summary>
+        /// 刷新时间
+        /// </summary>
+        public DateTime? RefreshDateTime { get; set; }
+
+        /// <summary>
+        /// 跳转的url
+        /// </summary>
+        public string ReturnUrl { set; get; }
+
+       
     }
 }

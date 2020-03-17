@@ -9,6 +9,7 @@ namespace FXKJ.Infrastructure.Entities.QueryModel
             Items = new List<ConditionItem>();
             OrderList = new List<QueryOrder>();
             Total = 0;
+           
         }
         public int PageSize { set; get; }
         public int PageIndex { set; get; }

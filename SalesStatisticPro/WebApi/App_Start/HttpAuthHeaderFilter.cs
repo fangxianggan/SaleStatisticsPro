@@ -30,8 +30,24 @@ namespace WebApi.App_Start
             var allowAnonymous = apiDescription.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any();
             if (isAuthorized && !allowAnonymous)
             {
-                operation.parameters.Add(new Parameter { name = "Authorization", @in = "header", description = "安全", required = false, type = "string" });
+                operation.parameters.Add(new Parameter { name = "X-Token",
+                    @in = "header",
+                    description = "安全",
+                    required = false,
+                    type = "string"
+                });
+               
             }
+
+            //operation.parameters.Add(new Parameter
+            //{
+            //    name = "TransactionToken",
+            //    @in = "header",
+            //    description = "安全",
+            //    required = false,
+            //    type = "string"
+
+            //});
         }
     }
 }

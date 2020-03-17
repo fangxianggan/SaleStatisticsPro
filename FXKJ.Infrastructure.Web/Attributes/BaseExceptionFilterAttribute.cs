@@ -20,7 +20,7 @@ namespace FXKJ.Infrastructure.Web.Attributes
         ///     异常发生记录日志
         /// </summary>
         /// <param name="filterContext"></param>
-        public void OnException(ExceptionContext filterContext)
+        public override void OnException(ExceptionContext filterContext)
         {
             ExceptionLogHandler exceptionLogHandler = new ExceptionLogHandler(filterContext.Exception);
             Task.Factory.StartNew(() => exceptionLogHandler.WriteLog());

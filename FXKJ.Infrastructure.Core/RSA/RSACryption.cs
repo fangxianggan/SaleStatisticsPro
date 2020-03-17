@@ -392,11 +392,11 @@ namespace FXKJ.Infrastructure.Core.RSA
         {
             try
             {
-                System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
+                RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
                 RSA.FromXmlString(strKeyPublic);
-                System.Security.Cryptography.RSAPKCS1SignatureDeformatter RSADeformatter = new
+                RSAPKCS1SignatureDeformatter RSADeformatter = new
 
-    System.Security.Cryptography.RSAPKCS1SignatureDeformatter(RSA);
+    RSAPKCS1SignatureDeformatter(RSA);
                 //指定解密的时候HASH算法为MD5   
                 RSADeformatter.SetHashAlgorithm("MD5");
                 if (RSADeformatter.VerifySignature(HashbyteDeformatter, DeformatterData))
@@ -426,7 +426,7 @@ namespace FXKJ.Infrastructure.Core.RSA
             {
                 byte[] HashbyteDeformatter;
                 HashbyteDeformatter = Convert.FromBase64String(strHashbyteDeformatter);
-                System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
+                RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
                 RSA.FromXmlString(strKeyPublic);
                 System.Security.Cryptography.RSAPKCS1SignatureDeformatter RSADeformatter = new
 

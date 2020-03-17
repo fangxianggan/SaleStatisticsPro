@@ -39,18 +39,22 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.8.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.8.0\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.0\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac.Integration.WebApi, Version=4.3.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.WebApi2.4.3.1\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    <Reference Include="Autofac.Integration.WebApi, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.WebApi2.4.3.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -69,10 +73,26 @@
       <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>NetDLL\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>NetDLL\System.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>NetDLL\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
@@ -158,6 +178,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\HiddenApiFilter.cs" />
@@ -167,52 +188,131 @@
     <Compile Include="App_Start\SwaggerControllerDescProvider.cs" />
     <Compile Include="App_Start\SwaggerNet.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="BLL\BusinessBLL.generated.cs" />
-    <Compile Include="BLL\ProdoctBLL.generated.cs" />
-    <Compile Include="BLL\ProductTypeBLL.generated.cs" />
-    <Compile Include="BLL\PurchaseOrderBLL.generated.cs" />
-    <Compile Include="BLL\PurchaseOrderInfoBLL.generated.cs" />
+    <Compile Include="BLL\ExpressCompanyBLL.cs" />
+    <Compile Include="BLL\BusinessBLL.cs" />
+    <Compile Include="BLL\ProductBLL.cs" />
+    <Compile Include="BLL\PurchaseOrderBLL.cs" />
+    <Compile Include="BLL\PurchaseOrderInfoBLL.cs" />
     <Compile Include="BLL\SaleOrderBLL.cs" />
-    <Compile Include="BLL\SaleOrderBLL.generated.cs" />
-    <Compile Include="BLL\SaleOrderInfoBLL.generated.cs" />
-    <Compile Include="BLL\TransferBinBLL.generated.cs" />
+    <Compile Include="BLL\SaleOrderInfoBLL.cs" />
+    <Compile Include="BLL\CategoryBLL.cs" />
+    <Compile Include="BLL\LoginBLL.cs" />
+    <Compile Include="BLL\TransferBinBLL.cs" />
+    <Compile Include="BLL\UserInfoBLL.cs" />
+    <Compile Include="BLL\_BusinessBLL.cs" />
+    <Compile Include="BLL\_CategoryBLL.cs" />
+    <Compile Include="BLL\_ExpressCompanyBLL.cs" />
+    <Compile Include="BLL\_MerchantInfoBLL.cs" />
+    <Compile Include="BLL\_MerchantRoleBLL.cs" />
+    <Compile Include="BLL\_ProductBLL.cs" />
+    <Compile Include="BLL\_PurchaseOrderBLL.cs" />
+    <Compile Include="BLL\_PurchaseOrderInfoBLL.cs" />
+    <Compile Include="BLL\_RoleBLL.cs" />
+    <Compile Include="BLL\_SaleOrderBLL.cs" />
+    <Compile Include="BLL\_SaleOrderInfoBLL.cs" />
+    <Compile Include="BLL\_SqlLogBLL.cs" />
+    <Compile Include="BLL\_SysConfigBLL.cs" />
+    <Compile Include="BLL\_TransferBinBLL.cs" />
+    <Compile Include="BLL\_UserInfoBLL.cs" />
+    <Compile Include="Controllers\ExpressCompanyController.cs" />
     <Compile Include="Controllers\BusinessController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\SaleOrderController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\TransferBinController.cs" />
+    <Compile Include="Controllers\UserInfoController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\_BusinessController.cs" />
+    <Compile Include="Controllers\_CategoryController.cs" />
+    <Compile Include="Controllers\_ExpressCompanyController.cs" />
+    <Compile Include="Controllers\_MerchantInfoController.cs" />
+    <Compile Include="Controllers\_MerchantRoleController.cs" />
+    <Compile Include="Controllers\_ProductController.cs" />
+    <Compile Include="Controllers\_PurchaseOrderController.cs" />
+    <Compile Include="Controllers\_PurchaseOrderInfoController.cs" />
+    <Compile Include="Controllers\_RoleController.cs" />
+    <Compile Include="Controllers\_SaleOrderController.cs" />
+    <Compile Include="Controllers\_SaleOrderInfoController.cs" />
+    <Compile Include="Controllers\_SqlLogController.cs" />
+    <Compile Include="Controllers\_SysConfigController.cs" />
+    <Compile Include="Controllers\_TransferBinController.cs" />
+    <Compile Include="Controllers\_UserInfoController.cs" />
     <Compile Include="EntitiesModels\Context.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="IBLL\IBusinessBLL.generated.cs" />
-    <Compile Include="IBLL\IProdoctBLL.generated.cs" />
-    <Compile Include="IBLL\IProductTypeBLL.generated.cs" />
+    <Compile Include="IBLL\IExpressCompanyBLL.cs" />
+    <Compile Include="IBLL\IBusinessBLL.cs" />
+    <Compile Include="IBLL\IProductBLL.cs" />
     <Compile Include="IBLL\IPurchaseOrderBLL.cs" />
-    <Compile Include="IBLL\IPurchaseOrderBLL.generated.cs" />
-    <Compile Include="IBLL\IPurchaseOrderInfoBLL.generated.cs" />
+    <Compile Include="IBLL\IPurchaseOrderInfoBLL.cs" />
     <Compile Include="IBLL\ISaleOrderBLL.cs" />
-    <Compile Include="IBLL\ISaleOrderBLL.generated.cs" />
-    <Compile Include="IBLL\ISaleOrderInfoBLL.generated.cs" />
-    <Compile Include="IBLL\ITransferBinBLL.generated.cs" />
-    <Compile Include="IRepository\IBusinessRepository.generated.cs" />
-    <Compile Include="IRepository\IProdoctRepository.generated.cs" />
-    <Compile Include="IRepository\IProductTypeRepository.generated.cs" />
-    <Compile Include="IRepository\IPurchaseOrderInfoRepository.generated.cs" />
-    <Compile Include="IRepository\IPurchaseOrderRepository.generated.cs" />
-    <Compile Include="IRepository\ISaleOrderInfoRepository.generated.cs" />
-    <Compile Include="IRepository\ISaleOrderRepository.generated.cs" />
-    <Compile Include="IRepository\ITransferBinRepository.generated.cs" />
+    <Compile Include="IBLL\ISaleOrderInfoBLL.cs" />
+    <Compile Include="IBLL\ICategoryBLL.cs" />
+    <Compile Include="IBLL\ILoginBLL.cs" />
+    <Compile Include="IBLL\ITransferBinBLL.cs" />
+    <Compile Include="IBLL\IUserInfoBLL.cs" />
+    <Compile Include="IBLL\_IBusinessBLL.cs" />
+    <Compile Include="IBLL\_ICategoryBLL.cs" />
+    <Compile Include="IBLL\_IExpressCompanyBLL.cs" />
+    <Compile Include="IBLL\_IMerchantInfoBLL.cs" />
+    <Compile Include="IBLL\_IMerchantRoleBLL.cs" />
+    <Compile Include="IBLL\_IProductBLL.cs" />
+    <Compile Include="IBLL\_IPurchaseOrderBLL.cs" />
+    <Compile Include="IBLL\_IPurchaseOrderInfoBLL.cs" />
+    <Compile Include="IBLL\_IRoleBLL.cs" />
+    <Compile Include="IBLL\_ISaleOrderBLL.cs" />
+    <Compile Include="IBLL\_ISaleOrderInfoBLL.cs" />
+    <Compile Include="IBLL\_ISqlLogBLL.cs" />
+    <Compile Include="IBLL\_ISysConfigBLL.cs" />
+    <Compile Include="IBLL\_ITransferBinBLL.cs" />
+    <Compile Include="IBLL\_IUserInfoBLL.cs" />
+    <Compile Include="IRepository\IProductRepository.cs" />
+    <Compile Include="IRepository\IPurchaseOrderInfoRepository.cs" />
+    <Compile Include="IRepository\IPurchaseOrderRepository.cs" />
+    <Compile Include="IRepository\ISaleOrderInfoRepository.cs" />
+    <Compile Include="IRepository\ISaleOrderRepository.cs" />
+    <Compile Include="IRepository\_IBusinessRepository.cs" />
+    <Compile Include="IRepository\_ICategoryRepository.cs" />
+    <Compile Include="IRepository\_IExpressCompanyRepository.cs" />
+    <Compile Include="IRepository\_IMerchantInfoRepository.cs" />
+    <Compile Include="IRepository\_IMerchantRoleRepository.cs" />
+    <Compile Include="IRepository\_IProductRepository.cs" />
+    <Compile Include="IRepository\_IPurchaseOrderInfoRepository.cs" />
+    <Compile Include="IRepository\_IPurchaseOrderRepository.cs" />
+    <Compile Include="IRepository\_IRoleRepository.cs" />
+    <Compile Include="IRepository\_ISaleOrderInfoRepository.cs" />
+    <Compile Include="IRepository\_ISaleOrderRepository.cs" />
+    <Compile Include="IRepository\_ISqlLogRepository.cs" />
+    <Compile Include="IRepository\_ISysConfigRepository.cs" />
+    <Compile Include="IRepository\_ITransferBinRepository.cs" />
+    <Compile Include="IRepository\_IUserInfoRepository.cs" />
     <Compile Include="Model\Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\BusinessRepository.generated.cs" />
-    <Compile Include="Repository\ProdoctRepository.generated.cs" />
-    <Compile Include="Repository\ProductTypeRepository.generated.cs" />
-    <Compile Include="Repository\PurchaseOrderInfoRepository.generated.cs" />
-    <Compile Include="Repository\PurchaseOrderRepository.generated.cs" />
-    <Compile Include="Repository\SaleOrderInfoRepository.generated.cs" />
-    <Compile Include="Repository\SaleOrderRepository.generated.cs" />
-    <Compile Include="Repository\TransferBinRepository.generated.cs" />
+    <Compile Include="Repository\ProductRepository.cs" />
+    <Compile Include="Repository\PurchaseOrderInfoRepository.cs" />
+    <Compile Include="Repository\PurchaseOrderRepository.cs" />
+    <Compile Include="Repository\SaleOrderInfoRepository.cs" />
+    <Compile Include="Repository\SaleOrderRepository.cs" />
+    <Compile Include="Repository\_BusinessRepository.cs" />
+    <Compile Include="Repository\_CategoryRepository.cs" />
+    <Compile Include="Repository\_ExpressCompanyRepository.cs" />
+    <Compile Include="Repository\_MerchantInfoRepository.cs" />
+    <Compile Include="Repository\_MerchantRoleRepository.cs" />
+    <Compile Include="Repository\_ProductRepository.cs" />
+    <Compile Include="Repository\_PurchaseOrderInfoRepository.cs" />
+    <Compile Include="Repository\_PurchaseOrderRepository.cs" />
+    <Compile Include="Repository\_RoleRepository.cs" />
+    <Compile Include="Repository\_SaleOrderInfoRepository.cs" />
+    <Compile Include="Repository\_SaleOrderRepository.cs" />
+    <Compile Include="Repository\_SqlLogRepository.cs" />
+    <Compile Include="Repository\_SysConfigRepository.cs" />
+    <Compile Include="Repository\_TransferBinRepository.cs" />
+    <Compile Include="Repository\_UserInfoRepository.cs" />
     <Compile Include="T4\Tool\TemplateCode.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -228,10 +328,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Data\connectionStrings.config" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="NetDLL\Autofac.dll" />
     <Content Include="NetDLL\Autofac.Integration.Mvc.dll" />
+    <Content Include="NetDLL\System.Buffers.dll" />
+    <Content Include="NetDLL\System.Memory.dll" />
+    <Content Include="NetDLL\System.Runtime.CompilerServices.Unsafe.dll" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="SwaggerUI\css\screen.css" />
     <Content Include="SwaggerUI\images\pet_store_api.png" />
@@ -257,39 +361,82 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TemplateCode.cs</LastGenOutput>
       <LastOutputs>
-..\..\BLL\BusinessBLL.generated.cs
-..\..\BLL\ProdoctBLL.generated.cs
-..\..\BLL\ProductTypeBLL.generated.cs
-..\..\BLL\PurchaseOrderBLL.generated.cs
-..\..\BLL\PurchaseOrderInfoBLL.generated.cs
-..\..\BLL\SaleOrderBLL.generated.cs
-..\..\BLL\SaleOrderInfoBLL.generated.cs
-..\..\BLL\TransferBinBLL.generated.cs
+..\..\BLL\_BusinessBLL.cs
+..\..\BLL\_CategoryBLL.cs
+..\..\BLL\_ExpressCompanyBLL.cs
+..\..\BLL\_MerchantInfoBLL.cs
+..\..\BLL\_MerchantRoleBLL.cs
+..\..\BLL\_ProductBLL.cs
+..\..\BLL\_PurchaseOrderBLL.cs
+..\..\BLL\_PurchaseOrderInfoBLL.cs
+..\..\BLL\_RoleBLL.cs
+..\..\BLL\_SaleOrderBLL.cs
+..\..\BLL\_SaleOrderInfoBLL.cs
+..\..\BLL\_SqlLogBLL.cs
+..\..\BLL\_SysConfigBLL.cs
+..\..\BLL\_TransferBinBLL.cs
+..\..\BLL\_UserInfoBLL.cs
+..\..\Controllers\_BusinessController.cs
+..\..\Controllers\_CategoryController.cs
+..\..\Controllers\_ExpressCompanyController.cs
+..\..\Controllers\_MerchantInfoController.cs
+..\..\Controllers\_MerchantRoleController.cs
+..\..\Controllers\_ProductController.cs
+..\..\Controllers\_PurchaseOrderController.cs
+..\..\Controllers\_PurchaseOrderInfoController.cs
+..\..\Controllers\_RoleController.cs
+..\..\Controllers\_SaleOrderController.cs
+..\..\Controllers\_SaleOrderInfoController.cs
+..\..\Controllers\_SqlLogController.cs
+..\..\Controllers\_SysConfigController.cs
+..\..\Controllers\_TransferBinController.cs
+..\..\Controllers\_UserInfoController.cs
 ..\..\EntitiesModels\Context.cs
-..\..\IBLL\IBusinessBLL.generated.cs
-..\..\IBLL\IProdoctBLL.generated.cs
-..\..\IBLL\IProductTypeBLL.generated.cs
-..\..\IBLL\IPurchaseOrderBLL.generated.cs
-..\..\IBLL\IPurchaseOrderInfoBLL.generated.cs
-..\..\IBLL\ISaleOrderBLL.generated.cs
-..\..\IBLL\ISaleOrderInfoBLL.generated.cs
-..\..\IBLL\ITransferBinBLL.generated.cs
-..\..\IRepository\IBusinessRepository.generated.cs
-..\..\IRepository\IProdoctRepository.generated.cs
-..\..\IRepository\IProductTypeRepository.generated.cs
-..\..\IRepository\IPurchaseOrderInfoRepository.generated.cs
-..\..\IRepository\IPurchaseOrderRepository.generated.cs
-..\..\IRepository\ISaleOrderInfoRepository.generated.cs
-..\..\IRepository\ISaleOrderRepository.generated.cs
-..\..\IRepository\ITransferBinRepository.generated.cs
-..\..\Repository\BusinessRepository.generated.cs
-..\..\Repository\ProdoctRepository.generated.cs
-..\..\Repository\ProductTypeRepository.generated.cs
-..\..\Repository\PurchaseOrderInfoRepository.generated.cs
-..\..\Repository\PurchaseOrderRepository.generated.cs
-..\..\Repository\SaleOrderInfoRepository.generated.cs
-..\..\Repository\SaleOrderRepository.generated.cs
-..\..\Repository\TransferBinRepository.generated.cs
+..\..\IBLL\_IBusinessBLL.cs
+..\..\IBLL\_ICategoryBLL.cs
+..\..\IBLL\_IExpressCompanyBLL.cs
+..\..\IBLL\_IMerchantInfoBLL.cs
+..\..\IBLL\_IMerchantRoleBLL.cs
+..\..\IBLL\_IProductBLL.cs
+..\..\IBLL\_IPurchaseOrderBLL.cs
+..\..\IBLL\_IPurchaseOrderInfoBLL.cs
+..\..\IBLL\_IRoleBLL.cs
+..\..\IBLL\_ISaleOrderBLL.cs
+..\..\IBLL\_ISaleOrderInfoBLL.cs
+..\..\IBLL\_ISqlLogBLL.cs
+..\..\IBLL\_ISysConfigBLL.cs
+..\..\IBLL\_ITransferBinBLL.cs
+..\..\IBLL\_IUserInfoBLL.cs
+..\..\IRepository\_IBusinessRepository.cs
+..\..\IRepository\_ICategoryRepository.cs
+..\..\IRepository\_IExpressCompanyRepository.cs
+..\..\IRepository\_IMerchantInfoRepository.cs
+..\..\IRepository\_IMerchantRoleRepository.cs
+..\..\IRepository\_IProductRepository.cs
+..\..\IRepository\_IPurchaseOrderInfoRepository.cs
+..\..\IRepository\_IPurchaseOrderRepository.cs
+..\..\IRepository\_IRoleRepository.cs
+..\..\IRepository\_ISaleOrderInfoRepository.cs
+..\..\IRepository\_ISaleOrderRepository.cs
+..\..\IRepository\_ISqlLogRepository.cs
+..\..\IRepository\_ISysConfigRepository.cs
+..\..\IRepository\_ITransferBinRepository.cs
+..\..\IRepository\_IUserInfoRepository.cs
+..\..\Repository\_BusinessRepository.cs
+..\..\Repository\_CategoryRepository.cs
+..\..\Repository\_ExpressCompanyRepository.cs
+..\..\Repository\_MerchantInfoRepository.cs
+..\..\Repository\_MerchantRoleRepository.cs
+..\..\Repository\_ProductRepository.cs
+..\..\Repository\_PurchaseOrderInfoRepository.cs
+..\..\Repository\_PurchaseOrderRepository.cs
+..\..\Repository\_RoleRepository.cs
+..\..\Repository\_SaleOrderInfoRepository.cs
+..\..\Repository\_SaleOrderRepository.cs
+..\..\Repository\_SqlLogRepository.cs
+..\..\Repository\_SysConfigRepository.cs
+..\..\Repository\_TransferBinRepository.cs
+..\..\Repository\_UserInfoRepository.cs
 .\TemplateCode.cs
 </LastOutputs>
     </Content>
@@ -322,15 +469,25 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="SwaggerUI\lib\.DS_Store" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="App_Data\redisConfig.config" />
+    <Content Include="App_Data\appSettings.config" />
+    <None Include="Aspose\License.lic" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
+      <Project>{77CF037D-57B0-4338-93EC-7415DD9B40CE}</Project>
+      <Name>FXKJ.Infrastructure.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FXKJ.Infrastructure.Dapper\FXKJ.Infrastructure.Dapper.csproj">
+      <Project>{E8EF2CEF-D651-4DFD-8896-9B81CA107A28}</Project>
+      <Name>FXKJ.Infrastructure.Dapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\FXKJ.Infrastructure.DataAccess\FXKJ.Infrastructure.DataAccess.csproj">
       <Project>{410CB82B-7197-48F7-A24F-E8F750C9249F}</Project>
       <Name>FXKJ.Infrastructure.DataAccess</Name>
@@ -350,6 +507,10 @@
     <ProjectReference Include="..\EntitiesModels\EntitiesModels.csproj">
       <Project>{fd648777-7297-496b-b4f1-d5d46dfa60e7}</Project>
       <Name>EntitiesModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetRedisUtil\NetRedisUtil.csproj">
+      <Project>{7f890a1a-ee96-486f-957f-9656a4e308de}</Project>
+      <Name>NetRedisUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

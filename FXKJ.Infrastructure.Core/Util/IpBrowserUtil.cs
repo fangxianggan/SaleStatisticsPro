@@ -67,8 +67,8 @@ namespace FXKJ.Infrastructure.Core.Util
             try
             {
                 var address = IPAddress.Parse(GetClientIp());
-                var ipInfor = Dns.GetHostByAddress(address);
-                return ipInfor.HostName;
+                var ipInfo = Dns.GetHostEntry(address);
+                return ipInfo.HostName;
             }
             catch (Exception ex)
             {
@@ -126,7 +126,7 @@ namespace FXKJ.Infrastructure.Core.Util
         {
             try
             {
-                return Dns.GetHostByName(GetServerHost()).AddressList[0].ToString();
+                return Dns.GetHostEntry(GetServerHost()).AddressList[0].ToString();
             }
             catch (Exception ex)
             {
@@ -186,7 +186,7 @@ namespace FXKJ.Infrastructure.Core.Util
                 var ips = strIPadd.Split('.');
                 if (ips.Length == 4 || ips.Length == 6)
                 {
-                    return Int32.Parse(ips[0]) < 256 &&
+                    return int.Parse(ips[0]) < 256 &&
                            Int32.Parse(ips[1]) < 256 & Int32.Parse(ips[2]) < 256 & Int32.Parse(ips[3]) < 256;
                 }
                 return false;
@@ -216,7 +216,6 @@ namespace FXKJ.Infrastructure.Core.Util
                 return false;
             }
         }
-
         #endregion
 
         #region 得到本机IP
@@ -234,7 +233,6 @@ namespace FXKJ.Infrastructure.Core.Util
                 strLocalIp = ip.ToString();
                 break;
             }
-
             return strLocalIp;
         }
 
@@ -430,9 +428,8 @@ namespace FXKJ.Infrastructure.Core.Util
         #endregion
 
         #region 获取物理地址
-
         /// <summary>
-        ///     根据提供的api获取物理地址
+        /// 根据提供的api获取物理地址
         /// </summary>
         /// <returns></returns>
         public static string GetAddressByApi()
@@ -440,7 +437,7 @@ namespace FXKJ.Infrastructure.Core.Util
             try
             {
                 var apiUrl = "http://whois.pconline.com.cn/ip.jsp?";
-                var ip = String.Format("ip={0}", GetClientIp());
+                var ip = string.Format("ip={0}", GetClientIp());
                 return RequestUtil.SendGetRequest(apiUrl, ip).Replace("\n", string.Empty).Replace("\r", string.Empty);
             }
             catch (Exception ex)
@@ -448,9 +445,7 @@ namespace FXKJ.Infrastructure.Core.Util
                 LogWriter.WriteLog(FolderName.Error, ex.Message);
                 return "";
             }
-
         }
-
         #endregion
 
 

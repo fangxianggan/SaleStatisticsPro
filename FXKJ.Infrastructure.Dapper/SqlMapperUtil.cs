@@ -1,10 +1,8 @@
 ﻿
 using FXKJ.Infrastructure.Core.Util;
-using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,11 +13,11 @@ namespace FXKJ.Infrastructure.Dapper
     /// </summary>
     public static class SqlMapperUtil
     {
-     
+
         public static string ConnectionName { set; get; }
         public static DbBase CreateDbBase()
         {
-          
+
             var dbBase = new DbBase(ConnectionName);
             return dbBase;
         }
@@ -32,13 +30,13 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="transaction">事物</param>
         /// <param name="commandTimeout">超时</param>
         /// <returns></returns>
-        public static Task<int> Insert<T>( T t, IDbTransaction transaction = null,
-            int? commandTimeout = null) where T : class 
+        public static int Insert<T>(T t, IDbTransaction transaction = null,
+            int? commandTimeout = null) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.Insert(t, transaction, commandTimeout);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -50,13 +48,13 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns></returns>
-        public static Task<T> InsertReT<T>(T t, IDbTransaction transaction = null,
+        public static T InsertReT<T>(T t, IDbTransaction transaction = null,
             int? commandTimeout = null) where T : class
         {
             using (var db = CreateDbBase())
             {
-                var result = db.InsertReT(t, transaction,commandTimeout);
-                return Task.Factory.StartNew(() => result);
+                var result = db.InsertReT(t, transaction, commandTimeout);
+                return result;
             }
         }
 
@@ -67,13 +65,13 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns></returns>
-        public static Task<int> InsertScalar<T>(T t, IDbTransaction transaction = null,
+        public static int InsertScalar<T>(T t, IDbTransaction transaction = null,
             int? commandTimeout = null) where T : class
         {
             using (var db = CreateDbBase())
             {
-                var result = db.InsertScalar(t,transaction,commandTimeout);
-                return Task.Factory.StartNew(() => result);
+                var result = db.InsertScalar(t, transaction, commandTimeout);
+                return result;
             }
         }
 
@@ -84,12 +82,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns></returns>
-        public static Task<int> InsertBatch<T>(IEnumerable<T> lt, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public static int InsertBatch<T>(IEnumerable<T> lt, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.InsertBatch(lt, transaction, commandTimeout);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -98,12 +96,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// </summary>
         /// <param name="lt"></param>
         /// <returns></returns>
-        public static Task<int> InsertWithBulkCopy<T>(List<T> lt, IDbTransaction transaction = null) where T : new()
+        public static int InsertWithBulkCopy<T>(List<T> lt, IDbTransaction transaction = null) where T : new()
         {
             using (var db = CreateDbBase())
             {
                 var result = db.InsertWithBulkCopy(lt, transaction);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -129,12 +127,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="t"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static Task<int> Update<T>(T t, IDbTransaction transaction = null, SqlQuery sql = null ) where T : class
+        public static int Update<T>(T t, IDbTransaction transaction = null, SqlQuery sql = null) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.Update(t, transaction, sql);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
         /// <summary>
@@ -144,12 +142,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="t"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static Task<T> UpdateReT<T>(T t, IDbTransaction transaction = null, SqlQuery sql = null) where T : class
+        public static T UpdateReT<T>(T t, IDbTransaction transaction = null, SqlQuery sql = null) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.Update(t, transaction, sql);
-                return Task.Factory.StartNew(() => t);
+                return t;
             }
         }
         /// <summary>
@@ -159,12 +157,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="sql"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static Task<int> Delete<T>(SqlQuery sql = null, IDbTransaction transaction = null, object id = null) where T : class
+        public static int Delete<T>(SqlQuery sql = null, IDbTransaction transaction = null, object id = null) where T : class
         {
             using (var db = CreateDbBase())
             {
-                var result = db.Delete<T>(sql,transaction);
-                return Task.Factory.StartNew(() => result);
+                var result = db.Delete<T>(sql, transaction);
+                return result;
             }
         }
 
@@ -175,12 +173,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="sql"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static Task<int> DeleteById<T>(IDbTransaction transaction = null,SqlQuery sql = null , object id=null ) where T : class
+        public static int DeleteById<T>(IDbTransaction transaction = null, SqlQuery sql = null, object id = null) where T : class
         {
             using (var db = CreateDbBase())
             {
-                var result = db.DeleteById<T>(sql,transaction,id);
-                return Task.Factory.StartNew(() => result);
+                var result = db.DeleteById<T>(sql, transaction, id);
+                return result;
             }
         }
 
@@ -191,12 +189,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="sql"></param>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public static Task<int> DeleteByIds<T>(string ids, IDbTransaction transaction = null, SqlQuery sql = null) where T : class
+        public static int DeleteByIds<T>(string ids, IDbTransaction transaction = null, SqlQuery sql = null) where T : class
         {
             using (var db = CreateDbBase())
             {
-                var result = db.DeleteByIds<T>(ids,sql,transaction);
-                return Task.Factory.StartNew(() => result);
+                var result = db.DeleteByIds<T>(ids, sql, transaction);
+                return result;
             }
         }
 
@@ -206,12 +204,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static Task<IEnumerable<T>> Query<T>(SqlQuery sql = null) where T : class
+        public static IEnumerable<T> Query<T>(SqlQuery sql = null) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.Query<T>(sql);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -222,12 +220,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="sql"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static Task<T> SingleOrDefault<T>(SqlQuery sql) where T : class
+        public static T SingleOrDefault<T>(SqlQuery sql) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.SingleOrDefault<T>(sql);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -238,12 +236,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="sql"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static Task<T> SingleOrDefault<T>(SqlQuery sql = null, object id = null) where T : class
+        public static T SingleOrDefault<T>(SqlQuery sql = null, object id = null) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.SingleOrDefault<T>(sql, id);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -253,56 +251,102 @@ namespace FXKJ.Infrastructure.Dapper
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static Task<int> Count<T>(SqlQuery sql = null) where T : class
+        public static int Count<T>(SqlQuery sql = null) where T : class
         {
             using (var db = CreateDbBase())
             {
                 var result = db.Count<T>(sql);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
+        /// <summary>
+        /// 获取总数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public static int Count<T>(string sql = null)
+        {
+            using (var db = CreateDbBase())
+            {
+                var result = db.DbConnecttion.Query<T>(sql).Count();
+                return result;
+            }
+        }
 
-        public static Task<IEnumerable<dynamic>> GetDynamicData(string querySql)
+        public static IEnumerable<T> GetListData<T>(string querySql)
+        {
+            var result = SqlWithParams<T>(querySql, null);
+            return result;
+        }
+
+
+        public static IEnumerable<dynamic> GetDynamicData(string querySql)
         {
             var sql = string.Format(@"select * from ({0}) seq ", querySql);
-            var result = SqlWithParams(sql,null).Result;
-            return Task.Factory.StartNew(() => result);
+            var result = SqlWithParams(sql, null);
+            return result;
         }
 
-        public static Task<HttpReponseModel<T>> PagingQueryAsync<T>(string querySql, QueryModel queryParam)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="querySql"></param>
+        /// <param name="queryParam"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> PagingQueryAsync<T>(string querySql, QueryModel queryParam)
         {
-            var sql = queryParam.IsReport ?
-                string.Format(@"select * from ({0}) seq ", querySql) :
-                string.Format(@"select * from ({0}) seq where seq.rownum between @x and @y", querySql);
-            var currentPage = queryParam.PageIndex; //当前页号
-            var pageSize = queryParam.PageSize; //每页记录数
-            var lower = ((currentPage - 1) * pageSize) + 1; //记录起点
-            var upper = currentPage * pageSize; //记录终点
+            var sql = querySql;
+           
+            var page = " ";
+
+            if (!queryParam.IsReport)
+            {
+                var currentPage = queryParam.PageIndex; //当前页号
+                var pageSize = queryParam.PageSize; //每页记录数
+                var lower = ((currentPage - 1) * pageSize); //记录起点
+                var upper = currentPage * pageSize; //记录终点
+                page = "  OFFSET " + lower + " ROWS FETCH NEXT " + upper + " ROWS ONLY ";
+            }
+
             var where = @" where 1=1 ";
-            if (queryParam.Items.Count()>0)
+            queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
+            if (queryParam.Items.Count() > 0)
             {
                 where += SearchFilterUtil.ConvertFilters(queryParam.Items);
+
             }
-            var parms = new DynamicParameters();
-            parms.Add("x", lower);
-            parms.Add("y", upper);
+
             //排序字段 
             var orderString = "";
-            if (queryParam.OrderList.Count()>0)
+            if (queryParam.OrderList.Count() > 0)
             {
                 orderString = string.Format("{0}", SearchFilterUtil.ConvertOrderBy(queryParam.OrderList));
             }
-            sql = sql.Replace("@recordCount", " count(*) over() as RecordCount ")
-                .Replace("@rowNumber", " row_number() over (order by @orderBy) as rownum ")
-                .Replace("@orderBy", orderString)
-                .Replace("@where", where);
-            var data =SqlWithParams<T>(sql, parms).Result.ToList();
-            int allCount= (int)data.Count();
-            //记录总数
-            return Task.Factory.StartNew(() => new HttpReponseModel<T> { PageData = data, PageIndex= currentPage, PageSize=pageSize,Total = allCount });
+            sql = sql.Replace("@orderBy", orderString)
+                .Replace("@where", where)
+                .Replace("@page", page);
+            string countSql = querySql.Replace("@where", where).Replace("@orderBy", " ").Replace("@page", "");
+            var data = SqlWithParams<T>(sql);
+            queryParam.Total = Count<T>(countSql);
+            return data;
         }
 
+        public static DataTable GetDataTable(string querySql, QueryModel queryParam)
+        {
+            var sql = querySql;
+            var where = @" where 1=1 ";
+            queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
+            if (queryParam.Items.Count() > 0)
+            {
+                where += SearchFilterUtil.ConvertFilters(queryParam.Items);
+            }
+            sql = sql.Replace("@where", where);
+            var data = SqlWithParamsToDataTable(sql);
+            return data;
+        }
 
         /// <summary>
         /// 单表存储过程分页
@@ -310,7 +354,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <typeparam name="T">实体</typeparam>
         /// <param name="queryParam">分页参数</param>
         /// <returns>返回值</returns>
-        public static Task<HttpReponseModel<T>> PagingQueryProcAsync<T>(QueryModel queryParam, SqlQuery sql = null) where T : class
+        public static IEnumerable<T> PagingQueryProcAsync<T>(QueryModel queryParam, SqlQuery sql = null) where T : class
         {
             using (var dbs = CreateDbBase())
             {
@@ -326,7 +370,7 @@ namespace FXKJ.Infrastructure.Dapper
                 {
                     filter = SearchFilterUtil.ConvertFilters(queryParam.Items);
                 }
-                parms.Add("Filters"," 1=1 "+ filter);
+                parms.Add("Filters", " 1=1 " + filter);
                 parms.Add("PageIndex", queryParam.PageIndex);
                 parms.Add("PageSize", queryParam.PageSize);
                 //排序字段 
@@ -336,11 +380,11 @@ namespace FXKJ.Infrastructure.Dapper
                     orderString = string.Format("{0}", SearchFilterUtil.ConvertOrderBy(queryParam.OrderList));
                 }
                 parms.Add("Sort", orderString);
-                parms.Add("RecordCount",value:0, dbType: DbType.Int32, direction: ParameterDirection.Output);
-                var data = StoredProcWithParams<T>("System_Proc_Paging", parms).Result.ToList();
-                int  allCount = parms.Get<int>("RecordCount");
-                return Task.Factory.StartNew(() => new HttpReponseModel<T> { PageData = data, PageIndex = queryParam.PageIndex, PageSize = queryParam.PageSize, Total = allCount });
-   
+                parms.Add("RecordCount", value: 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+                var data = StoredProcWithParams<T>("System_Proc_Paging", parms);
+                queryParam.Total = parms.Get<int>("RecordCount");
+                return data;
+
             }
         }
 
@@ -356,12 +400,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms">参数信息</param>
         /// <param name="isSetConnectionStr">是否需要重置连接字符串</param>
         /// <returns>影响数</returns>
-        public static Task<int> InsertUpdateOrDeleteSql<T>(string sql, IDbTransaction transaction = null, dynamic parms = null, bool isSetConnectionStr = true)
+        public static int InsertUpdateOrDeleteSql<T>(string sql, IDbTransaction transaction = null, dynamic parms = null, bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
                 var result = db.InsertUpdateOrDeleteSql(sql, transaction, (object)parms);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -372,12 +416,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms">参数信息</param>
         /// <param name="isSetConnectionStr">是否需要重置连接字符串</param>
         /// <returns>影响数</returns>
-        public static Task<bool> InsertUpdateOrDeleteSqlBool<T>(string sql, IDbTransaction transaction = null, dynamic parms = null, bool isSetConnectionStr = true)
+        public static bool InsertUpdateOrDeleteSqlBool<T>(string sql, IDbTransaction transaction = null, dynamic parms = null, bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
-                var result = db.InsertUpdateOrDeleteSql(sql,transaction, (object)parms) > 0;
-                return Task.Factory.StartNew(() => result);
+                var result = db.InsertUpdateOrDeleteSql(sql, transaction, (object)parms) > 0;
+                return result;
             }
         }
         #endregion
@@ -391,12 +435,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms"></param>
         /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static Task<IEnumerable<T>> SqlWithParams<T>(string sql, dynamic parms = null, bool isSetConnectionStr = true)
+        public static IEnumerable<T> SqlWithParams<T>(string sql, dynamic parms = null, bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
                 var result = db.SqlWithParams<T>(sql, (object)parms);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -408,14 +452,32 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms"></param>
         /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static Task<IEnumerable<dynamic>> SqlWithParams(string sql, dynamic parms, bool isSetConnectionStr = true)
+        public static IEnumerable<dynamic> SqlWithParams(string sql, dynamic parms = null, bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
                 var result = db.SqlWithParams(sql, (object)parms);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
+
+        /// <summary>
+        /// 返回dataTable
+        /// </summary>
+        /// <typeparam name="dynamic"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="parms"></param>
+        /// <param name="isSetConnectionStr"></param>
+        /// <returns></returns>
+        public static DataTable SqlWithParamsToDataTable(string sql, dynamic parms = null, bool isSetConnectionStr = true)
+        {
+            using (var db = CreateDbBase())
+            {
+                var result = db.SqlWithParamsToDataTable(sql, (object)parms);
+                return result;
+            }
+        }
+
 
 
         /// <summary>
@@ -425,12 +487,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms"></param>
         /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static Task<bool> SqlWithParamsBool<T>(string sql, dynamic parms, bool isSetConnectionStr = true)
+        public static bool SqlWithParamsBool<T>(string sql, dynamic parms, bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
                 var result = db.SqlWithParamsBool(sql, (object)parms);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -442,12 +504,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms"></param>
         /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static Task<T> SqlWithParamsSingle<T>(string sql, dynamic parms = null, bool isSetConnectionStr = true)
+        public static T SqlWithParamsSingle<T>(string sql, dynamic parms = null, bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
                 var result = db.SqlWithParamsSingle<T>(sql, (object)parms);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -463,13 +525,13 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms">The parms.</param>
         /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static Task<IEnumerable<T>> StoredProcWithParams<T>(string procName, dynamic parms,
+        public static IEnumerable<T> StoredProcWithParams<T>(string procName, dynamic parms,
             bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
                 var result = db.StoredProcWithParams<T>(procName, (object)parms);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
 
@@ -498,13 +560,13 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms"></param>
         /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static Task<int> InsertUpdateOrDeleteStoredProc<T>(string procName, IDbTransaction transaction = null, dynamic parms = null,
+        public static int InsertUpdateOrDeleteStoredProc<T>(string procName, IDbTransaction transaction = null, dynamic parms = null,
             bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
-                var result = db.InsertUpdateOrDeleteStoredProc(procName, transaction,(object)parms);
-                return Task.Factory.StartNew(() => result);
+                var result = db.InsertUpdateOrDeleteStoredProc(procName, transaction, (object)parms);
+                return result;
             }
         }
 
@@ -516,17 +578,17 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="parms"></param>
         /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static Task<T> StoredProcWithParamsSingle<T>(string procName, dynamic parms = null,
+        public static T StoredProcWithParamsSingle<T>(string procName, dynamic parms = null,
             bool isSetConnectionStr = true)
         {
             using (var db = CreateDbBase())
             {
                 var result = db.StoredProcWithParamsSingle<T>(procName, (object)parms);
-                return Task.Factory.StartNew(() => result);
+                return result;
             }
         }
         #endregion
 
-       
+
     }
 }
