@@ -31,8 +31,17 @@ namespace FXKJ.Infrastructure.DataAccess
             using (var dbContext = new MyContext())
             {
                 dbContext.Set<T>().Add(model);
-                 dbContext.SaveChanges();
+                dbContext.SaveChanges();
                 return model;
+            }
+        }
+
+        public virtual bool Add(T model, bool retType)
+        {
+            using (var dbContext = new MyContext())
+            {
+                dbContext.Set<T>().Add(model);
+                return dbContext.SaveChanges() > 0 ? true : false;
             }
         }
 
@@ -44,7 +53,7 @@ namespace FXKJ.Infrastructure.DataAccess
                 {
                     dbContext.Set<T>().Add(_model);
                 }
-                 dbContext.SaveChanges();
+                dbContext.SaveChanges();
                 return list.ToList();
             }
         }
@@ -64,11 +73,29 @@ namespace FXKJ.Infrastructure.DataAccess
                     }
                 }
                 dbContext.Entry(model).State = EntityState.Modified;
-                 dbContext.SaveChanges();
+                dbContext.SaveChanges();
                 return model;
             }
         }
+        public virtual bool Update(T model, bool retType)
+        {
+            using (var dbContext = new MyContext())
+            {
 
+                //反射更新时间字段
+                Type type = model.GetType();
+                foreach (var item in type.GetRuntimeProperties())
+                {
+                    if (item.Name == "UpdateTime")
+                    {
+                        item.SetValue(model, DateTime.Now);
+                        break;
+                    }
+                }
+                dbContext.Entry(model).State = EntityState.Modified;
+                return dbContext.SaveChanges() > 0 ? true : false;
+            }
+        }
         public virtual List<T> UpdateList(IEnumerable<T> list)
         {
             using (var dbContext = new MyContext())
@@ -87,7 +114,7 @@ namespace FXKJ.Infrastructure.DataAccess
                     }
                     dbContext.Entry(model).State = EntityState.Modified;
                 }
-                 dbContext.SaveChanges();
+                dbContext.SaveChanges();
                 return list.ToList();
             }
         }
@@ -98,7 +125,7 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 var _model = dbContext.Set<T>().Find(keyValues);
                 dbContext.Set<T>().Remove(_model);
-                return  dbContext.SaveChanges();
+                return dbContext.SaveChanges();
             }
         }
 
@@ -111,7 +138,7 @@ namespace FXKJ.Infrastructure.DataAccess
                 {
                     dbContext.Set<T>().Remove(_model);
                 }
-                return  dbContext.SaveChanges();
+                return dbContext.SaveChanges();
             }
         }
 
@@ -120,7 +147,7 @@ namespace FXKJ.Infrastructure.DataAccess
             using (var dbContext = new MyContext())
             {
                 var _model = dbContext.Set<T>().Find(keyValues);
-                return  _model;
+                return _model;
             }
         }
 
@@ -128,7 +155,7 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-                return  dbContext.Set<T>().Where(whereLambda).FirstOrDefault();
+                return dbContext.Set<T>().Where(whereLambda).FirstOrDefault();
             }
         }
 
@@ -136,7 +163,7 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-                return  dbContext.Set<T>().Where(whereLambda).ToList();
+                return dbContext.Set<T>().Where(whereLambda).ToList();
             }
         }
 
@@ -150,7 +177,7 @@ namespace FXKJ.Infrastructure.DataAccess
                 //排序操作
                 QueryList = _GetOrder(QueryList, queryParam.OrderList);
                 queryParam.Total = QueryList.Count();
-                return  QueryList.Skip((queryParam.PageIndex - 1) * queryParam.PageSize).Take(queryParam.PageSize).ToList();
+                return QueryList.Skip((queryParam.PageIndex - 1) * queryParam.PageSize).Take(queryParam.PageSize).ToList();
             }
         }
 
@@ -173,7 +200,7 @@ namespace FXKJ.Infrastructure.DataAccess
             return list;
         }
 
-       
+
     }
 }
 

@@ -1,10 +1,6 @@
 ﻿using EntitiesModels.DtoModels;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.WebApi.Models.Token;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace WebApi.IBLL
 {
@@ -17,11 +13,11 @@ namespace WebApi.IBLL
         /// <returns></returns>
         HttpReponseModel<string> CheckLogin(LoginRequest loginRequest);
 
-        HttpReponseModel<AuthInfo> GetUserInfo(string token);
+        HttpReponseModel<MerchantInfoViewModel> GetMerchantInfo(string token);
 
         HttpReponseModel<string> SignOut(string token);
 
-        HttpReponseModel<string> Register(RegisterViewModel register);
+        HttpReponseModel<bool> Register(RegisterViewModel register);
 
         HttpReponseModel<bool> IsExistPhoneNumber(string phoneNumber);
 

@@ -16,13 +16,13 @@ namespace FXKJ.Infrastructure.DataAccess
         /// <returns></returns>
         Task<T> Add(T entity);
 
-       
+        Task<bool> Add(T entity,bool retType);
 
-       /// <summary>
-       /// 批量添加
-       /// </summary>
-       /// <param name="list"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// 批量添加
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         Task<List<T>> AddList(IEnumerable<T> list);
 
        
@@ -35,12 +35,12 @@ namespace FXKJ.Infrastructure.DataAccess
         Task<T> Update(T current);
 
 
-
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="list"></param>
-       /// <returns></returns>
+        Task<bool> Update(T current,bool retType);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         Task<List<T>> UpdateList(IEnumerable<T> list);
         /// <summary>
         /// 根据主键删除

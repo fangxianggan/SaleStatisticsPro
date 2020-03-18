@@ -36,6 +36,15 @@ namespace FXKJ.Infrastructure.DataAccess
             }
         }
 
+        public virtual async Task<bool> Add(T model, bool retType)
+        {
+            using (var dbContext = new MyContext())
+            {
+                dbContext.Set<T>().Add(model);
+                return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+        }
+
         public virtual async Task<List<T>> AddList(IEnumerable<T> list)
         {
             using (var dbContext = new MyContext())
@@ -68,7 +77,25 @@ namespace FXKJ.Infrastructure.DataAccess
                 return model;
             }
         }
+        public virtual async Task<bool> Update(T model, bool retType)
+        {
+            using (var dbContext = new MyContext())
+            {
 
+                //反射更新时间字段
+                Type type = model.GetType();
+                foreach (var item in type.GetRuntimeProperties())
+                {
+                    if (item.Name == "UpdateTime")
+                    {
+                        item.SetValue(model, DateTime.Now);
+                        break;
+                    }
+                }
+                dbContext.Entry(model).State = EntityState.Modified;
+                return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+        }
         public virtual async Task<List<T>> UpdateList(IEnumerable<T> list)
         {
             using (var dbContext = new MyContext())

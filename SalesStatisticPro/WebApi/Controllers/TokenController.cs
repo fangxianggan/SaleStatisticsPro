@@ -51,15 +51,15 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取用户信息
+        /// 获取商户信息
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("GetUserInfo")]
-        public HttpReponseModel<AuthInfo> GetUserInfo([FromBody] string token)
+        [Route("GetMerchantInfo")]
+        public HttpReponseModel<MerchantInfoViewModel> GetMerchantInfo([FromBody] string token)
         {
-            return _loginBLL.GetUserInfo(token);
+            return _loginBLL.GetMerchantInfo(token);
         }
 
         /// <summary>
@@ -79,12 +79,22 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("Register")]
         [ApiDTC]
-        public HttpReponseModel<string> Register(RegisterViewModel register)
+        public HttpReponseModel<bool> Register(RegisterViewModel register)
         {
             return _loginBLL.Register(register);
         }
 
-
+        /// <summary>
+        /// 验证手机号是否已经存在
+        /// </summary>
+        /// <param name="register"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("IsExistPhoneNumber")]
+        public HttpReponseModel<bool> IsExistPhoneNumber(string phoneNumber)
+        {
+            return _loginBLL.IsExistPhoneNumber(phoneNumber);
+        }
         #endregion
 
     }

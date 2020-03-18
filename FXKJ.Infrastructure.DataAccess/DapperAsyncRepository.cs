@@ -20,6 +20,11 @@ namespace FXKJ.Infrastructure.DataAccess
             throw new NotImplementedException();
         }
 
+        public Task<bool> Add(T entity, bool retType)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<T>> AddList(IEnumerable<T> list)
         {
             throw new NotImplementedException();
@@ -56,6 +61,11 @@ namespace FXKJ.Infrastructure.DataAccess
         }
 
         public Task<T> Update(T current)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> Update(T current, bool retType)
         {
             throw new NotImplementedException();
         }

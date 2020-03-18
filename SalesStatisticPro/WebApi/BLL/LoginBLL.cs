@@ -116,14 +116,20 @@ namespace WebApi.BLL
         }
 
         /// <summary>
-        /// 获取用户信息
+        /// 获取商户信息
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public HttpReponseModel<AuthInfo> GetUserInfo(string token)
+        public HttpReponseModel<MerchantInfoViewModel> GetMerchantInfo(string token)
         {
-            HttpReponseModel<AuthInfo> httpReponse = new HttpReponseModel<AuthInfo>();
-            httpReponse.Data = _tokenBLL.DecoderToken(token, secretKey).Data;
+            var authInfo = _tokenBLL.DecoderToken(token, secretKey).Data;
+            HttpReponseModel<MerchantInfoViewModel> httpReponse = new HttpReponseModel<MerchantInfoViewModel>();
+            MerchantInfoViewModel merchantInfoView = new MerchantInfoViewModel();
+            merchantInfoView.Avatar = authInfo.Avatar;
+            merchantInfoView.Name = authInfo.Name;
+            merchantInfoView.Roles =new List<string> {"admin", "editor"};
+            merchantInfoView.Introduction = authInfo.Introduction;
+            httpReponse.Data = merchantInfoView;
             return httpReponse;
         }
 
@@ -148,9 +154,9 @@ namespace WebApi.BLL
         /// <param name="register"></param>
         /// <returns></returns>
         /// 
-        public HttpReponseModel<string> Register(RegisterViewModel register)
+        public HttpReponseModel<bool> Register(RegisterViewModel register)
         {
-            HttpReponseModel<string> httpReponse = new HttpReponseModel<string>();
+            HttpReponseModel<bool> httpReponse = new HttpReponseModel<bool>();
             MerchantInfo merchantInfo = new MerchantInfo();
             merchantInfo.ID = Guid.NewGuid();
             merchantInfo.MerchantName = "";
@@ -161,7 +167,10 @@ namespace WebApi.BLL
             }
             merchantInfo.MerchantPhone = register.PhoneNumber;
             merchantInfo.MerchantPassword= DEncryptUtil.Md5Encrypt(register.Password);
-            _merchantInfoEFRepository.Add(merchantInfo);
+            httpReponse.Data= _merchantInfoEFRepository.Add(merchantInfo,true);
+            if (httpReponse.Data) {
+                httpReponse.Message = "注册成功!";
+            }
             return httpReponse;
         }
 

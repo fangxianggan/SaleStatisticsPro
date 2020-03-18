@@ -1,9 +1,7 @@
-﻿using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+﻿using FXKJ.Infrastructure.Entities.QueryModel;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.DataAccess
 {
@@ -16,13 +14,13 @@ namespace FXKJ.Infrastructure.DataAccess
         /// <returns></returns>
         T Add(T entity);
 
-       
+        bool Add(T entity,bool retType);
 
-       /// <summary>
-       /// 批量添加
-       /// </summary>
-       /// <param name="list"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// 批量添加
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         List<T> AddList(IEnumerable<T> list);
 
        
@@ -34,13 +32,13 @@ namespace FXKJ.Infrastructure.DataAccess
         /// <returns></returns>
         T Update(T current);
 
+        bool Update(T current,bool retType);
 
-
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="list"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         List<T> UpdateList(IEnumerable<T> list);
         /// <summary>
         /// 根据主键删除

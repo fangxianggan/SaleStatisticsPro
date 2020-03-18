@@ -80,7 +80,7 @@
           </span>
           <el-input
             ref="phoneNumber"
-            v-model="registerForm.PhoneNumber"
+            v-model="registerForm.phoneNumber"
             placeholder="手机号"
             name="phoneNumber"
             type="text"
@@ -106,14 +106,14 @@
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </span>
         </el-form-item>
-           <el-form-item prop="passwordTwo">
+        <el-form-item prop="passwordTwo">
           <span class="svg-container">
             <svg-icon icon-class="password" />
           </span>
           <el-input
             :key="passwordType"
             ref="passwordTwo"
-            v-model="registerForm.password"
+            v-model="registerForm.passwordTwo"
             :type="passwordType"
             placeholder="再次输入密码"
             name="passwordTwo"
@@ -139,29 +139,34 @@
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
+import validate from "@/rules/validate";
 export default {
   name: "Login",
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error("请输入用户名"));
+    const checkPasswordTwo = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+        return false;
+      }
+      if (value !== this.registerForm.password) {
+        callback(new Error("输入密码不一致"));
       } else {
         callback();
       }
     };
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 3) {
-        callback(new Error("密码不能少于3位"));
+    const checkPhoneNumberExsit = (rule, value, callback) => {
+      if (value === "") {
+        return false;
       } else {
-        callback();
-      }
-    };
-    const validatePhoneNumber = (rule, value, callback) => {
-      if (value.length != 11) {
-        callback(new Error("手机号有误"));
-      } else {
-        callback();
+        var url = "/Token/IsExistPhoneNumber";
+        var data = {phoneNumber:value};
+        this.$ajax(url,data,{method:"get"}).then(res => {
+          if (res.data) {
+            callback(new Error("该手机号已经注册过了!"));
+          } else {
+            callback();
+          }
+        });
       }
     };
     return {
@@ -171,23 +176,22 @@ export default {
       },
       registerForm: {
         phoneNumber: "",
-        password:"",
-        passwordTwo:""
+        password: "",
+        passwordTwo: ""
       },
+
       loginRules: {
-        UserName: [
-          { required: true, trigger: "blur", validator: validateUsername }
-        ],
-        Password: [
-          { required: true, trigger: "blur", validator: validatePassword }
-        ]
+        UserName: [validate.checkPhoneNumer],
+        Password: [validate.checkPassword]
       },
       registerRules: {
         phoneNumber: [
-          { required: true, trigger: "blur", validator: validatePhoneNumber }
+          validate.checkPhoneNumer,
+          { required: true, trigger: "blur", validator: checkPhoneNumberExsit }
         ],
-         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
+        password: [validate.checkPassword],
+        passwordTwo: [
+          { required: true, trigger: "blur", validator: checkPasswordTwo }
         ]
       },
       loading: false,
@@ -235,7 +239,26 @@ export default {
         }
       });
     },
-    handleRegister() {},
+    handleRegister() {
+      this.$refs.registerForm.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          this.$store
+            .dispatch("user/register", this.registerForm)
+            .then(res => {
+              this.showRegister = false;
+              this.showLogin = true;
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+        } else {
+          // console.log('error submit!!')
+          return false;
+        }
+      });
+    },
     //注册
     ToRegister() {
       this.showRegister = true;

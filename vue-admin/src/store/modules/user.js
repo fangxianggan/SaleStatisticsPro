@@ -1,11 +1,12 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo,register } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import  router,{ resetRouter } from '@/router'
 import {  Message } from 'element-ui'
 const state = {
   token: getToken(),
   name: '',
-  avatar: ''
+  avatar: '',
+  roles: []
 }
 
 const mutations = {
@@ -17,6 +18,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -57,13 +61,13 @@ const actions = {
         const d = response.data
        // console.log(d);
         if (!d) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败从新登陆!')
         }
-
+        const { roles, name, avatar } = d
       //  const { name, avatar } = data
-
-        commit('SET_NAME', d.name)
-        commit('SET_AVATAR', d.avatar)
+        commit('SET_ROLES', roles)
+        commit('SET_NAME', name)
+        commit('SET_AVATAR', avatar)
         resolve(d)
       }).catch(error => {
         reject(error)
@@ -72,12 +76,14 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({ commit, state,dispatch }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
         removeToken()
         resetRouter()
+        dispatch('tagsView/delAllViews', null, { root: true })
         resolve()
       }).catch(error => {
         reject(error)
@@ -89,10 +95,62 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
       removeToken()
       resolve()
     })
+  },
+  //
+  register(registerForm){
+    return new Promise((resolve, reject) => {
+      register(registerForm).then(res => {
+        let type;
+        if (res.code == 200) {
+          switch (res.resultSign) {
+            case 0:  type = "success"; break;
+            case 1: type = "warning"; break;
+            case 2: type = "error"; break;
+            case 3: type = "info"; break;
+            default:type = "info"; break;
+          }
+          Message({
+            message: res.message ,
+            type: type,
+            duration: 3 * 1000
+          })
+        } 
+        resolve()
+      }).catch(error => {
+        reject(error)
+      });
+    })
+  },
+   // dynamically modify permissions
+   changeRoles({ commit, dispatch }, role) {
+    return new Promise(async resolve => {
+      const token = role + '-token'
+
+      commit('SET_TOKEN', token)
+      setToken(token)
+
+      const { roles } = await dispatch('getInfo')
+
+      resetRouter()
+
+      // generate accessible routes map based on roles
+      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+
+      // dynamically add accessible routes
+      router.addRoutes(accessRoutes)
+
+      // reset visited views and cached views
+      dispatch('tagsView/delAllViews', null, { root: true })
+
+      resolve()
+    })
   }
+
+
 }
 
 export default {
