@@ -10,10 +10,11 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-03-15 20:51
+//        生成时间：2020-03-20 17:04
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -34,6 +35,11 @@ namespace EntitiesModels
        ///   Business
       /// </summary>
        public DbSet<Business> Business { get; set; }
+
+               /// <summary>
+       ///   Menu
+      /// </summary>
+       public DbSet<Menu> Menu { get; set; }
 
                /// <summary>
        ///   MerchantRole
@@ -64,6 +70,11 @@ namespace EntitiesModels
        ///   Role
       /// </summary>
        public DbSet<Role> Role { get; set; }
+
+               /// <summary>
+       ///   RoleMenu
+      /// </summary>
+       public DbSet<RoleMenu> RoleMenu { get; set; }
 
                /// <summary>
        ///   SaleOrder
@@ -104,6 +115,26 @@ namespace EntitiesModels
        ///   UserInfo
       /// </summary>
        public DbSet<UserInfo> UserInfo { get; set; }
+
+               /// <summary>
+       ///   DataLog
+      /// </summary>
+       public DbSet<DataLog> DataLog { get; set; }
+
+               /// <summary>
+       ///   ExceptionLog
+      /// </summary>
+       public DbSet<ExceptionLog> ExceptionLog { get; set; }
+
+               /// <summary>
+       ///   LoginLog
+      /// </summary>
+       public DbSet<LoginLog> LoginLog { get; set; }
+
+               /// <summary>
+       ///   OperateLog
+      /// </summary>
+       public DbSet<OperateLog> OperateLog { get; set; }
 
           }
 }

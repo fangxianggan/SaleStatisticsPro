@@ -89,6 +89,14 @@ namespace WebApi.App_Start
             //产品
             base.CreateMap<Product, ProductViewModel>();
 
+            //菜单
+            base.CreateMap<Menu, TreeViewModel>()
+                  .ForMember(dest => dest.ID, options => options.MapFrom(src => src.ID))
+                   .ForMember(dest => dest.Label, options => options.MapFrom(src => src.MenuName));
+                  
+                
+
+
         }
     }
 }

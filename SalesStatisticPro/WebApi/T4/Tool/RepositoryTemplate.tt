@@ -44,6 +44,7 @@ public class RepositoryTemplate : CSharpTemplate
 //------------------------------------------------------------------------------
 using EntitiesModels;
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.DataAccess;
 using WebApi.IRepository;
 using FXKJ.Infrastructure.Dapper;

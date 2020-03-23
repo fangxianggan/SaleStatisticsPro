@@ -26,7 +26,7 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+  login({ commit }, userInfo,$this) {
     return new Promise((resolve, reject) => {
       login(userInfo).then(res => {
         let type;
@@ -43,6 +43,7 @@ const actions = {
             type: type,
             duration: 5 * 1000
           })
+          $this.loading = false;
           return false;
         } 
         commit('SET_TOKEN', res.token)
@@ -101,7 +102,7 @@ const actions = {
     })
   },
   //
-  register(registerForm){
+  register({ commit },registerForm){
     return new Promise((resolve, reject) => {
       register(registerForm).then(res => {
         let type;

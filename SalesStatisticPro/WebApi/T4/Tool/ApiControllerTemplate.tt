@@ -43,12 +43,14 @@ public class ApiControllerTemplate : CSharpTemplate
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WebApi.IBLL;
+using System;
 namespace WebApi.Controllers
 
 {
@@ -112,7 +114,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("_DelData")]
-        public HttpReponseModel<int> Delete(int id)
+        public HttpReponseModel<int> Delete(<#=_model.KeyTypeName#> id)
         {
             return  _<#= _model._Name #>BLL.DelData(id);
         }

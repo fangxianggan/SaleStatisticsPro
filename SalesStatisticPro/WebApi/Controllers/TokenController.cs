@@ -27,6 +27,7 @@ namespace WebApi.Controllers
     [RoutePrefix("dev-api/Token")]
 
     //[EnableCors(origins: "http://localhost:9528/", headers: "*", methods: "GET,POST,PUT,DELETE,OPTIONS")]
+    [ApiException]
     public class TokenController : ApiController
     {
         private readonly ILoginBLL _loginBLL;

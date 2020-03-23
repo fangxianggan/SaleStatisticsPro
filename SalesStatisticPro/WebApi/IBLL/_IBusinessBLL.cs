@@ -10,10 +10,11 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-03-15 20:51
+//        生成时间：2020-03-20 17:04
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
 using System;
@@ -23,7 +24,7 @@ using System.Threading.Tasks;
 namespace WebApi.IBLL
 {
     /// <summary>
-    ///   业务层接口——Business
+    ///   业务层接口——客户商家
     /// </summary>
     public partial interface IBusinessBLL
     {

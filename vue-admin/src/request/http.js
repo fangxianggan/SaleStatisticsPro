@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken,setToken} from '@/utils/auth'
+import { getToken, setToken } from '@/utils/auth'
 
 
 //console.log(myAction)
@@ -81,62 +81,74 @@ service.interceptors.response.use(
       }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
-      if(res.token!="")
-      {
+      if (res.token != "") {
         setToken(res.token)
       }
       return res
     }
   },
   error => {
-
+    let msg = "";
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
+          msg = "错误请求";
           console.log('错误请求')
           break;
         case 401:
+          msg = "未授权，请重新登录";
           console.log('未授权，请重新登录')
           break;
         case 403:
+          msg = "拒绝访问";
           console.log('拒绝访问')
           break;
         case 404:
+          msg = "请求错误,未找到该资源";
           console.log('请求错误,未找到该资源')
           break;
         case 405:
+          msg = "请求方法未允许";
           console.log('请求方法未允许')
           break;
         case 408:
+          msg = "请求超时";
           console.log('请求超时')
           break;
         case 500:
+          msg = "服务器端出错";
           console.log('服务器端出错')
           break;
         case 501:
+          msg = "网络未实现";
           console.log('网络未实现')
           break;
         case 502:
+          msg = "网络错误";
           console.log('网络错误')
           break;
         case 503:
+          msg = "服务不可用";
           console.log('服务不可用')
           break;
         case 504:
+          msg = "网络超时";
           console.log('网络超时')
           break;
         case 505:
+          msg = "http版本不支持该请求";
           console.log('http版本不支持该请求')
           break;
         default:
+          msg = "连接错误";
           console.log(`连接错误${error.response.status}`)
       }
     } else {
-      console.log('连接到服务器失败')
+      msg = "连接到服务器失败";
     }
-    console.log('err' + error) // for debug
+    // console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      message: msg,
       type: 'error',
       duration: 5 * 1000
     })
@@ -152,7 +164,7 @@ service.interceptors.response.use(
  * @param {any} options
  */
 const http = (path, data = {}, options = {}) => {
-  
+
   let url = path
   let method = options.method || 'post'
   let params = { url, method }
@@ -168,4 +180,4 @@ const http = (path, data = {}, options = {}) => {
 }
 
 export default http
- 
+

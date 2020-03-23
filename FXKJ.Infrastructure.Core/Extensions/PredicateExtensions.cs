@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -92,8 +93,81 @@ namespace FXKJ.Infrastructure.Core.Extensions
             return source.Provider.CreateQuery<T>(resultExp);
         }
 
+        /// <summary>
+        /// 动态创建lab
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propName"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Expression<Func<T, bool>> BuildPropertyInExpression<T>(string propName, IEnumerable values)
+        {
+            ParameterExpression x = Expression.Parameter(typeof(T), "x");
+            LambdaExpression expr;
+            var tempExp = BuildPropertyInExpressionCore(x, propName, values);
+            if (tempExp == null)
+            {
+                expr = Expression.Lambda(Expression.Constant(false), x);
+            }
+            else
+            {
+                expr = Expression.Lambda(tempExp, x);
+            }
+            return (Expression<Func<T, bool>>)expr;
+        }
 
-    }
+        /// <summary>
+        /// 构建属性等于单个值的表达式
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="propName"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private static BinaryExpression BuildPropertyEqualsSingleValueExpression(ParameterExpression x, string propName, object id)
+        {
+            MemberExpression left = Expression.Property(x, propName);
+            ConstantExpression right = Expression.Constant(id);
+            return Expression.Equal(left, right);
+        }
+
+        /// <summary>
+        /// 构建 属性A等于值1 或者 属性A等于值2 或者 属性A等于值3  等等一个或多个 OrElse  的表达式的核心
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="propName"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        private static BinaryExpression BuildPropertyInExpressionCore(ParameterExpression x, string propName, IEnumerable values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
+            IEnumerator enumerator = values.GetEnumerator();
+            int i = 0;
+            BinaryExpression binaryExp = null;
+            while (enumerator.MoveNext())
+            {
+                object objValue = enumerator.Current;
+                if (objValue == null)
+                {
+                    continue;
+                }
+                if (i == 0)
+                {
+                    binaryExp = BuildPropertyEqualsSingleValueExpression(x, propName, objValue);
+                    i++;
+                    continue;
+                }
+                binaryExp = Expression.OrElse(binaryExp, BuildPropertyEqualsSingleValueExpression(x, propName, objValue));
+                i++;
+            }
+            return binaryExp;
+        }
+    
+
+
+}
 
     /// <summary>
     /// 统一ParameterExpression

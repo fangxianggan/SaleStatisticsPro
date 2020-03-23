@@ -10,10 +10,11 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-03-15 20:51
+//        生成时间：2020-03-20 17:04
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Logic;
 using WebApi.IRepository;
 using WebApi.IBLL;
@@ -22,11 +23,12 @@ using FXKJ.Infrastructure.Entities.QueryModel;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 using System.Threading.Tasks;
 namespace WebApi.BLL
 {
     /// <summary>
-    ///   业务访问——Business
+    ///   业务访问——客户商家
     /// </summary>
     public partial class BusinessBLL :IBusinessBLL
     { 
@@ -38,7 +40,7 @@ namespace WebApi.BLL
         /// <param name="logic"></param>
         public BusinessBLL(ILogic<Business> logic)
         {
-            _logic = logic;
+           _logic = logic;
         }
 
 
@@ -49,7 +51,7 @@ namespace WebApi.BLL
         /// <returns></returns>
         public HttpReponseModel<int> DelData(params object[] keyValues)
         {
-            return  _logic.DeleteLogic(keyValues);
+           return  _logic.DeleteLogic(keyValues);
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace WebApi.BLL
         /// <returns></returns>
         public HttpReponseModel<Business> GetModel(params object[] keyValues)
         {
-            return  _logic.GetEntityLogic(keyValues);
+          return  _logic.GetEntityLogic(keyValues);
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace WebApi.BLL
         /// <returns></returns>
         public HttpReponseModel<List<Business>> GetPageList(QueryModel model)
         {
-            return  _logic.GetPageListLogic(model);
+          return  _logic.GetPageListLogic(model);
         }
 
 
@@ -80,7 +82,7 @@ namespace WebApi.BLL
         /// <returns></returns>
         public HttpReponseModel<List<Business>> GetList(Expression<Func<Business, bool>> whereLambda)
         {
-            return  _logic.GetListLogic(whereLambda);
+           return  _logic.GetListLogic(whereLambda);
         }
 
         /// <summary>
@@ -90,14 +92,17 @@ namespace WebApi.BLL
         /// <returns></returns>
         public HttpReponseModel<Business> SaveData(Business entity)
         {
-            if (entity.ID == 0)
+          
+             
+          if (entity.ID==0)
             {
-                return  _logic.AddLogic(entity);
+             return  _logic.AddLogic(entity);
             }
-            else
-            {
-                return  _logic.UpdateLogic(entity);
-            }
+         else
+         {
+            return  _logic.UpdateLogic(entity);
+           }
+
 
         }
 
@@ -108,15 +113,16 @@ namespace WebApi.BLL
         /// <returns></returns>
         public HttpReponseModel<List<Business>> SaveData(List<Business> entityList)
         {
-            var entity = entityList.FindLast(p => true);
-            if (entity.ID == 0)
-            {
-                return  _logic.AddListLogic(entityList);
-            }
-            else
-            {
-                return  _logic.UpdateListLogic(entityList);
-            }
+
+           if (entityList.FirstOrDefault().ID==0)
+{
+     return  _logic.AddListLogic(entityList);
+}
+else
+{
+     return  _logic.UpdateListLogic(entityList);
+}
+           
         }
 
 

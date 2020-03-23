@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 
 namespace EntitiesModels.T4
@@ -46,11 +48,16 @@ namespace EntitiesModels.T4
         /// </summary>
         public string KeyTypeName { get; set; }
 
+        /// <summary>
+        /// 主键名称
+        /// </summary>
+        public string KeyName { set; get; }
+
         public IEnumerable<PropertyInfo> Properties { get; private set; }
 
         public T4ModelInfo(Type modelType,bool useModuleDir = false)
         {
-
+           
             var @namespace = modelType.Namespace;
             if (@namespace == null)
             {
@@ -65,10 +72,14 @@ namespace EntitiesModels.T4
 
             Name = modelType.Name;
             _Name = modelType.Name.Substring(0, 1).ToLower() + modelType.Name.Substring(1, modelType.Name.Length-1);
-            //modelType.Name.Substring(0, 1).ToLower() + modelType.Name.Substring(1, modelType.Name.Length);
-            //PropertyInfo keyProp = modelType.GetProperty("Id");
-            //KeyType = keyProp.PropertyType;
-            //KeyTypeName = KeyType.Name;
+
+
+            PropertyInfo pkProp = modelType.GetProperties().Where(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Length > 0).FirstOrDefault();
+            //主键名称
+            KeyName = pkProp.Name;
+            PropertyInfo keyProp = modelType.GetProperty(KeyName);
+            KeyType = keyProp.PropertyType;
+            KeyTypeName = KeyType.Name;
 
             var descAttributes = modelType.GetCustomAttributes(typeof(DescriptionAttribute), true);
             Description = descAttributes.Length == 1 ? ((DescriptionAttribute)descAttributes[0]).Description : Name;

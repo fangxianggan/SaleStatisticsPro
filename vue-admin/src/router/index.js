@@ -96,8 +96,8 @@ export const constantRoutes = [
     path: '/system',
     component: Layout,
     redirect: '/example/table',
-    name: '系统管理',
-    meta: { title: '系统管理', icon: 'form' },
+    name: '基础数据管理',
+    meta: { title: '基础数据管理', icon: 'form' },
     children: [
       {
         path: 'businesslist',
@@ -163,7 +163,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/profile/index'),
         name: '个人中心',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        meta: { title: '个人中心', icon: 'user', noCache: true }
       }
     ]
   }
@@ -174,9 +174,9 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/permission/page',
     alwaysShow: true, // will always show the root menu
-    name: 'Permission',
+    name: '权限管理',
     meta: {
-      title: 'Permission',
+      title: '权限管理',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
@@ -200,16 +200,24 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
+        path: 'roleslist',
+        component: () => import('@/views/permission/roleslist'),
+        name: '角色列表',
         meta: {
-          title: 'Role Permission',
-          roles: ['admin']
+          title: '角色列表',
+          roles: ['admin'],
+          icon: 'tree'
         }
-      }
+      },
+      {
+        path: 'menulist',
+        name: '菜单列表',
+        component: () => import('@/views/permission/menulist'),
+        meta: { title: '菜单列表', icon: 'tree' }
+      },
     ]
-  }, {
+  },
+  {
     path: '/logs',
     component: Layout,
     redirect: '/example/table',
@@ -231,6 +239,7 @@ export const asyncRoutes = [
 
     ]
   },
+
 ]
 
 const createRouter = () => new Router({

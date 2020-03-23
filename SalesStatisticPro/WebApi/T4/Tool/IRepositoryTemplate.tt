@@ -43,6 +43,7 @@ public class IRepositoryTemplate : CSharpTemplate
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.DataAccess;
 namespace WebApi.IRepository
 {

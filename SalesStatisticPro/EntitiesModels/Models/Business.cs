@@ -7,7 +7,7 @@ namespace EntitiesModels.Models
     /// <summary>
     /// 商家
     /// </summary>
-    [Table("Business")]
+    [Table("Business"),Description("客户商家")]
     public partial class Business: BaseEntity
     {
         /// <summary>

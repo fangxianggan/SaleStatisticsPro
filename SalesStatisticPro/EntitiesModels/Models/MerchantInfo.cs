@@ -10,12 +10,10 @@ using System.Threading.Tasks;
 namespace EntitiesModels.Models
 {
     [Table("MerchantInfo")]
-    public partial class MerchantInfo
+    public partial class MerchantInfo:BaseEntityGuid
     {
         
-        [Key]
-        [Required, DisplayName("ID")]
-        public Guid ID { set; get; }
+       
 
         [MaxLength(32), Required, DisplayName("商户号")]
         public string MerchantNo { set; get; }

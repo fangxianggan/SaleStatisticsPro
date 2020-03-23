@@ -43,6 +43,7 @@ public class IBLLTemplate : CSharpTemplate
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
 using System;

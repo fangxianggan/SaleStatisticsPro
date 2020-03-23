@@ -32,25 +32,6 @@ namespace FXKJ.Infrastructure.Entities.Tree
         }
 
 
-        /// <summary>
-        /// 递归 ztree
-        /// </summary>
-        /// <param name="alllist">数据里的所有节点</param>
-        /// <param name="list">根节点</param>
-        public static void GetTreeMenuChilds(List<Define_Sys_Menu> alllist, ref List<Define_Sys_Menu> list)
-        {
-            foreach (var model in list)
-            {
-                //通过上级ID获取子级，然后添加到lstModel中  
-                List<Define_Sys_Menu> lstModel = alllist.Where(p => p.MenuParentId.ToString() == model.MenuId.ToString()).ToList();
-                if (lstModel.Count > 0)
-                {
-                    model.Children = lstModel;
-                    //  model.open = true;//张开
-                    //采用递归的形式  
-                    GetTreeMenuChilds(alllist, ref lstModel);
-                }
-            }
-        }
+       
     }
 }

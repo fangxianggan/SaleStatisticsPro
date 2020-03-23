@@ -1,5 +1,5 @@
 ﻿<#+
-    // <copyright file="IEntityBLLTemplate.tt" company="郭明锋@中国">
+    // <copyright file="IEntityBLLTemplate.tt" company="fxg@中国">
     //  Copyright © yxd All Rights Reserved.
     // </copyright>
 
@@ -33,6 +33,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
+using EntitiesModels.Models.SysModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

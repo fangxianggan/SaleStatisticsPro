@@ -1,4 +1,5 @@
-import request from '@/utils/request'
+import http from '@/request/http'
+import qs from 'qs'
 
 export function getRoutes() {
   return request({
@@ -7,11 +8,11 @@ export function getRoutes() {
   })
 }
 
-export function getRoles() {
-  return request({
-    url: '/vue-element-admin/roles',
-    method: 'get'
-  })
+export function getRoles(param) {
+  let url = "/Role/_GetPageList";
+  let data = { query: param };
+  return http(url, data);
+  
 }
 
 export function addRole(data) {
