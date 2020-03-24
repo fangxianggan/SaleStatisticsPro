@@ -93,8 +93,9 @@ namespace WebApi.App_Start
             base.CreateMap<Menu, TreeViewModel>()
                   .ForMember(dest => dest.ID, options => options.MapFrom(src => src.ID))
                    .ForMember(dest => dest.Label, options => options.MapFrom(src => src.MenuName));
-                  
-                
+
+            base.CreateMap<Menu, MenuViewModel>();
+               
 
 
         }

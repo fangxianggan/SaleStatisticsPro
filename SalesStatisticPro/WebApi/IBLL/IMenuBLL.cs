@@ -32,7 +32,7 @@ namespace WebApi.IBLL
 
         HttpReponseModel<List<TreeViewModel>> GetTreeListView(int id);
 
-
+        HttpReponseModel<List<MenuViewModel>> GetMenuPageList(QueryModel model);
 
     }
 }

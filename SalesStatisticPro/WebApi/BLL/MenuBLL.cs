@@ -34,15 +34,15 @@ namespace WebApi.BLL
     /// <summary>
     ///   业务访问——Menu
     /// </summary>
-    public partial class MenuBLL :IMenuBLL
+    public partial class MenuBLL : IMenuBLL
     {
-      
+
         private readonly IEFRepository<Menu> _menuEFRepository;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logic"></param>
-        public MenuBLL(IEFRepository<Menu>  menuEFRepository,ILogic<Menu> logic) : this(logic)
+        public MenuBLL(IEFRepository<Menu> menuEFRepository, ILogic<Menu> logic) : this(logic)
         {
             _menuEFRepository = menuEFRepository;
         }
@@ -52,7 +52,7 @@ namespace WebApi.BLL
             HttpReponseModel<List<TreeViewModel>> httpReponse = new HttpReponseModel<List<TreeViewModel>>();
             List<TreeViewModel> trees = new List<TreeViewModel>();
             List<Menu> menus = _menuEFRepository.GetList(p => true);
-           
+
             TreeViewModel treeView = new TreeViewModel();
             if (id == 0)
             {
@@ -62,15 +62,28 @@ namespace WebApi.BLL
                 trees.Add(treeView);
                 RecursiveHelper.GetTreeChilds<Menu, TreeViewModel>(menus, ref trees);
             }
-            else {
+            else
+            {
 
 
             }
             httpReponse.Data = trees;
-          return  httpReponse;
+            return httpReponse;
         }
 
-
+        public HttpReponseModel<List<MenuViewModel>> GetMenuPageList(QueryModel model)
+        {
+            HttpReponseModel<List<MenuViewModel>> httpReponse = new HttpReponseModel<List<MenuViewModel>>();
+            List<MenuViewModel> trees = new List<MenuViewModel>();
+            List<Menu> menus = _menuEFRepository.GetList(p => true);
+            MenuViewModel treeView = new MenuViewModel();
+            treeView.ID = 0;
+            treeView.Children = new List<MenuViewModel>();
+            trees.Add(treeView);
+            RecursiveHelper.GetTreeChilds<Menu, MenuViewModel>(menus, ref trees);
+            httpReponse.Data = trees;
+            return httpReponse;
+        }
 
 
     }

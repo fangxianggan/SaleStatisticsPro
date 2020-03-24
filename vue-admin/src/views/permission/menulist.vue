@@ -47,8 +47,10 @@
       </el-button>-->
     </div>
 
+
     <el-table
       :key="tableKey"
+      row-key="id"
       v-loading="listLoading"
       :data="list"
       border
@@ -56,6 +58,8 @@
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
+      default-expand-all
+     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column label="菜单名称" prop="menuName" sortable="custom" width="180">
         <template slot-scope="{row}">
@@ -235,7 +239,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      var url = "/Menu/_GetPageList";
+      var url = "/Menu/GetMenuPageList";
       var data = myAction.getQueryModel(
         this.listQuery.limit,
         this.listQuery.page,
@@ -245,7 +249,7 @@ export default {
       );
       //var data = myAction.getItemsModel(this.filterModel);
       this.$ajax(url, data).then(response => {
-        this.list = response.data;
+        this.list = response.data[0].children;
         this.total = response.total;
 
         // Just to simulate the time of the request

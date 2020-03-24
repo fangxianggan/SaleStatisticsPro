@@ -43,12 +43,22 @@ namespace WebApi.Controllers
           
         }
 
-
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="id"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMenuPageList")]
+        public HttpReponseModel<List<MenuViewModel>> GetMenuPageList(QueryModel model)
+        {
+            return _menuBLL.GetMenuPageList(model);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetTreeMenuList")]
         public HttpReponseModel<List<TreeViewModel>> GetTreeMenuList(int id)
