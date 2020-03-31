@@ -54,7 +54,7 @@ namespace FXKJ.Infrastructure.WebApi.Filter
                                     else if (json.ExpiryDateTime < DateTime.Now && json.RefreshDateTime > DateTime.Now)
                                     {
                                         //验证token是不是合法的
-                                        var flag = _tokenBLL.VerifyRedisToken(json.UserName, token).Data;
+                                        var flag = _tokenBLL.VerifyRedisToken(json.PhoneNumber, token).Data;
                                         if (flag)
                                         {
                                             json.ExpiryDateTime = DateTime.Now.AddMinutes(15);
@@ -62,7 +62,7 @@ namespace FXKJ.Infrastructure.WebApi.Filter
                                             //重新生成token 
                                             var fefreshToken = _tokenBLL.GetJWTData(json, secretKey).Data;
                                             //存储redis
-                                            _tokenBLL.SetRedisToken(json.UserName, fefreshToken);
+                                            _tokenBLL.SetRedisToken(json.PhoneNumber, fefreshToken);
                                             //返回到页面上 并且重新赋值
                                             actionContext.RequestContext.RouteData.Values.Add("X-Token", fefreshToken);
                                             return true;

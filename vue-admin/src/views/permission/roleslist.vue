@@ -134,17 +134,22 @@
     </el-dialog>
 
     <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogPermissionVisible">
-      <el-form ref="permissionForm" :model="temp" label-position="right" label-width="100px">
+      <el-form
+        ref="permissionForm"
+        :model="permissionTemp"
+        label-position="right"
+        label-width="100px"
+      >
         <el-row>
           <el-col :span="24">
-            <el-form-item label="角色名称" prop="roleName" :rules="rules.checkNull">
-              <el-input v-model="temp.roleName" />
+            <el-form-item label="角色名称">
+              <el-input v-model="permissionTemp.roleName" readonly />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限" prop="parentId" :rules="rules.checkNull">
+            <el-form-item label="权限">
               <el-tree
                 :data="treeData"
                 show-checkbox
@@ -152,7 +157,6 @@
                 node-key="id"
                 ref="menuTree"
                 :props="defaultProps"
-                @check-change="checkChange"
                 :check-strictly="true"
               ></el-tree>
             </el-form-item>
@@ -171,6 +175,7 @@
 import waves from "@/directive/waves"; // waves directive
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import myAction from "@/utils/baseutil";
+import { getRoleMenuPermission, setRoleMenuPermission } from "@/api/menu";
 var currentData = {
   filterModel: {
     roleName: {
@@ -199,15 +204,9 @@ var currentData = {
     remark: ""
   },
   permissionTemp: {
-    roleId: 0,
-    menuId: 0,
-    id: 0,
-    createTime: "",
-    createUserCode: "",
-    updateTime: "",
-    updateUserCode: "",
-    remark: "",
-    merchantId: ""
+    roleCode: 0,
+    roleName: "",
+    menuId: []
   },
   orderArr: []
 };
@@ -262,7 +261,7 @@ export default {
       var url = "/Menu/GetTreeMenuList";
       let data = { id: 0 };
       this.$ajax(url, data, { method: "get" }).then(res => {
-        this.treeData = res.data;
+        this.treeData = res.data[0].children;
       });
     },
     //查询处理的事件
@@ -275,20 +274,6 @@ export default {
       this.orderArr = [];
       this.orderArr.push(data);
       this.handleFilter();
-    },
-    resetPermissionTemp() {
-      // let roleCode = myAction.newGuid();
-      this.temp = {
-        roleId: 0,
-        menuId: 0,
-        id: 0,
-        createTime: "",
-        createUserCode: "",
-        updateTime: "",
-        updateUserCode: "",
-        remark: "",
-        merchantId: ""
-      };
     },
     resetTemp() {
       // let roleCode = myAction.newGuid();
@@ -390,24 +375,32 @@ export default {
     },
     //配置权限
     handlePermission(row) {
-      this.temp = Object.assign({}, row); // copy obj
-      this.dialogStatus = "update";
-      this.dialogTitle = "配置权限菜单";
-      this.dialogPermissionVisible = true;
-      this.$nextTick(() => {
-        this.$refs["permissionForm"].clearValidate();
+      getRoleMenuPermission(row.id).then(res => {
+        this.permissionTemp.roleCode = row.roleCode;
+        this.permissionTemp.roleName = row.roleName;
+        this.permissionTemp.menuId = res.data;
+        this.dialogStatus = "update";
+        this.dialogTitle = "配置权限菜单";
+        this.dialogPermissionVisible = true;
+        
+        this.$nextTick(() => {
+          this.$refs.menuTree.setCheckedKeys(res.data)
+          this.$refs["permissionForm"].clearValidate();
+        });
+
+         
       });
     },
     //权限数据
     permissionData() {
       this.$refs["permissionForm"].validate(valid => {
         if (valid) {
-          const tempData = Object.assign({}, this.permissionTemp);
-          var url = "/RoleMenu/_SaveData";
-          var data = tempData;
-          this.$ajax(url, data).then(response => {
-            var d = response.data;
-            myAction.getNotifyFunc(response, this);
+           this.dialogPermissionVisible = false;
+          let roleCode = this.permissionTemp.roleCode;
+          let menuIds = this.$refs.menuTree.getCheckedKeys();
+          setRoleMenuPermission(roleCode, menuIds).then(res => {
+            var d = res.data;
+            myAction.getNotifyFunc(res, this);
           });
         }
       });

@@ -3,16 +3,14 @@ using FXKJ.Infrastructure.WebApi.Models.Token;
 
 namespace FXKJ.Infrastructure.WebApi.IBLL
 {
-    public  partial interface ITokenBLL
+    public partial interface ITokenBLL
     {
-       
-
         /// <summary>
         /// 生成jwt
         /// </summary>
         /// <param name="authInfo"></param>
         /// <returns></returns>
-        HttpReponseModel<string> GetJWTData(AuthInfo authInfo,string secretKey);
+        HttpReponseModel<string> GetJWTData(AuthInfo authInfo, string secretKey);
 
         /// <summary>
         /// 存储redis信息
@@ -46,6 +44,12 @@ namespace FXKJ.Infrastructure.WebApi.IBLL
         HttpReponseModel<string> RemoveRedisToken(string key, string value);
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="menuUrl"></param>
+        /// <returns></returns>
+        HttpReponseModel<bool> VerifyMenuUrl(string userName,string menuUrl);
     }
 }

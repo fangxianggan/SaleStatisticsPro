@@ -23,6 +23,7 @@ using System.Web.Http;
 using WebApi.IBLL;
 using System;
 using EntitiesModels.DtoModels;
+using FXKJ.Infrastructure.WebApi.Filter;
 
 namespace WebApi.Controllers
 
@@ -66,6 +67,46 @@ namespace WebApi.Controllers
             return _menuBLL.GetTreeListView(id);
         }
 
+
+
+        /// <summary>
+        /// 设置角色菜单权限
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// 
+        [ApiDTC]
+        [HttpPost]
+        [Route("SetRoleMenuPermission")]
+        public HttpReponseModel<bool> SetRoleMenuPermission(RoleMenuViewModel model)
+        {
+            return _menuBLL.SetRoleMenuPermission(model);
+        }
+
+
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="roleCode"></param>
+       /// <returns></returns>
+        [HttpPost]
+        [Route("GetRoleMenuPermission")]
+        public HttpReponseModel<int[]> GetRoleMenuPermission([FromBody]string roleCode)
+        {
+            return _menuBLL.GetRoleMenuPermission(roleCode);
+        }
+
+       /// <summary>
+       /// 通过角色获取菜单权限
+       /// </summary>
+       /// <param name="roleCodes"></param>
+       /// <returns></returns>
+        [HttpPost]
+        [Route("GetMenuListPermission")]
+        public HttpReponseModel<List<Menu>> GetMenuListPermission([FromBody]string[] roleCodes)
+        {
+            return _menuBLL.GetMenuPermission(roleCodes);
+        }
 
 
     }

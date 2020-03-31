@@ -208,6 +208,7 @@
     <Compile Include="BLL\MenuBLL.cs" />
     <Compile Include="BLL\_MenuBLL.cs" />
     <Compile Include="BLL\_MerchantInfoBLL.cs" />
+    <Compile Include="BLL\MerchantRoleBLL.cs" />
     <Compile Include="BLL\_MerchantRoleBLL.cs" />
     <Compile Include="BLL\_OperateLogBLL.cs" />
     <Compile Include="BLL\_ProductBLL.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Controllers\_LoginLogController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\_MenuController.cs" />
+    <Compile Include="Controllers\MerchantInfoController.cs" />
     <Compile Include="Controllers\_MerchantInfoController.cs" />
     <Compile Include="Controllers\_MerchantRoleController.cs" />
     <Compile Include="Controllers\_OperateLogController.cs" />
@@ -279,6 +281,7 @@
     <Compile Include="IBLL\IMenuBLL.cs" />
     <Compile Include="IBLL\_IMenuBLL.cs" />
     <Compile Include="IBLL\_IMerchantInfoBLL.cs" />
+    <Compile Include="IBLL\IMerchantRoleBLL.cs" />
     <Compile Include="IBLL\_IMerchantRoleBLL.cs" />
     <Compile Include="IBLL\_IOperateLogBLL.cs" />
     <Compile Include="IBLL\_IProductBLL.cs" />

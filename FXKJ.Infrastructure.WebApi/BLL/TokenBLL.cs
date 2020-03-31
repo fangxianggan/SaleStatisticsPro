@@ -7,14 +7,31 @@ using NetRedisUtil;
 using System;
 using System.Text;
 using FXKJ.Infrastructure.WebApi.IBLL;
+using FXKJ.Infrastructure.DataAccess;
+using EntitiesModels.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FXKJ.Infrastructure.WebApi.BLL
 {
     public partial class TokenBLL : ITokenBLL
     {
-        public TokenBLL()
+
+        private readonly IEFRepository<MerchantInfo> _merchantInfoEFRepository;
+
+        private readonly IEFRepository<Menu> _menuEFRepository;
+
+        private readonly IEFRepository<Role> _roleEFRepository;
+
+        private readonly IEFRepository<RoleMenu> _roleMenuEFRepository;
+
+        private readonly IEFRepository<MerchantRole> _merchantRoleEFRepository;
+        public TokenBLL(IEFRepository<MerchantInfo> merchantInfoEFRepository, IEFRepository<RoleMenu> roleMenuEFRepository, IEFRepository<Menu> menuEFRepository, IEFRepository<MerchantRole> merchantRoleEFRepository)
         {
-           
+            _menuEFRepository = menuEFRepository;
+            _roleMenuEFRepository = roleMenuEFRepository;
+            _merchantRoleEFRepository = merchantRoleEFRepository;
+            _merchantInfoEFRepository = merchantInfoEFRepository;
         }
         public HttpReponseModel<string> GetJWTData(AuthInfo authInfo, string secretKey)
         {
@@ -88,11 +105,28 @@ namespace FXKJ.Infrastructure.WebApi.BLL
             return httpReponse;
         }
 
-
         public HttpReponseModel<string> RemoveRedisToken(string key, string value)
         {
             HttpReponseModel<string> httpReponse = new HttpReponseModel<string>();
             httpReponse.Flag = DoRedisHash.RemoveEntryFromHash("auth-token", key);
+            return httpReponse;
+        }
+
+        public HttpReponseModel<bool> VerifyMenuUrl(string userName, string menuUrl)
+        {
+            HttpReponseModel<bool> httpReponse = new HttpReponseModel<bool>();
+            string num = _merchantInfoEFRepository.GetEntity(p => p.MerchantPhone == userName).MerchantNo;
+            List<string> roleCodeList = _merchantRoleEFRepository.GetList(p => p.MerchantNo == num).Select(p => p.RoleCode).Distinct().ToList();
+            List<int> menuIds = _roleMenuEFRepository.GetList(p => roleCodeList.Contains(p.RoleCode)).Select(p => p.MenuId).Distinct().ToList();
+            var list = _menuEFRepository.GetList(p => menuIds.Contains(p.ID)).Select(p => p.Path).Where(p => p.Contains(menuUrl));
+            if (list.Count() > 0)
+            {
+                httpReponse.Data = true;
+            }
+            else
+            {
+                httpReponse.Data = false;
+            }
             return httpReponse;
         }
     }

@@ -64,7 +64,7 @@ namespace WebApi.BLL
             }
             else
             {
-                var ent = _merchantInfoEFRepository.GetEntity(p => p.MerchantPhone == loginRequest.UserName || p.MerchantNo == loginRequest.UserName);
+                var ent = _merchantInfoEFRepository.GetEntity(p => p.MerchantPhone == loginRequest.UserName);
                 if (ent == null)
                 {
                     httpReponse.ResultSign = ResultSign.Warning;
@@ -76,15 +76,16 @@ namespace WebApi.BLL
                     if (ent.MerchantPassword == password)
                     {
                         List<string> roles = _merchantRoleEFRepository.GetList(p => p.MerchantNo == ent.MerchantNo).Select(p => p.RoleCode).ToList();
-                        var isAdmin = roles.Where(p => p == "admin").Count() > 0 ? true : false;
+                        var isAdmin = roles.Where(p => p == "Admin").Count() > 0 ? true : false;
                         AuthInfo authInfo = new AuthInfo
                         {
-                            UserName = loginRequest.UserName,
+                            PhoneNumber = loginRequest.UserName,
+                            MerchantNo = ent.MerchantNo,
                             Roles = roles,
                             IsAdmin = isAdmin,
                             ExpiryDateTime = DateTime.Now.AddMinutes(20),
                             RefreshDateTime = DateTime.Now.AddHours(3),
-                            ReturnUrl = loginRequest.ReturnUrl
+                         
                         };
                         //口令加密秘钥
                         var data = _tokenBLL.GetJWTData(authInfo, secretKey);
@@ -119,7 +120,7 @@ namespace WebApi.BLL
         /// 获取商户信息
         /// </summary>
         /// <param name="token"></param>
-        /// <returns></returns>
+        /// <returns></returns>GetMerchantInfo
         public HttpReponseModel<MerchantInfoViewModel> GetMerchantInfo(string token)
         {
             var authInfo = _tokenBLL.DecoderToken(token, secretKey).Data;
@@ -127,7 +128,7 @@ namespace WebApi.BLL
             MerchantInfoViewModel merchantInfoView = new MerchantInfoViewModel();
             merchantInfoView.Avatar = authInfo.Avatar;
             merchantInfoView.Name = authInfo.Name;
-            merchantInfoView.Roles =new List<string> {"admin", "editor"};
+            merchantInfoView.Roles = _merchantRoleEFRepository.GetList(p => p.MerchantNo == authInfo.MerchantNo).Select(p => p.RoleCode).ToList();
             merchantInfoView.Introduction = authInfo.Introduction;
             httpReponse.Data = merchantInfoView;
             return httpReponse;
@@ -144,7 +145,7 @@ namespace WebApi.BLL
             //口令加密秘钥
             string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
             var authInfo = _tokenBLL.DecoderToken(token, secretKey).Data;
-            httpReponse = _tokenBLL.RemoveRedisToken(authInfo.UserName, token);
+            httpReponse = _tokenBLL.RemoveRedisToken(authInfo.PhoneNumber, token);
             return httpReponse;
         }
 
@@ -209,5 +210,7 @@ namespace WebApi.BLL
             }
             return httpReponse;
         }
+
+
     }
 }

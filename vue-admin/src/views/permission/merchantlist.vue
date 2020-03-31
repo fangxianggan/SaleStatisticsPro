@@ -2,10 +2,10 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form :inline="true" :model="filterModel">
-        <el-form-item label="菜单名称">
+        <el-form-item label="商户名称">
           <el-input
-            v-model="filterModel.menuName.value"
-            placeholder="菜单名称"
+            v-model="filterModel.merchantName.value"
+            placeholder="商户名称"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
@@ -49,7 +49,6 @@
 
     <el-table
       :key="tableKey"
-      row-key="id"
       v-loading="listLoading"
       :data="list"
       border
@@ -57,12 +56,20 @@
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
-      default-expand-all
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="菜单名称" prop="menuName" sortable="custom" width="180">
+      <el-table-column label="商户号" prop="merchantNo" sortable="custom" width="180">
         <template slot-scope="{row}">
-          <span>{{ row.menuName }}</span>
+          <span>{{ row.merchantNo }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商户名称" prop="merchantName" sortable="custom" width="180">
+        <template slot-scope="{row}">
+          <span>{{ row.merchantName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商户手机号" prop="merchantPhone" sortable="custom" width="180">
+        <template slot-scope="{row}">
+          <span>{{ row.merchantPhone }}</span>
         </template>
       </el-table-column>
       <el-table-column label="添加时间" prop="createTime" sortable="custom" width="180px">
@@ -81,7 +88,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" width="250" class-name="small-padding fixed-width">
+      <el-table-column label="操作" width="280" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">修改</el-button>
 
@@ -91,6 +98,8 @@
             type="danger"
             @click="handleDelete(row,$index)"
           >删除</el-button>
+
+          <el-button type="success" size="mini" @click="handleSetRole(row)">配置角色权限</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -107,60 +116,16 @@
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="菜单编码" prop="menuCode" :rules="rules.checkNull">
-              <el-input v-model="temp.menuCode" />
+            <el-form-item label="商户编码" prop="merchantCode" :rules="rules.checkNull">
+              <el-input v-model="temp.merchantCode" />
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="24">
-            <el-form-item label="菜单名称" prop="menuName" :rules="rules.checkNull">
-              <el-input v-model="temp.menuName" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="父节点" prop="parentId" :rules="rules.checkNull">
-              <el-tree
-                :data="treeData"
-                show-checkbox
-                default-expand-all
-                node-key="id"
-                ref="menuTree"
-                :props="defaultProps"
-                @check-change="checkChange"
-                :check-strictly="true"
-              ></el-tree>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="路径" prop="path" :rules="rules.checkNull">
-              <el-input v-model="temp.path" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="icon图标" prop="icon" :rules="rules.checkNull">
-              <el-input v-model="temp.icon" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="是否掩藏" prop="hidden" :rules="rules.checkNull">
-             <el-switch
-  v-model="temp.hidden"
-  active-color="#13ce66"
-  inactive-color="#ff4949">
-</el-switch>
+            <el-form-item label="商户名称" prop="merchantName" :rules="rules.checkNull">
+              <el-input v-model="temp.merchantName" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -177,6 +142,42 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">保存</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogSetRoleVisible">
+      <el-form
+        ref="setRoleForm"
+        :model="setRoleTemp"
+        label-position="right"
+        label-width="100px"
+      >
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="商户名称">
+              <el-input v-model="setRoleTemp.merchantName" readonly />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="角色权限">
+              <template>
+                <el-transfer 
+                 v-model="setRoleList"
+                 :data="getAllRoleList"
+                 :titles="['未设角色', '已设角色']"
+                 :button-texts="['到左边', '到右边']"
+                  @change="handleSetRoleChange"
+                 ></el-transfer>
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogSetRoleVisible = false">关闭</el-button>
+        <el-button type="primary" @click="setRoleData()">保存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -184,10 +185,15 @@
 import waves from "@/directive/waves"; // waves directive
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import myAction from "@/utils/baseutil";
+import {
+  getMerchantRolePermission,
+  getRoleTransferData,
+  setMerchantRolePermission
+} from "@/api/merchant";
 var currentData = {
   filterModel: {
-    menuName: {
-      field: "MenuName",
+    merchantName: {
+      field: "MerchantName",
       method: "Contains",
       value: "",
       prefix: "",
@@ -202,25 +208,24 @@ var currentData = {
     }
   },
   temp: {
-    menuCode: "",
-    menuName: "",
-    path: "",
-    icon: "",
-    hidden:false,
-    parentId: 0,
-    id: 0,
+    merchantNo: "",
+    merchantName: "",
+    merchantPassword: "",
+    merchantPhone: "",
+    id: "",
     createTime: "",
-    createUserCode: "",
-    updateTime: "",
-    updateUserCode: "",
-    remark: "",
-    merchantId: ""
+    updateTime: ""
+  },
+  setRoleTemp: {
+    merchantNo: "",
+    merchantName: "",
+    roleCodes: []
   },
   orderArr: []
 };
 var data = $.extend(false, myAction.setBaseVueData, currentData);
 export default {
-  name: "menulist",
+  name: "merchantlist",
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -231,22 +236,19 @@ export default {
   data() {
     let custRules = {};
     data.rules = $.extend(false, myAction.setBaseValidateRules(), custRules);
-    data.treeData = [];
-    data.defaultProps = {
-      children: "children",
-      label: "label"
-    };
-    data.leafCheckArr = [];
-    data.oldCheckKey = "";
+    data.dialogSetRoleVisible = false;
+    data.setRoleList=[];
+    data.getAllRoleList=[];
     return data;
   },
   created() {
     this.getList();
+    
   },
   methods: {
     getList() {
       this.listLoading = true;
-      var url = "/Menu/GetMenuPageList";
+      var url = "/MerchantInfo/_GetPageList";
       var data = myAction.getQueryModel(
         this.listQuery.limit,
         this.listQuery.page,
@@ -256,7 +258,7 @@ export default {
       );
       //var data = myAction.getItemsModel(this.filterModel);
       this.$ajax(url, data).then(response => {
-        this.list = response.data[0].children;
+        this.list = response.data;
         this.total = response.total;
 
         // Just to simulate the time of the request
@@ -265,6 +267,7 @@ export default {
         }, 1.5 * 300);
       });
     },
+   
     //查询处理的事件
     handleFilter() {
       this.listQuery.page = 1;
@@ -277,29 +280,23 @@ export default {
       this.handleFilter();
     },
     resetTemp() {
-      // let menuCode = myAction.newGuid();
+      // let merchantCode = myAction.newGuid();
       this.temp = {
-        menuCode: "",
-        menuName: "",
-        path: "",
-        icon: "",
-        hidden:false,
-        parentId: 0,
-        id: 0,
+        id: "",
+        merchantCode: "",
+        merchantName: "",
         createTime: "",
         createUserCode: "",
         updateTime: "",
         updateUserCode: "",
-        remark: "",
-        merchantId: ""
+        remark: ""
       };
     },
     //新增 页面
     handleCreate() {
-      this.getMenuTreeList();
       this.resetTemp();
       this.dialogStatus = "create";
-      this.dialogTitle = "新增菜单";
+      this.dialogTitle = "新增商户";
       this.dialogFormVisible = true;
       this.$nextTick(() => {
         this.$refs["dataForm"].clearValidate();
@@ -309,7 +306,7 @@ export default {
     createData() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          var url = "/Menu/_SaveData";
+          var url = "/Merchant/_SaveData";
           var data = this.temp;
           this.$ajax(url, data).then(response => {
             var d = response.data;
@@ -323,13 +320,11 @@ export default {
     },
     //修改 页面
     handleUpdate(row) {
-      this.getMenuTreeList();
       this.temp = Object.assign({}, row); // copy obj
       this.dialogStatus = "update";
-      this.dialogTitle = "修改菜单";
+      this.dialogTitle = "修改商户";
       this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs.menuTree.setCheckedKeys([row.parentId]);
         this.$refs["dataForm"].clearValidate();
       });
     },
@@ -338,7 +333,7 @@ export default {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           const tempData = Object.assign({}, this.temp);
-          var url = "/Menu/_SaveData";
+          var url = "/Merchant/_SaveData";
           var data = tempData;
           this.$ajax(url, data).then(response => {
             var d = response.data;
@@ -361,15 +356,15 @@ export default {
       })
         .then(() => {
           this.$ajax(
-            "/Menu/GetIsDeleteFlag",
-            { code: row.menuCode },
+            "/Merchant/GetIsDeleteFlag",
+            { code: row.merchantCode },
             { method: "get" }
           ).then(d => {
             if (d.resultSign == 1) {
               myAction.getNotifyFunc(d, this);
               return false;
             }
-            let url = "/Menu/_DelData";
+            let url = "/Merchant/_DelData";
             let data = { id: row.id };
             this.$ajax(url, data, { method: "get" }).then(response => {
               if (response.resultSign == 0) {
@@ -382,36 +377,41 @@ export default {
         })
         .catch(action => {});
     },
-    //选中单机事件
-    checkChange() {
-      this.leafCheckArr = this.$refs.menuTree.getCheckedKeys();
+    //配置角色权限
+    handleSetRole(row) {
+      getRoleTransferData(row.merchantNo).then(res => {
+        this.setRoleTemp.merchantNo = row.merchantNo;
+        this.setRoleTemp.merchantName = row.merchantName;
+      
+        this.dialogStatus = "update";
+        this.dialogTitle = "配置角色权限";
+        this.dialogSetRoleVisible = true;
 
-      let arr = [];
-
-      this.leafCheckArr.forEach(item => {
-        arr.push(item);
-      });
-
-      if (this.leafCheckArr.length > 1) {
-        arr = this.leafCheckArr.filter(item => {
-          return item != this.oldCheckKey;
+        this.$nextTick(() => {
+          this.getAllRoleList=res.data.allRoleList;
+          this.setRoleList=res.data.setRoleList;
+          this.$refs["setRoleForm"].clearValidate();
         });
-      } // this.oldCheckKey就是最后选中的节点的值
-
-      this.oldCheckKey = arr.join("");
-
-      this.$refs.menuTree.setCheckedKeys([]);
-
-      this.$refs.menuTree.setCheckedKeys([this.oldCheckKey]); // 通过 this.$refs.fileTree.getCheckedNodes()[0]['label'] 可以拿到最后选中的节点的label
-
-      this.temp.parentId = this.oldCheckKey;
-    },
-    getMenuTreeList() {
-      var url = "/Menu/GetTreeMenuList";
-      let data = { id: 0 };
-      this.$ajax(url, data, { method: "get" }).then(res => {
-        this.treeData = res.data;
       });
+    },
+    //权限数据
+    setRoleData() {
+      this.$refs["setRoleForm"].validate(valid => {
+        if (valid) {
+          this.dialogSetRoleVisible = false;
+          let merchantNo = this.setRoleTemp.merchantNo;
+          let roleCodes = this.setRoleList;
+          setMerchantRolePermission(merchantNo, roleCodes).then(res => {
+            var d = res.data;
+            myAction.getNotifyFunc(res, this);
+          });
+        }
+      });
+    },
+    handleSetRoleChange(value, direction, movedKeys)
+    {
+     this.setRoleTemp.roleCodes=value;
+
     }
   }
 };

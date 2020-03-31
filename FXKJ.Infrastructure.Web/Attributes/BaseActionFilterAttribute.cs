@@ -107,7 +107,7 @@ namespace FXKJ.Infrastructure.Web.Attributes
             //        //OperateStatus operateStatus = request.Deserialize<OperateStatus>();
             //        //if (operateStatus.ResultSign == ResultSign.Error)
             //        //{
-            //        //     //ErrorRedirect(filterContext, "/Error/Warn");
+            //        //     ErrorRedirect(filterContext, "/Error/Warn");
             //        //}
             //    }
             //}

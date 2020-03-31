@@ -6,7 +6,7 @@
 //       如存在本生成代码外的新需求，请在相同命名空间下创建同名分部类进行实现。
 // </auto-generated>
 //
-// <copyright file="IMenuBLL.cs">
+// <copyright file="IMerchantRoleBLL.cs">
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
@@ -25,22 +25,15 @@ using System.Threading.Tasks;
 namespace WebApi.IBLL
 {
     /// <summary>
-    ///   业务层接口——Menu
+    ///   业务层接口——MerchantRole
     /// </summary>
-    public partial interface IMenuBLL
+    public partial interface IMerchantRoleBLL
     {
+        HttpReponseModel<bool> SetMerchantRolePermission(MerchantRoleViewModel model);
 
-        HttpReponseModel<List<TreeViewModel>> GetTreeListView(int id);
+        HttpReponseModel<string[]> GetMerchantRolePermission(string merchantNo);
 
-        HttpReponseModel<List<MenuViewModel>> GetMenuPageList(QueryModel model);
-
-
-        HttpReponseModel<bool> SetRoleMenuPermission(RoleMenuViewModel model);
-
-        HttpReponseModel<int[]> GetRoleMenuPermission(string roleCode);
-
-        HttpReponseModel<List<Menu>> GetMenuPermission(string[] roleCodes);
-
+        HttpReponseModel<SetTransferViewModel> GetRoleTransferData(string merchantNo);
 
     }
 }

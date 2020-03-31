@@ -21,12 +21,15 @@ namespace EntitiesModels.Models
         [DisplayName("菜单名称"), MaxLength(32)]
         public string MenuName { set; get; }
 
-        [DisplayName("url"), MaxLength(32)]
-        public string MenuUrl { set; get; }
+        [DisplayName("路径"), MaxLength(32)]
+        public string Path { set; get; }
 
         [DisplayName("icon"), MaxLength(32)]
-        public string MenuIcon { set; get; }
+        public string Icon { set; get; }
         [DisplayName("父节点")]
         public int ParentId { set; get; }
+
+        [DisplayName("是否掩藏")]
+        public bool Hidden { set; get; }
     }
 }

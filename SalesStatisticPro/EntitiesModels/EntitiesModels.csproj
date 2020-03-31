@@ -57,10 +57,13 @@
     <Compile Include="DtoModels\FileStreamViewModel.cs" />
     <Compile Include="DtoModels\MenuViewModel.cs" />
     <Compile Include="DtoModels\MerchantInfoViewModel.cs" />
+    <Compile Include="DtoModels\MerchantRoleViewModel.cs" />
+    <Compile Include="DtoModels\TransferViewModel.cs" />
     <Compile Include="DtoModels\ProductStockViewModel.cs" />
     <Compile Include="DtoModels\ProductViewModel.cs" />
     <Compile Include="DtoModels\PurchaseOrderInfoViewModel.cs" />
     <Compile Include="DtoModels\RegisterViewModel.cs" />
+    <Compile Include="DtoModels\RoleMenuViewModel.cs" />
     <Compile Include="DtoModels\SaleOrderStatisticsViewModel.cs" />
     <Compile Include="DtoModels\PurchaseOrderStatisticsViewModel.cs" />
     <Compile Include="DtoModels\PurchaseOrderViewModel.cs" />
@@ -156,6 +159,14 @@
     <Compile Include="Migrations\202003200905391_zxx12.cs" />
     <Compile Include="Migrations\202003200905391_zxx12.Designer.cs">
       <DependentUpon>202003200905391_zxx12.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003300925369_sdd.cs" />
+    <Compile Include="Migrations\202003300925369_sdd.Designer.cs">
+      <DependentUpon>202003300925369_sdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003301010000_sddf.cs" />
+    <Compile Include="Migrations\202003301010000_sddf.Designer.cs">
+      <DependentUpon>202003301010000_sddf.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
@@ -255,6 +266,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003200905391_zxx12.resx">
       <DependentUpon>202003200905391_zxx12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003300925369_sdd.resx">
+      <DependentUpon>202003300925369_sdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003301010000_sddf.resx">
+      <DependentUpon>202003301010000_sddf.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -215,6 +216,12 @@ export const asyncRoutes = [
         component: () => import('@/views/permission/menulist'),
         meta: { title: '菜单列表', icon: 'tree' }
       },
+      {
+        path: 'merchantlist',
+        name: '商户列表',
+        component: () => import('@/views/permission/merchantlist'),
+        meta: { title: '商户列表', icon: 'tree' }
+      }
     ]
   },
   {

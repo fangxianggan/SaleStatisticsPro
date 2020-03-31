@@ -11,7 +11,7 @@ namespace EntitiesModels.Models
     [Table("RoleMenu")]
     public partial class RoleMenu : BaseEntity
     {
-        public int RoleId { set; get; }
+        public string RoleCode { set; get; }
 
         public int MenuId { set; get; }
 

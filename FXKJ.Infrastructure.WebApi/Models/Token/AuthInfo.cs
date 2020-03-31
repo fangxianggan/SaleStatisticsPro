@@ -12,10 +12,15 @@ namespace FXKJ.Infrastructure.WebApi.Models.Token
     public class AuthInfo:BaseModel
     {
 
+       /// <summary>
+       /// 手机号
+       /// </summary>
+        public string PhoneNumber { get; set; }
+
         /// <summary>
-        /// 用户名
+        /// 商户号
         /// </summary>
-        public string UserName { get; set; }
+        public string MerchantNo { set; get; }
 
         /// <summary>
         /// 角色
@@ -38,10 +43,7 @@ namespace FXKJ.Infrastructure.WebApi.Models.Token
         /// </summary>
         public DateTime? RefreshDateTime { get; set; }
 
-        /// <summary>
-        /// 跳转的url
-        /// </summary>
-        public string ReturnUrl { set; get; }
+       
 
        
     }

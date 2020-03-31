@@ -95,7 +95,16 @@ namespace WebApi.App_Start
                    .ForMember(dest => dest.Label, options => options.MapFrom(src => src.MenuName));
 
             base.CreateMap<Menu, MenuViewModel>();
-               
+
+            //角色菜单
+            base.CreateMap<RoleMenu, TreeViewModel>()
+                   .ForMember(dest => dest.ID, options => options.MapFrom(src => src.MenuId))
+                    .ForMember(dest => dest.Label, options => options.MapFrom(src => src.Remark));
+
+            //角色
+            base.CreateMap<Role, TransferViewModel>()
+                  .ForMember(dest => dest.Key, options => options.MapFrom(src => src.RoleCode))
+                   .ForMember(dest => dest.Label, options => options.MapFrom(src => src.RoleName));
 
 
         }

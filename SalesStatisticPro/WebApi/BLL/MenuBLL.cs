@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using FXKJ.Infrastructure.DataAccess;
 using EntitiesModels.DtoModels;
 using FXKJ.Infrastructure.Core.Helper;
+using FXKJ.Infrastructure.Core.Extensions;
 
 namespace WebApi.BLL
 {
@@ -38,13 +39,16 @@ namespace WebApi.BLL
     {
 
         private readonly IEFRepository<Menu> _menuEFRepository;
+
+        private readonly IEFRepository<RoleMenu> _roleMenuEFRepository;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logic"></param>
-        public MenuBLL(IEFRepository<Menu> menuEFRepository, ILogic<Menu> logic) : this(logic)
+        public MenuBLL(IEFRepository<RoleMenu> roleMenuEFRepository, IEFRepository<Menu> menuEFRepository, ILogic<Menu> logic) : this(logic)
         {
             _menuEFRepository = menuEFRepository;
+            _roleMenuEFRepository = roleMenuEFRepository;
         }
 
         public HttpReponseModel<List<TreeViewModel>> GetTreeListView(int id)
@@ -85,7 +89,37 @@ namespace WebApi.BLL
             return httpReponse;
         }
 
+        public HttpReponseModel<bool> SetRoleMenuPermission(RoleMenuViewModel model)
+        {
+            HttpReponseModel<bool> httpReponse = new HttpReponseModel<bool>();
+            List<RoleMenu> list = new List<RoleMenu>();
+            _roleMenuEFRepository.Delete(p => p.RoleCode == model.RoleCode);
+            foreach (var item in model.MenuIds)
+            {
+                RoleMenu roleMenu = new RoleMenu();
+                roleMenu.RoleCode = model.RoleCode;
+                roleMenu.MenuId = item;
+                list.Add(roleMenu);
+            }
+            _roleMenuEFRepository.AddList(list);
+            return httpReponse;
+        }
 
+
+        public HttpReponseModel<int[]> GetRoleMenuPermission(string roleCode)
+        {
+            HttpReponseModel<int[]> httpReponse = new HttpReponseModel<int[]>();
+            httpReponse.Data = _roleMenuEFRepository.GetList(p => p.RoleCode == roleCode).Select(s=>s.MenuId).ToArray();
+            return httpReponse;
+        }
+
+        public HttpReponseModel<List<Menu>> GetMenuPermission(string[] roleCodes)
+        {
+            HttpReponseModel<List<Menu>> httpReponse = new HttpReponseModel<List<Menu>>();
+            List<int> menusId=  _roleMenuEFRepository.GetList(p => roleCodes.Contains(p.RoleCode)).Select(p=>p.MenuId).Distinct().ToList();
+            httpReponse.Data=_menuEFRepository.GetList(p => menusId.Contains(p.ID)).ToList();
+            return httpReponse;
+        }
     }
 }
 
