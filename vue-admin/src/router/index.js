@@ -54,102 +54,102 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-  {
-    path: '/order',
-    component: Layout,
-    redirect: '/example/table',
-    name: '订单管理',
-    meta: { title: '订单管理', icon: 'example' },
-    children: [
-      {
-        path: 'purchaselist',
-        name: '进货列表',
-        component: () => import('@/views/order/purchaselist'),
-        meta: { title: '进货列表', icon: 'tree' }
-      },
-      {
-        path: 'salelist',
-        name: '销售列表',
-        component: () => import('@/views/order/salelist'),
-        meta: { title: '销售列表', icon: 'tree' }
-      },
+  // {
+  //   path: '/order',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: '订单管理',
+  //   meta: { title: '订单管理', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'purchaselist',
+  //       name: '进货列表',
+  //       component: () => import('@/views/order/purchaselist'),
+  //       meta: { title: '进货列表', icon: 'tree' }
+  //     },
+  //     {
+  //       path: 'salelist',
+  //       name: '销售列表',
+  //       component: () => import('@/views/order/salelist'),
+  //       meta: { title: '销售列表', icon: 'tree' }
+  //     },
 
-    ]
-  },
-  {
-    path: '/report',
-    component: Layout,
-    redirect: '/example/table',
-    name: '统计表报',
-    meta: { title: '统计表报', icon: 'example' },
-    children: [
-      {
-        path: 'productstatisticslist',
-        name: '产品统计报表',
-        component: () => import('@/views/report/productstatisticslist'),
-        meta: { title: '产品统计报表', icon: 'tree' }
-      }
+  //   ]
+  // },
+  // {
+  //   path: '/report',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: '统计表报',
+  //   meta: { title: '统计表报', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'productstatisticslist',
+  //       name: '产品统计报表',
+  //       component: () => import('@/views/report/productstatisticslist'),
+  //       meta: { title: '产品统计报表', icon: 'tree' }
+  //     }
 
 
-    ]
-  },
-  {
-    path: '/system',
-    component: Layout,
-    redirect: '/example/table',
-    name: '基础数据管理',
-    meta: { title: '基础数据管理', icon: 'form' },
-    children: [
-      {
-        path: 'businesslist',
-        name: '供应商列表',
-        component: () => import('@/views/system/businesslist'),
-        meta: { title: '供应商列表', icon: 'tree' }
-      }, {
-        path: 'userinfolist',
-        name: '用户列表',
-        component: () => import('@/views/system/userinfolist'),
-        meta: { title: '用户列表', icon: 'tree' }
-      },
-      //{
-      //  path: 'brandlist',
-      //  name: '品牌列表',
-      //  component: () => import('@/views/system/brandlist'),
-      //  meta: { title: '品牌列表', icon: 'tree' }
-      //},
-      {
-        path: 'categorylist',
-        name: '产品分类列表',
-        component: () => import('@/views/system/categorylist'),
-        meta: { title: '产品分类列表', icon: 'tree' }
-      },
-      {
-        path: 'productlist',
-        name: '产品列表',
-        component: () => import('@/views/system/productlist'),
-        meta: { title: '产品列表', icon: 'tree' }
-      },
-      //{
-      //  path: 'specslist',
-      //  name: '规格列表',
-      //  component: () => import('@/views/system/specslist'),
-      //  meta: { title: '规格列表', icon: 'tree' }
-      //},
-      {
-        path: 'expresscompanylist',
-        name: '快递公司列表',
-        component: () => import('@/views/system/expresscompanylist'),
-        meta: { title: '快递公司列表', icon: 'tree' }
-      },
-      {
-        path: 'transferbinlist',
-        name: '转运仓列表',
-        component: () => import('@/views/system/transferbinlist'),
-        meta: { title: '转运仓列表', icon: 'tree' }
-      }
-
-    ]
-  },
+  //   ]
+  // },
+  // {
+  //   path: '/system',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: '基础数据管理',
+  //   meta: { title: '基础数据管理', icon: 'form' },
+  //   children: [
+  //     {
+  //       path: 'businesslist',
+  //       name: '供应商列表',
+  //       component: () => import('@/views/system/businesslist'),
+  //       meta: { title: '供应商列表', icon: 'tree' }
+  //     }, {
+  //       path: 'userinfolist',
+  //       name: '用户列表',
+  //       component: () => import('@/views/system/userinfolist'),
+  //       meta: { title: '用户列表', icon: 'tree' }
+  //     },
+  //     //{
+  //     //  path: 'brandlist',
+  //     //  name: '品牌列表',
+  //     //  component: () => import('@/views/system/brandlist'),
+  //     //  meta: { title: '品牌列表', icon: 'tree' }
+  //     //},
+  //     {
+  //       path: 'categorylist',
+  //       name: '产品分类列表',
+  //       component: () => import('@/views/system/categorylist'),
+  //       meta: { title: '产品分类列表', icon: 'tree' }
+  //     },
+  //     {
+  //       path: 'productlist',
+  //       name: '产品列表',
+  //       component: () => import('@/views/system/productlist'),
+  //       meta: { title: '产品列表', icon: 'tree' }
+  //     },
+  //     //{
+  //     //  path: 'specslist',
+  //     //  name: '规格列表',
+  //     //  component: () => import('@/views/system/specslist'),
+  //     //  meta: { title: '规格列表', icon: 'tree' }
+  //     //},
+  //     {
+  //       path: 'expresscompanylist',
+  //       name: '快递公司列表',
+  //       component: () => import('@/views/system/expresscompanylist'),
+  //       meta: { title: '快递公司列表', icon: 'tree' }
+  //     },
+  //     {
+  //       path: 'transferbinlist',
+  //       name: '转运仓列表',
+  //       component: () => import('@/views/system/transferbinlist'),
+  //       meta: { title: '转运仓列表', icon: 'tree' }
+  //     }
+  //
+  //  ]
+  // },
 
 
   // 404 page must be placed at the end !!!

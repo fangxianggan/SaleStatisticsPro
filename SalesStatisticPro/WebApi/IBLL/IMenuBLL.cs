@@ -39,7 +39,7 @@ namespace WebApi.IBLL
 
         HttpReponseModel<int[]> GetRoleMenuPermission(string roleCode);
 
-        HttpReponseModel<List<Menu>> GetMenuPermission(string[] roleCodes);
+        HttpReponseModel<List<MenuRouterViewModel>> GetMenuRouterList(string[] roleCodes);
 
 
     }

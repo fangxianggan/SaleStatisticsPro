@@ -55,6 +55,7 @@
     <Compile Include="DtoEnum\OrderEnum.cs" />
     <Compile Include="DtoModels\DashboardViewModel.cs" />
     <Compile Include="DtoModels\FileStreamViewModel.cs" />
+    <Compile Include="DtoModels\MenuRouterViewModel.cs" />
     <Compile Include="DtoModels\MenuViewModel.cs" />
     <Compile Include="DtoModels\MerchantInfoViewModel.cs" />
     <Compile Include="DtoModels\MerchantRoleViewModel.cs" />

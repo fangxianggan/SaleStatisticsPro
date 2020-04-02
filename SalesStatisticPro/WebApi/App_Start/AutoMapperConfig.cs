@@ -96,6 +96,11 @@ namespace WebApi.App_Start
 
             base.CreateMap<Menu, MenuViewModel>();
 
+            base.CreateMap<MenuViewModel, MenuRouterViewModel>()
+                .ForMember(dest =>dest.Name, options => options.MapFrom(src => src.MenuName))
+                 .ForMember(dest=>dest.Meta, options => options.MapFrom(src => new MetaViewModel() { Icon=src.Icon, Title=src.MenuName   } ))
+                   .ForMember(dest => dest.Component, options => options.MapFrom(src => src.Path));
+
             //角色菜单
             base.CreateMap<RoleMenu, TreeViewModel>()
                    .ForMember(dest => dest.ID, options => options.MapFrom(src => src.MenuId))
@@ -106,6 +111,7 @@ namespace WebApi.App_Start
                   .ForMember(dest => dest.Key, options => options.MapFrom(src => src.RoleCode))
                    .ForMember(dest => dest.Label, options => options.MapFrom(src => src.RoleName));
 
+            
 
         }
     }

@@ -30,7 +30,7 @@ export function getRoleMenuPermission(roleCode) {
    */
   export function getMenuListPermission(roleCodes) {
     //console.log(roleId);
-    var url = "/Menu/getMenuListPermission";
+    var url = "/Menu/GetMenuRouterList";
     var param = qs.stringify({ "": roleCodes });
     return http(url, param, {
       headers: {

@@ -102,10 +102,10 @@ namespace WebApi.Controllers
        /// <param name="roleCodes"></param>
        /// <returns></returns>
         [HttpPost]
-        [Route("GetMenuListPermission")]
-        public HttpReponseModel<List<Menu>> GetMenuListPermission([FromBody]string[] roleCodes)
+        [Route("GetMenuRouterList")]
+        public HttpReponseModel<List<MenuRouterViewModel>> GetMenuRouterList([FromBody]string[] roleCodes)
         {
-            return _menuBLL.GetMenuPermission(roleCodes);
+            return _menuBLL.GetMenuRouterList(roleCodes);
         }
 
 

@@ -109,17 +109,27 @@ namespace WebApi.BLL
         public HttpReponseModel<int[]> GetRoleMenuPermission(string roleCode)
         {
             HttpReponseModel<int[]> httpReponse = new HttpReponseModel<int[]>();
-            httpReponse.Data = _roleMenuEFRepository.GetList(p => p.RoleCode == roleCode).Select(s=>s.MenuId).ToArray();
+            httpReponse.Data = _roleMenuEFRepository.GetList(p => p.RoleCode == roleCode).Select(s => s.MenuId).ToArray();
             return httpReponse;
         }
 
-        public HttpReponseModel<List<Menu>> GetMenuPermission(string[] roleCodes)
+        public HttpReponseModel<List<MenuRouterViewModel>> GetMenuRouterList(string[] roleCodes)
         {
-            HttpReponseModel<List<Menu>> httpReponse = new HttpReponseModel<List<Menu>>();
-            List<int> menusId=  _roleMenuEFRepository.GetList(p => roleCodes.Contains(p.RoleCode)).Select(p=>p.MenuId).Distinct().ToList();
-            httpReponse.Data=_menuEFRepository.GetList(p => menusId.Contains(p.ID)).ToList();
+            HttpReponseModel<List<MenuRouterViewModel>> httpReponse = new HttpReponseModel<List<MenuRouterViewModel>>();
+            List<int> menusId = _roleMenuEFRepository.GetList(p => roleCodes.Contains(p.RoleCode)).Select(p => p.MenuId).Distinct().ToList();
+            List<Menu> menus = _menuEFRepository.GetList(p => menusId.Contains(p.ID)).ToList();
+            List<MenuViewModel> trees = new List<MenuViewModel>();
+            MenuViewModel treeView = new MenuViewModel();
+            treeView.ID = 0;
+            treeView.Children = new List<MenuViewModel>();
+            trees.Add(treeView);
+            RecursiveHelper.GetTreeChilds<Menu, MenuViewModel>(menus, ref trees);
+            httpReponse.Data = AutoMapperExtension.MapTo<List<MenuRouterViewModel>>(trees[0].Children);
             return httpReponse;
         }
+
+
+
     }
 }
 

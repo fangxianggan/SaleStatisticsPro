@@ -1,39 +1,31 @@
 /* Layout */
 import Layout from '@/layout'
 import { getMenuListPermission } from '@/api/menu'
+import { asyncRoutes,  constantRoutes } from '@/router'
+
+
 /**
- * Use meta.role to determine if the current user has permission
- * @param roles
- * @param route
+ * 后台查询的菜单数据拼装成路由格式的数据
+ * @param routes
  */
-function hasPermission(roles, route) {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role))
-  } else {
-    
-    return true
-  }
-}
-
-
-export function convertTree11(routers,menuList) {
-  routers.forEach(r => {
-      menuList.forEach((m, i) => {
-          if (m.parentId && m.parentId == r.meta.id) {
-              if (!r.children) r.children = []
-              m.fullPath = r.meta.fullPath + '/' + m.path
-              let menu = {
-                  path: m.path,
-                  component: () => import('@/views'+r.meta.fullPath+'/'+m.path),
-                  meta: { id: m.id, title: m.menuName, fullPath: r.meta.fullPath + '/' + m.path }
-              }
-              r.children.push(menu)
-          }
-      })
-      if (r.children) convertTree(r.children,menuList)
+export function generaMenu(routes, data) {
+  data.forEach(item => {
+    // alert(JSON.stringify(item))
+    const menu = {
+      path: item.path === '#' ? item.Id + '_key' : item.path,
+      component: item.path === '#' ? Layout : () => import('@/views'+item.path+'/index'),
+      children: [],
+      name: 'menu_' + item.Id,
+      meta: { title: item.menuName, id: item.Id, roles: ['admin'] }
+    }
+    if (item.children) {
+      generaMenu(menu.children, item.children)
+    }
+    routes.push(menu)
   })
- 
 }
+
+
 
 const state = {
   routes: [],
@@ -43,73 +35,28 @@ const state = {
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
-    state.routes = [].concat(routes)
+    state.routes = constantRoutes.concat(routes)
   }
 }
 
 const actions = {
   generateRoutes({ commit }, roles) {
-    
     return new Promise(resolve => {
+      const loadMenuData = []  
+      getMenuListPermission(roles).then(res => {
+        Object.assign(loadMenuData,  res.data)
+        generaMenu(asyncRoutes, loadMenuData)
       
-      let menuRouters = [] //定义一个空数组，这个是用来装真正路由数据的
-
-      getMenuListPermission(roles).then(res=>{
-
-        let menuList = res.data //这是后端的菜单数据
-        //下面就要根据后端的菜单数据组装树型路由数据
-        //先取出根节点，没有父id的就是根节点
-        menuList.forEach((m, i) => {
-            if (m.parentId == 0) {
-                m.fullPath = '/' + m.path
-                let module = {
-                    path: '/' + m.path,
-                    component: Layout,
-                    name:m.menuName,
-                    meta: { id: m.id, title: m.menuName, icon: m.icon },
-                     children: [
-                        {
-                            path: '',
-                            name:m.menuName,
-                            component:() => import('@/views/' + m.path + '/index'),
-                            meta: {
-                                menuHide: true,
-                                title: m.menuName
-                            }
-                        }
-                    ] 
-                }
-                menuRouters.push(module)
-            }
-        })
-
-//定义一个递归方法
-function convertTree(routers) {
-  routers.forEach(r => {
-      menuList.forEach((m, i) => {
-          if (m.parent_id && m.parent_id == r.meta.id) {
-              if (!r.children) r.children = []
-              m.fullPath = r.meta.fullPath + '/' + m.path
-              let menu = {
-                  path: m.path,
-                  component: () => import('@/views'+r.meta.fullPath+'/'+m.path),
-                  meta: { id: m.id, title: m.title, fullPath: r.meta.fullPath + '/' + m.path }
-              }
-              r.children.push(menu)
-          }
-      })
-      if (r.children) convertTree(r.children)
-  })
-}
-      
-       convertTree(menuRouters);
-       console.log(menuRouters);
-        commit('SET_ROUTES', menuRouters)
-        resolve(menuRouters)
-        
+        let accessedRoutes
+        if (roles.includes('admin')) {
+          // alert(JSON.stringify(asyncRoutes))
+          accessedRoutes = asyncRoutes || []
+        } else {
+          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+        }
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
       });
-
-      
     })
   }
 }
