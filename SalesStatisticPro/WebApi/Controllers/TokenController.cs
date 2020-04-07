@@ -1,21 +1,7 @@
 ﻿using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Core.Util;
-using FXKJ.Infrastructure.Entities.Enum;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.WebApi.Filter;
-using FXKJ.Infrastructure.WebApi.IBLL;
-using FXKJ.Infrastructure.WebApi.Models.Token;
-using JWT;
-using JWT.Algorithms;
-using JWT.Serializers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using WebApi.IBLL;
 
 namespace WebApi.Controllers
@@ -27,7 +13,7 @@ namespace WebApi.Controllers
     [RoutePrefix("dev-api/Token")]
 
     //[EnableCors(origins: "http://localhost:9528/", headers: "*", methods: "GET,POST,PUT,DELETE,OPTIONS")]
-    [ApiException]
+   // [ApiException]
     public class TokenController : ApiController
     {
         private readonly ILoginBLL _loginBLL;
@@ -46,7 +32,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Login")]
-        public HttpReponseModel<string> Login([FromBody] LoginRequest loginRequest)
+        public HttpReponseModel<string> Login([FromBody] LoginRequestViewModel loginRequest)
         {
             return _loginBLL.CheckLogin(loginRequest);
         }

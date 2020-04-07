@@ -7,8 +7,11 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Configuration;
 using EntitiesModels;
+using EntitiesModels.DtoModels;
+using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Core.Extensions;
 using FXKJ.Infrastructure.Entities.QueryModel;
 
@@ -19,12 +22,12 @@ namespace FXKJ.Infrastructure.DataAccess
         where T : class, new()
 
     {
-        //private readonly DbContext _db;
-        //public EFRepository(DbContext db)
-        //{
-        //    _db = db;
-        //}
+        //当前商户的信息
+        private static AuthInfoViewModel currentMerchantInfo;
+        public EFRepository()
+        {
 
+        }
 
         public virtual T Add(T model)
         {
@@ -81,7 +84,6 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-
                 //反射更新时间字段
                 Type type = model.GetType();
                 foreach (var item in type.GetRuntimeProperties())
@@ -163,7 +165,10 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-                return dbContext.Set<T>().Where(whereLambda).ToList();
+                var list = dbContext.Set<T>().Where(whereLambda);
+                //权限过滤
+                list = _GetFilterPermissionList(list);
+                return list.ToList();
             }
         }
 
@@ -174,6 +179,8 @@ namespace FXKJ.Infrastructure.DataAccess
                 IQueryable<T> QueryList = dbContext.Set<T>();
                 //条件操作
                 QueryList = Core.Extensions.QueryableExtensions.Where(QueryList, queryParam);
+                //权限过滤
+                QueryList = _GetFilterPermissionList(QueryList);
                 //排序操作
                 QueryList = _GetOrder(QueryList, queryParam.OrderList);
                 queryParam.Total = QueryList.Count();
@@ -200,6 +207,31 @@ namespace FXKJ.Infrastructure.DataAccess
             return list;
         }
 
+        /// <summary>
+        /// 数据权限过滤
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private IQueryable<T> _GetFilterPermissionList(IQueryable<T> list)
+        {
+            Type t = typeof(T);
+            PropertyInfo[] properties = t.GetProperties();
+            var perName = properties.Where(p => p.Name == "P_MerchantNo").FirstOrDefault();
+            if (perName != null)
+            {
+                currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
+                if (currentMerchantInfo != null)
+                {
+                    if (!currentMerchantInfo.Roles.Contains("admin"))
+                    {
+                        string merchantNo = currentMerchantInfo.MerchantNo;
+                        var expression = PredicateExtensions.BuildPropertyInExpression<T>("P_MerchantNo", new List<string>() { merchantNo });
+                        list = list.Where(expression.Compile()).AsQueryable();
+                    }
+                }
+            }
+            return list;
+        }
 
     }
 }

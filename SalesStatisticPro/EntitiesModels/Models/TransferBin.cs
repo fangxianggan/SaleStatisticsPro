@@ -9,7 +9,7 @@ namespace EntitiesModels.Models
     /// </summary>
     /// 
     [Table("TransferBin")]
-    public partial class TransferBin:BaseEntity
+    public partial class TransferBin: BaseEntityPermission
     {
         /// <summary>
         /// 转运仓编码

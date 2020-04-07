@@ -1,6 +1,5 @@
 ﻿using EntitiesModels.DtoModels;
 using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.WebApi.Models.Token;
 
 namespace WebApi.IBLL
 {
@@ -11,7 +10,7 @@ namespace WebApi.IBLL
         /// </summary>
         /// <param name="loginRequest"></param>
         /// <returns></returns>
-        HttpReponseModel<string> CheckLogin(LoginRequest loginRequest);
+        HttpReponseModel<string> CheckLogin(LoginRequestViewModel loginRequest);
 
         HttpReponseModel<MerchantInfoViewModel> GetMerchantInfo(string token);
 

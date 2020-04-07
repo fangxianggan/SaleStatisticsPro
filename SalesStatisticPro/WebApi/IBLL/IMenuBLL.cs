@@ -42,6 +42,9 @@ namespace WebApi.IBLL
         HttpReponseModel<List<MenuRouterViewModel>> GetMenuRouterList(string[] roleCodes);
 
 
+        HttpReponseModel<bool> GetIsDeleteFlag(int menuId);
+
+
     }
 }
 

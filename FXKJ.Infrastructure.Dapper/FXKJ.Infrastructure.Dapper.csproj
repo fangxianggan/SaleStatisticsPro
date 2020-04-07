@@ -76,6 +76,10 @@
       <Project>{3BEF85F5-E1D8-4526-AE3A-416C19D32E81}</Project>
       <Name>FXKJ.Infrastructure.Log</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SalesStatisticPro\EntitiesModels\EntitiesModels.csproj">
+      <Project>{FD648777-7297-496B-B4F1-D5D46DFA60E7}</Project>
+      <Name>EntitiesModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

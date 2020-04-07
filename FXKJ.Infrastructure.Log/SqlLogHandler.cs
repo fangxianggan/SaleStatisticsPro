@@ -1,10 +1,12 @@
 ﻿using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Config;
-using FXKJ.Infrastructure.Log.Util;
-using FXKJ.Infrastructure.Log.LogModel;
 using System;
 using System.Data.SqlClient;
-using System.Web;
+using EntitiesModels.DtoModels;
+using EntitiesModels.Models;
+using FXKJ.Infrastructure.Core.Sql;
+using System.Data;
+using System.Collections.Generic;
 
 namespace FXKJ.Infrastructure.Log
 {
@@ -20,31 +22,20 @@ namespace FXKJ.Infrastructure.Log
             )
             : base("SqlLogToDatabase")
         {
-            PrincipalUser principalUser = new PrincipalUser
+            AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+            if (authInfo == null)
             {
-                Name = "匿名用户",
-                UserId = Guid.Empty
-            };
-            var current = HttpContext.Current;
-            if (current != null)
-            {
-                principalUser = FormAuthenticationExtension.Current(HttpContext.Current.Request);
-            }
-            if (principalUser == null)
-            {
-                principalUser = new PrincipalUser()
-                {
-                    Name = "匿名用户",
-                    UserId = Guid.Empty
-                };
+                authInfo.Name = "测试用户";
+                authInfo.PhoneNumber = "15255458934";
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
             }
             log = new SqlLog
             {
                 SqlLogId = Guid.NewGuid(),
                 CreateTime = DateTime.Now,
-                CreateUserId = principalUser.UserId,
-                CreateUserCode = principalUser.Code,
-                CreateUserName = principalUser.Name,
+                CreateUserId = authInfo.GuidId,
+                CreateUserCode = authInfo.PhoneNumber,
+                CreateUserName = authInfo.Name,
                 OperateSql = operateSql,
                 ElapsedTime = elapsedTime,
                 EndDateTime = endDateTime,
@@ -58,42 +49,62 @@ namespace FXKJ.Infrastructure.Log
             WriteSqlLogData(log);
         }
 
-
         private int WriteSqlLogData(SqlLog log)
         {
             int result = 0;  //接收sql返回的结果
             //写入sql日志
             try
             {
-                string conStr = GlobalParams.ReadConnectionString();
-                using (SqlConnection con = new SqlConnection(conStr))
-                {
-                    //插入sql语句
-                    string sqlStr = @"insert into [dbo].[SqlLog] (
-[SqlLogId],
-[OperateSql],
-[EndDateTime],
-[ElapsedTime],
-[Parameter],
-[CreateUserCode],
-[CreateTime],
-[UpdateTime]
-) values('" +
-log.SqlLogId + "','" +
-log.OperateSql + "','" +
-log.EndDateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" +
-log.ElapsedTime + "','" +
-log.Parameter + "','" +
-log.CreateUserCode + "','" +
-log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) +"','"+
-log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) +
-"');";
-                    using (SqlCommand cmd = new SqlCommand(sqlStr, con))
-                    {
-                        con.Open();
-                        result = cmd.ExecuteNonQuery();
-                    }
-                }
+                string sql = string.Format(@"insert into [dbo].[Log_SqlLog] values (
+                         @SqlLogId,
+                         @CreateTime,
+                         @CreateUserId,
+                         @CreateUserCode,
+                         @CreateUserName,
+                         @OperateSql,
+                         @ElapsedTime,
+                         @EndDateTime,
+                         @Parameter
+                         )");
+                List<SqlParameter> list = new List<SqlParameter>() {
+                    new SqlParameter{
+                      ParameterName = "SqlLogId",
+                      Value = log.SqlLogId,
+                     },
+                      new SqlParameter{
+                      ParameterName = "CreateTime",
+                      Value = log.CreateTime,
+                     },
+                        new SqlParameter{
+                      ParameterName = "CreateUserId",
+                      Value = log.CreateUserId,
+                     },
+                          new SqlParameter{
+                      ParameterName = "CreateUserCode",
+                      Value = log.CreateUserCode,
+                     },
+                           new SqlParameter{
+                      ParameterName = "CreateUserName",
+                      Value = log.CreateUserName,
+                     },
+                            new SqlParameter{
+                      ParameterName = "OperateSql",
+                      Value = log.OperateSql,
+                     },
+                              new SqlParameter{
+                      ParameterName = "Parameter",
+                      Value = log.Parameter,
+                     },
+                               new SqlParameter{
+                      ParameterName = "EndDateTime",
+                      Value = log.SqlLogId,
+                     },
+                                new SqlParameter{
+                      ParameterName = "ElapsedTime",
+                      Value = log.SqlLogId,
+                     },
+                };
+                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             }
             catch (Exception ex)
             {
@@ -101,6 +112,5 @@ log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) +
             }
             return result;
         }
-
     }
 }

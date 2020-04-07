@@ -13,7 +13,7 @@ namespace EntitiesModels.Models
     /// 产品
     /// </summary>
     [Table("Product")]
-    public partial class Product : BaseEntity
+    public partial class Product : BaseEntityPermission
     {
 
         /// <summary>

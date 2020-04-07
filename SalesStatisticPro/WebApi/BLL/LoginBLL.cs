@@ -5,8 +5,7 @@ using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.DataAccess;
 using FXKJ.Infrastructure.Entities.Enum;
 using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.WebApi.IBLL;
-using FXKJ.Infrastructure.WebApi.Models.Token;
+using FXKJ.Infrastructure.Token.IBLL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +30,10 @@ namespace WebApi.BLL
 
         private readonly ITokenBLL _tokenBLL;
 
-        /// <summary>
-        /// 秘钥
-        /// </summary>
+       
+         /// <summary>
+         /// 秘钥
+         /// </summary>
         private readonly string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
 
         public LoginBLL(ITokenBLL tokenBLL, IEFRepository<MerchantInfo> merchantInfoEFRepository, IEFRepository<Role> roleEFRepository, IEFRepository<MerchantRole> merchantRoleEFRepository)
@@ -49,7 +49,7 @@ namespace WebApi.BLL
         /// </summary>
         /// <param name="loginRequest"></param>
         /// <returns></returns>
-        public HttpReponseModel<string> CheckLogin(LoginRequest loginRequest)
+        public HttpReponseModel<string> CheckLogin(LoginRequestViewModel loginRequest)
         {
             HttpReponseModel<string> httpReponse = new HttpReponseModel<string>();
             if (loginRequest.UserName.IsNullOrEmpty())
@@ -76,8 +76,8 @@ namespace WebApi.BLL
                     if (ent.MerchantPassword == password)
                     {
                         List<string> roles = _merchantRoleEFRepository.GetList(p => p.MerchantNo == ent.MerchantNo).Select(p => p.RoleCode).ToList();
-                        var isAdmin = roles.Where(p => p == "Admin").Count() > 0 ? true : false;
-                        AuthInfo authInfo = new AuthInfo
+                        var isAdmin = roles.Where(p => p == "admin").Count() > 0 ? true : false;
+                        AuthInfoViewModel authInfo = new AuthInfoViewModel
                         {
                             PhoneNumber = loginRequest.UserName,
                             MerchantNo = ent.MerchantNo,
@@ -89,12 +89,12 @@ namespace WebApi.BLL
                         };
                         //口令加密秘钥
                         var data = _tokenBLL.GetJWTData(authInfo, secretKey);
-                        if (data.Flag)
+                        if (!string.IsNullOrEmpty(data))
                         {
                             //存储redis
-                            _tokenBLL.SetRedisToken(ent.MerchantPhone, data.Data);
+                            _tokenBLL.SetRedisToken(ent.MerchantPhone, data);
                             httpReponse.Code = StatusCode.OK;
-                            httpReponse.Token = data.Data;
+                            httpReponse.Token = data;
                             httpReponse.ResultSign = ResultSign.Successful;
                             httpReponse.Data = "";
                         }
@@ -123,7 +123,7 @@ namespace WebApi.BLL
         /// <returns></returns>GetMerchantInfo
         public HttpReponseModel<MerchantInfoViewModel> GetMerchantInfo(string token)
         {
-            var authInfo = _tokenBLL.DecoderToken(token, secretKey).Data;
+            var authInfo = _tokenBLL.DecoderToken(token, secretKey);
             HttpReponseModel<MerchantInfoViewModel> httpReponse = new HttpReponseModel<MerchantInfoViewModel>();
             MerchantInfoViewModel merchantInfoView = new MerchantInfoViewModel();
             merchantInfoView.Avatar = authInfo.Avatar;
@@ -144,8 +144,8 @@ namespace WebApi.BLL
             HttpReponseModel<string> httpReponse = new HttpReponseModel<string>();
             //口令加密秘钥
             string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
-            var authInfo = _tokenBLL.DecoderToken(token, secretKey).Data;
-            httpReponse = _tokenBLL.RemoveRedisToken(authInfo.PhoneNumber, token);
+            var authInfo = _tokenBLL.DecoderToken(token, secretKey);
+            _tokenBLL.RemoveRedisToken(authInfo.PhoneNumber, token);
             return httpReponse;
         }
 
@@ -160,7 +160,7 @@ namespace WebApi.BLL
             HttpReponseModel<bool> httpReponse = new HttpReponseModel<bool>();
             MerchantInfo merchantInfo = new MerchantInfo();
             merchantInfo.ID = Guid.NewGuid();
-            merchantInfo.MerchantName = "";
+            merchantInfo.MerchantName = register.NickName;
             merchantInfo.MerchantNo = RandomExtension.GetRandomNumberString(new Random(), 8);
             while (IsExistMerchantNo(merchantInfo.MerchantNo).Data)
             {
@@ -169,6 +169,12 @@ namespace WebApi.BLL
             merchantInfo.MerchantPhone = register.PhoneNumber;
             merchantInfo.MerchantPassword= DEncryptUtil.Md5Encrypt(register.Password);
             httpReponse.Data= _merchantInfoEFRepository.Add(merchantInfo,true);
+
+            MerchantRole merchantRole = new MerchantRole();
+            merchantRole.MerchantNo = merchantInfo.MerchantNo;
+            merchantRole.RoleCode = "merchant_1";//普通商户角色
+            _merchantRoleEFRepository.Add(merchantRole,true);
+
             if (httpReponse.Data) {
                 httpReponse.Message = "注册成功!";
             }

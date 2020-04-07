@@ -13,11 +13,9 @@ namespace FXKJ.Infrastructure.Dapper
     /// </summary>
     public static class SqlMapperUtil
     {
-
         public static string ConnectionName { set; get; }
         public static DbBase CreateDbBase()
         {
-
             var dbBase = new DbBase(ConnectionName);
             return dbBase;
         }
@@ -30,7 +28,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="transaction">事物</param>
         /// <param name="commandTimeout">超时</param>
         /// <returns></returns>
-        public static int Insert<T>(T t, IDbTransaction transaction = null,
+        public static bool Insert<T>(T t, IDbTransaction transaction = null,
             int? commandTimeout = null) where T : class
         {
             using (var db = CreateDbBase())
@@ -299,9 +297,7 @@ namespace FXKJ.Infrastructure.Dapper
         public static IEnumerable<T> PagingQueryAsync<T>(string querySql, QueryModel queryParam)
         {
             var sql = querySql;
-           
             var page = " ";
-
             if (!queryParam.IsReport)
             {
                 var currentPage = queryParam.PageIndex; //当前页号
@@ -310,13 +306,11 @@ namespace FXKJ.Infrastructure.Dapper
                 var upper = currentPage * pageSize; //记录终点
                 page = "  OFFSET " + lower + " ROWS FETCH NEXT " + upper + " ROWS ONLY ";
             }
-
             var where = @" where 1=1 ";
             queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
             if (queryParam.Items.Count() > 0)
             {
                 where += SearchFilterUtil.ConvertFilters(queryParam.Items);
-
             }
 
             //排序字段 
@@ -389,8 +383,6 @@ namespace FXKJ.Infrastructure.Dapper
         }
 
         #endregion
-
-
 
         #region 增删改
         /// <summary>

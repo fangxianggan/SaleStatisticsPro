@@ -353,7 +353,7 @@ export default {
         .then(() => {
           this.$ajax(
             "/Role/GetIsDeleteFlag",
-            { code: row.roleCode },
+            { roleCode: row.roleCode },
             { method: "get" }
           ).then(d => {
             if (d.resultSign == 1) {
@@ -375,7 +375,7 @@ export default {
     },
     //配置权限
     handlePermission(row) {
-      getRoleMenuPermission(row.id).then(res => {
+      getRoleMenuPermission(row.roleCode).then(res => {
         this.permissionTemp.roleCode = row.roleCode;
         this.permissionTemp.roleName = row.roleName;
         this.permissionTemp.menuId = res.data;

@@ -9,7 +9,7 @@ namespace EntitiesModels.Models.SysModels
    public class BaseEntityLog
     {
         /// <summary>
-        ///     创建人员
+        ///  创建人员
         /// </summary>
         public Guid CreateUserId { get; set; }
 

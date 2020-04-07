@@ -8,6 +8,12 @@ using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Config;
 using FXKJ.Infrastructure.Log.LogModel;
 using System.Net;
+using EntitiesModels.Models.SysModels;
+using EntitiesModels.DtoModels;
+using System.IO;
+using FXKJ.Infrastructure.Core.Sql;
+using System.Data;
+using System.Collections.Generic;
 
 namespace FXKJ.Infrastructure.Log
 {
@@ -21,46 +27,36 @@ namespace FXKJ.Infrastructure.Log
         public ExceptionLogHandler(Exception exception)
             : base("ExceptionLogToDatabase")
         {
-            PrincipalUser principalUser = new PrincipalUser
+            AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+            if (authInfo == null)
             {
-                Name = "匿名用户",
-                UserId = Guid.Empty
-            };
-            var current = HttpContext.Current;
-            if (current != null)
-            {
-                principalUser = FormAuthenticationExtension.Current(HttpContext.Current.Request);
-            }
-            if (principalUser == null)
-            {
-                principalUser = new PrincipalUser()
-                {
-                    Name = "匿名用户",
-                    UserId = Guid.Empty
-                };
+                authInfo.Name = "测试用户";
+                authInfo.PhoneNumber = "15255458934";
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
             }
             log = new ExceptionLog
             {
                 ExceptionLogId=Guid.NewGuid(),
-                ExceptionTime = DateTime.Now,
                 Message = exception.Message,
                 StackTrace = exception.StackTrace,
                 ExceptionType = exception.GetType().FullName,
-                CreateUserCode = principalUser.Code,
-                CreateUserName = principalUser.Name,
                 ServerHost = string.Format("{0}【{1}】", Dns.GetHostName(), Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString()),
                 ClientHost = string.Format("{0}", Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString()),
-                Runtime = "Web"
+                Runtime = "Web",
+                CreateTime = DateTime.Now,
+                CreateUserId = authInfo.GuidId,
+                CreateUserCode = authInfo.PhoneNumber,
+                CreateUserName = authInfo.Name,
             };
             //获取服务器信息
             var request = HttpContext.Current.Request;
             log.RequestUrl = string.Format("{0} ", request.Url);
             log.HttpMethod = request.HttpMethod;
             log.UserAgent = request.UserAgent;
-            //var inputStream = request.InputStream;
-            //var streamReader = new StreamReader(inputStream);
-            //var requestData = HttpUtility.UrlDecode(streamReader.ReadToEnd());
-            //log.RequestData = requestData;
+            var inputStream = request.InputStream;
+            var streamReader = new StreamReader(inputStream);
+            var requestData = HttpUtility.UrlDecode(streamReader.ReadToEnd());
+            log.RequestData = requestData;
             log.InnerException = exception.InnerException != null ? GetExceptionFullMessage(exception.InnerException) : "";
         }
 
@@ -74,7 +70,7 @@ namespace FXKJ.Infrastructure.Log
             base.WriteLog();
 
             //写入数据库
-           // WriteExceptionLogData(log);
+            WriteExceptionLogData(log);
 
             string exceptionHtml = ExceptionHtml(log);
             //是否发送邮件
@@ -102,13 +98,96 @@ namespace FXKJ.Infrastructure.Log
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     //插入sql语句
-                    string sqlStr = "insert into [dbo].[Sys_ExceptionLog] ([ExceptionLogId],[ExceptionTime],[CreateUserId],[CreateUserCode],[CreateUserName],[Message],[StackTrace],[InnerException],[ExceptionType],[ServerHost],[ClientHost],[Runtime],[RequestUrl],[RequestData],[UserAgent],[HttpMethod]) values('" + log.ExceptionLogId + "','" + log.ExceptionTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.Message + "','" + log.StackTrace + "','" + log.InnerException + "','" + log.ExceptionType + "','" + log.ServerHost + "','" + log.ClientHost + "','" + log.Runtime + "','" + log.RequestUrl + "','" + log.RequestData + "','" + log.UserAgent + "','" + log.HttpMethod +"');";
+                    string sqlStr = "insert into [dbo].[Sys_ExceptionLog] ([ExceptionLogId],[ExceptionTime]" +
+                        ",[CreateUserId],[CreateUserCode],[CreateUserName],[Message],[StackTrace]" +
+                        ",[InnerException],[ExceptionType],[ServerHost],[ClientHost],[Runtime],[RequestUrl],[RequestData],[UserAgent],[HttpMethod]) values('" + log.ExceptionLogId + "','" + log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.Message + "','" + log.StackTrace + "','" + log.InnerException + "','" + log.ExceptionType + "','" + log.ServerHost + "','" + log.ClientHost + "','" + log.Runtime + "','" + log.RequestUrl + "','" + log.RequestData + "','" + log.UserAgent + "','" + log.HttpMethod +"');";
                     using (SqlCommand cmd = new SqlCommand(sqlStr, con))
                     {
                         con.Open();
                         result = cmd.ExecuteNonQuery();
                     }
                 }
+
+                string sql = string.Format(@"insert into [dbo].[Log_ExceptionLog] values (
+                         @ExceptionLogId,
+                         @Message,
+                         @StackTrace,
+                         @InnerException,
+                         @ExceptionType,  
+                         @ServerHost,
+                         @ClientHost,
+                         @Runtime,
+                         @RequestUrl,
+                         @RequestData,
+                         @UserAgent,
+                         @HttpMethod,
+                         @CreateTime,
+                         @CreateUserId,
+                         @CreateUserCode,
+                         @CreateUserName,
+                         )");
+                List<SqlParameter> list = new List<SqlParameter>() {
+                    new SqlParameter{
+                      ParameterName = "ExceptionLogId",
+                      Value = log.ExceptionLogId,
+                     },
+                      new SqlParameter{
+                      ParameterName = "Message",
+                      Value = log.Message,
+                     },
+                        new SqlParameter{
+                      ParameterName = "StackTrace",
+                      Value = log.StackTrace,
+                     },
+                          new SqlParameter{
+                      ParameterName = "InnerException",
+                      Value = log.InnerException,
+                     },
+                            new SqlParameter{
+                      ParameterName = "ExceptionType",
+                      Value = log.ExceptionType,
+                     },
+                     new SqlParameter{
+                      ParameterName = "ServerHost",
+                      Value = log.ServerHost,
+                     },
+                     new SqlParameter{
+                      ParameterName = "ClientHost",
+                      Value = log.ClientHost,
+                     }, new SqlParameter{
+                      ParameterName = "Runtime",
+                      Value = log.Runtime,
+                     }, new SqlParameter{
+                      ParameterName = "RequestUrl",
+                      Value = log.RequestUrl,
+                     }, new SqlParameter{
+                      ParameterName = "RequestData",
+                      Value = log.RequestData,
+                     }, new SqlParameter{
+                      ParameterName = "UserAgent",
+                      Value = log.UserAgent,
+                     }, new SqlParameter{
+                      ParameterName = "HttpMethod",
+                      Value = log.HttpMethod,
+                     },
+                              new SqlParameter{
+                      ParameterName = "CreateTime",
+                      Value = log.CreateTime,
+                     },
+                               new SqlParameter{
+                      ParameterName = "CreateUserId",
+                      Value = log.CreateUserId,
+                     },
+                       new SqlParameter{
+                      ParameterName = "CreateUserCode",
+                      Value = log.CreateUserCode,
+                     },  new SqlParameter{
+                      ParameterName = "CreateUserName",
+                      Value = log.CreateUserName,
+                     }
+                };
+                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+
             }
             catch (Exception ex)
             {
@@ -305,7 +384,7 @@ namespace FXKJ.Infrastructure.Log
                             <label id='ClientHost'>{12}</label></td>
                     </tr>
                 </tbody>
-            </table>", log.ExceptionTime.ToString(CultureInfo.InvariantCulture), log.CreateUserCode, log.CreateUserName, log.Message, log.StackTrace, log.InnerException, log.ExceptionType, log.RequestUrl, log.UserAgent, log.HttpMethod, log.RequestData, log.ServerHost, log.ClientHost);
+            </table>", log.CreateTime.ToString(CultureInfo.InvariantCulture), log.CreateUserCode, log.CreateUserName, log.Message, log.StackTrace, log.InnerException, log.ExceptionType, log.RequestUrl, log.UserAgent, log.HttpMethod, log.RequestData, log.ServerHost, log.ClientHost);
             return html;
         }
 

@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-03-20 17:04
+//        生成时间：2020-04-07 18:37
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -85,7 +85,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("_DelData")]
-        public HttpReponseModel<int> Delete(Int32 id)
+        public HttpReponseModel<int> Delete(Guid id)
         {
             return  _sqlLogBLL.DelData(id);
         }

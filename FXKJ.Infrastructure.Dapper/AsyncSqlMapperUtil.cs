@@ -1,10 +1,8 @@
 ﻿
 using FXKJ.Infrastructure.Core.Util;
-using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,7 +30,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="transaction">事物</param>
         /// <param name="commandTimeout">超时</param>
         /// <returns></returns>
-        public static Task<int> Insert<T>(T t, IDbTransaction transaction = null,
+        public static Task<bool> Insert<T>(T t, IDbTransaction transaction = null,
             int? commandTimeout = null) where T : class
         {
             using (var db = CreateDbBase())

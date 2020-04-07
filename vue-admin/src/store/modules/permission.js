@@ -31,21 +31,8 @@ function generaMenu(routes, data) {
     if (item.children.length > 0) {
       menu.component = Layout;
     } else {
-      var path=item.path;
-      if(item.path=="/dashboard")
-      {
-        menu.path="/";
-        menu.redirect= '/dashboard',
-        menu.children=[{
-              path: '/dashboard',
-              name: '首页',
-              component: () => import('@/views/dashboard/index'),
-              meta: { title: '首页', icon: 'dashboard' }
-        }];
-        menu.component = Layout;
-      }else{
-        menu.component =() => import(`@/views${path}`)
-      }
+      var path = item.path;
+      menu.component = () => import(`@/views${path}`)
     }
     if (item.children.length > 0) {
       generaMenu(menu.children, item.children)
@@ -71,7 +58,6 @@ export function filterAsyncRoutes(routes, roles) {
       res.push(tmp)
     }
   })
-  //console.log(res)
   return res
 }
 
@@ -94,13 +80,9 @@ const actions = {
       getMenuListPermission(roles).then(res => {
         generaMenu(aa, res.data)
         let accessedRoutes
-        if (roles.includes('admin')) {
-          //accessedRoutes = asyncRoutes || []
-          accessedRoutes = aa;
-        } else {
-          console.log("111")
-          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-        }
+        accessedRoutes = aa;
+        //404错误页要最后加载进去
+        accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       })

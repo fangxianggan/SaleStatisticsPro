@@ -9,7 +9,7 @@ namespace EntitiesModels.Models
     /// 用户信息
     /// </summary>
     [Table("UserInfo")]
-    public partial class UserInfo : BaseEntity
+    public partial class UserInfo : BaseEntityPermission
     {
         /// <summary>
         /// 姓名

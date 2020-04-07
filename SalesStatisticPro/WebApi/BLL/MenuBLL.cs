@@ -29,6 +29,7 @@ using FXKJ.Infrastructure.DataAccess;
 using EntitiesModels.DtoModels;
 using FXKJ.Infrastructure.Core.Helper;
 using FXKJ.Infrastructure.Core.Extensions;
+using FXKJ.Infrastructure.Entities.Enum;
 
 namespace WebApi.BLL
 {
@@ -55,8 +56,7 @@ namespace WebApi.BLL
         {
             HttpReponseModel<List<TreeViewModel>> httpReponse = new HttpReponseModel<List<TreeViewModel>>();
             List<TreeViewModel> trees = new List<TreeViewModel>();
-            List<Menu> menus = _menuEFRepository.GetList(p => true);
-
+            List<Menu> menus = _menuEFRepository.GetList(p => true).OrderBy(p=>p.Sort).ToList();
             TreeViewModel treeView = new TreeViewModel();
             if (id == 0)
             {
@@ -79,7 +79,7 @@ namespace WebApi.BLL
         {
             HttpReponseModel<List<MenuViewModel>> httpReponse = new HttpReponseModel<List<MenuViewModel>>();
             List<MenuViewModel> trees = new List<MenuViewModel>();
-            List<Menu> menus = _menuEFRepository.GetList(p => true);
+            List<Menu> menus = _menuEFRepository.GetList(p => true).OrderBy(p=>p.Sort).ToList();
             MenuViewModel treeView = new MenuViewModel();
             treeView.ID = 0;
             treeView.Children = new List<MenuViewModel>();
@@ -117,7 +117,7 @@ namespace WebApi.BLL
         {
             HttpReponseModel<List<MenuRouterViewModel>> httpReponse = new HttpReponseModel<List<MenuRouterViewModel>>();
             List<int> menusId = _roleMenuEFRepository.GetList(p => roleCodes.Contains(p.RoleCode)).Select(p => p.MenuId).Distinct().ToList();
-            List<Menu> menus = _menuEFRepository.GetList(p => menusId.Contains(p.ID)).ToList();
+            List<Menu> menus = _menuEFRepository.GetList(p => menusId.Contains(p.ID)).OrderBy(p=>p.Sort).ToList();
             List<MenuViewModel> trees = new List<MenuViewModel>();
             MenuViewModel treeView = new MenuViewModel();
             treeView.ID = 0;
@@ -128,8 +128,24 @@ namespace WebApi.BLL
             return httpReponse;
         }
 
-
-
+        public HttpReponseModel<bool> GetIsDeleteFlag(int menuId)
+        {
+            HttpReponseModel<bool> httpReponse = new HttpReponseModel<bool>();
+            var list1 = _roleMenuEFRepository.GetList(p => p.MenuId == menuId);
+            if (list1.Count() > 0)
+            {
+                httpReponse.Data = false;
+                httpReponse.ResultSign = ResultSign.Warning;
+                httpReponse.Message = "先解除已配置角色在删除菜单！";
+            }
+            else
+            {
+                httpReponse.Data = true;
+                httpReponse.ResultSign = ResultSign.Successful;
+                httpReponse.Message = "操作成功！";
+            }
+            return httpReponse;
+        }
     }
 }
 

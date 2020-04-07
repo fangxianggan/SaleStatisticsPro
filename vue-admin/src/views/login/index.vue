@@ -88,6 +88,18 @@
             auto-complete="on"
           />
         </el-form-item>
+            <el-form-item prop="nickName">
+          <span class="svg-container">
+            <i class="ele-icon-shouji"></i>
+          </span>
+          <el-input
+            ref="nickName"
+            v-model="registerForm.nickName"
+            placeholder="昵称"
+            name="nickName"
+            type="text"
+          />
+        </el-form-item>
         <el-form-item prop="password">
           <span class="svg-container">
             <svg-icon icon-class="password" />
@@ -176,6 +188,7 @@ export default {
       },
       registerForm: {
         phoneNumber: "",
+        nickName:"",
         password: "",
         passwordTwo: ""
       },
@@ -228,6 +241,7 @@ export default {
             .dispatch("user/login", this.loginForm,this)
             .then(res => {
               this.$router.push({ path: this.redirect || "/" });
+              //console.log(this.$router);
               this.loading = false;
             })
             .catch(() => {

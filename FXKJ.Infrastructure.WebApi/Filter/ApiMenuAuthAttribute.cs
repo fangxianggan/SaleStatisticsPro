@@ -1,14 +1,8 @@
 ﻿using FXKJ.Infrastructure.Entities.Enum;
 using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.WebApi.IBLL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using FXKJ.Infrastructure.Token.IBLL;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
@@ -36,16 +30,14 @@ namespace FXKJ.Infrastructure.WebApi.Filter
             var _tokenBLL = actionContext.ControllerContext.Configuration.DependencyResolver.GetService(typeof(ITokenBLL)) as ITokenBLL;
             if (_tokenBLL != null)
             {
-                var d = _tokenBLL.VerifyMenuUrl(userName, menuUrl);
-                if (!d.Data)
-                {
+                
                     HttpReponseModel httpReponse = new HttpReponseModel();
                     httpReponse.Code = StatusCode.Unauthorized;
                     httpReponse.Message = "未授权";
                     httpReponse.Flag = true;
                     httpReponse.ResultSign = ResultSign.Warning;
                     actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.OK, httpReponse, "application/json");
-                }
+                
                
             }
             else

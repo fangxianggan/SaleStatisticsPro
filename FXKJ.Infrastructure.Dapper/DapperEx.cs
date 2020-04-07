@@ -10,7 +10,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using FXKJ.Infrastructure.Log.LogModel;
+using EntitiesModels.Models.SysModels;
+using EntitiesModels.Models;
 
 namespace FXKJ.Infrastructure.Dapper
 {
@@ -38,7 +39,6 @@ namespace FXKJ.Infrastructure.Dapper
         /// <returns></returns>
         private static void WriteDataLog(DataLog log)
         {
-
             DataLogHandler _dataLoginHandler = new DataLogHandler(log.OperateType, log.OperateTable, log.OperationBefore, log.OperationAfterData);
             _dataLoginHandler.WriteLog();
 
@@ -60,7 +60,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns></returns>
-        public static int Insert<T>(this DbBase dbs, T t, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static bool Insert<T>(this DbBase dbs, T t, IDbTransaction transaction = null, int? commandTimeout = null)
             where T : class
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -73,7 +73,7 @@ namespace FXKJ.Infrastructure.Dapper
                 OperateSql = sql.InsertSql,
                 Parameter = JsonConvert.SerializeObject(t)
             };
-            var result = db.Execute(sql.InsertSql, t, transaction, commandTimeout);
+            var result = db.Execute(sql.InsertSql, t, transaction, commandTimeout) > 0 ? true : false;
             stopwatch.Stop();
             DataLog datalog = new DataLog
             {
@@ -84,8 +84,8 @@ namespace FXKJ.Infrastructure.Dapper
             };
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
-           // WriteSqlLog(log);
-          //  WriteDataLog(datalog);
+            WriteSqlLog(log);
+            WriteDataLog(datalog);
             return result;
         }
 
@@ -255,7 +255,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="id"></param>
         /// <param name="transaction"></param>
         /// <returns></returns>
-        public static int DeleteById<T>( this DbBase dbs, SqlQuery sql = null,  IDbTransaction transaction = null, object id=null) where T : class
+        public static int DeleteById<T>(this DbBase dbs, SqlQuery sql = null, IDbTransaction transaction = null, object id = null) where T : class
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -568,7 +568,7 @@ namespace FXKJ.Infrastructure.Dapper
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
-           // WriteSqlLog(log);
+            // WriteSqlLog(log);
             return result;
         }
 
@@ -615,7 +615,8 @@ namespace FXKJ.Infrastructure.Dapper
             stopwatch.Start();
             int result = 1;
 
-            try {
+            try
+            {
                 using (var destinationConnection = (SqlConnection)dbs.DbConnecttion)
                 {
                     using (transaction = destinationConnection.BeginTransaction())
@@ -651,13 +652,14 @@ namespace FXKJ.Infrastructure.Dapper
                 log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
                 WriteSqlLog(log);
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
 
                 transaction.Rollback();
-                
+
             }
-           
+
             return result;
         }
 
@@ -713,7 +715,7 @@ namespace FXKJ.Infrastructure.Dapper
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
             WriteSqlLog(log);
             var result = dbs.DbConnecttion.Query<T>(sql, (object)parms);
-           
+
             return result;
         }
 
@@ -732,7 +734,7 @@ namespace FXKJ.Infrastructure.Dapper
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
-           // WriteSqlLog(log);
+            // WriteSqlLog(log);
             return result;
         }
 
@@ -808,7 +810,7 @@ namespace FXKJ.Infrastructure.Dapper
                 OperateSql = procName,
                 Parameter = parms == null ? "" : parms.ToString()
             };
-            var result = dbs.DbConnecttion.Execute(procName, (object)parms,transaction, commandType: CommandType.StoredProcedure);
+            var result = dbs.DbConnecttion.Execute(procName, (object)parms, transaction, commandType: CommandType.StoredProcedure);
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;

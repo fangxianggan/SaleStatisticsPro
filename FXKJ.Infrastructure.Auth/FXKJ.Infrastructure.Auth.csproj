@@ -31,10 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JWT">
+      <HintPath>..\FXKJ.Infrastructure.WebApi\NetDLL\JWT.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\FXKJ.Infrastructure.Core\NetDLL\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +57,18 @@
     <ProjectReference Include="..\FXKJ.Infrastructure.Config\FXKJ.Infrastructure.Config.csproj">
       <Project>{91938935-5697-44A0-9B10-A86BEEDCF045}</Project>
       <Name>FXKJ.Infrastructure.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
+      <Project>{77cf037d-57b0-4338-93ec-7415dd9b40ce}</Project>
+      <Name>FXKJ.Infrastructure.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalesStatisticPro\EntitiesModels\EntitiesModels.csproj">
+      <Project>{FD648777-7297-496B-B4F1-D5D46DFA60E7}</Project>
+      <Name>EntitiesModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalesStatisticPro\FXKJ.Infrastructrue.Token\FXKJ.Infrastructrue.Token.csproj">
+      <Project>{98708003-6570-4187-90be-86b7db3c7ef9}</Project>
+      <Name>FXKJ.Infrastructrue.Token</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

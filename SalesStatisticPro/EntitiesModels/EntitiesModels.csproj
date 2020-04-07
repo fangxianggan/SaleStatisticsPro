@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,8 +54,10 @@
   <ItemGroup>
     <Compile Include="Context.cs" />
     <Compile Include="DtoEnum\OrderEnum.cs" />
+    <Compile Include="DtoModels\AuthInfoViewModel.cs" />
     <Compile Include="DtoModels\DashboardViewModel.cs" />
     <Compile Include="DtoModels\FileStreamViewModel.cs" />
+    <Compile Include="DtoModels\LoginRequestViewModel.cs" />
     <Compile Include="DtoModels\MenuRouterViewModel.cs" />
     <Compile Include="DtoModels\MenuViewModel.cs" />
     <Compile Include="DtoModels\MerchantInfoViewModel.cs" />
@@ -169,10 +172,32 @@
     <Compile Include="Migrations\202003301010000_sddf.Designer.cs">
       <DependentUpon>202003301010000_sddf.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004041426020_22553.cs" />
+    <Compile Include="Migrations\202004041426020_22553.Designer.cs">
+      <DependentUpon>202004041426020_22553.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004051414000_225535.cs" />
+    <Compile Include="Migrations\202004051414000_225535.Designer.cs">
+      <DependentUpon>202004051414000_225535.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004051524086_2255356.cs" />
+    <Compile Include="Migrations\202004051524086_2255356.Designer.cs">
+      <DependentUpon>202004051524086_2255356.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004051554370_22553568.cs" />
+    <Compile Include="Migrations\202004051554370_22553568.Designer.cs">
+      <DependentUpon>202004051554370_22553568.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004060414262_22998.cs" />
+    <Compile Include="Migrations\202004060414262_22998.Designer.cs">
+      <DependentUpon>202004060414262_22998.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
+    <Compile Include="Models\BaseEntityPermission.cs" />
     <Compile Include="Models\Business.cs" />
+    <Compile Include="Models\LogModels\SqlLog.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\MerchantRole.cs" />
     <Compile Include="Models\MerchantInfo.cs" />
@@ -183,7 +208,6 @@
     <Compile Include="Models\RoleMenu.cs" />
     <Compile Include="Models\SaleOrder.cs" />
     <Compile Include="Models\SaleOrderInfo.cs" />
-    <Compile Include="Models\SqlLog.cs" />
     <Compile Include="Models\SysConfig.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ExpressCompany.cs" />
@@ -273,6 +297,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003301010000_sddf.resx">
       <DependentUpon>202003301010000_sddf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004041426020_22553.resx">
+      <DependentUpon>202004041426020_22553.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004051414000_225535.resx">
+      <DependentUpon>202004051414000_225535.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004051524086_2255356.resx">
+      <DependentUpon>202004051524086_2255356.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004051554370_22553568.resx">
+      <DependentUpon>202004051554370_22553568.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004060414262_22998.resx">
+      <DependentUpon>202004060414262_22998.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

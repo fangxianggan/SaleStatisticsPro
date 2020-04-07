@@ -1,9 +1,10 @@
 ﻿using Autofac;
+using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using FXKJ.Infrastructure.DataAccess;
 using FXKJ.Infrastructure.Logic;
-using FXKJ.Infrastructure.WebApi.BLL;
-using FXKJ.Infrastructure.WebApi.IBLL;
+using FXKJ.Infrastructure.Token.BLL;
+using FXKJ.Infrastructure.Token.IBLL;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -12,10 +13,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using WebApi.App_Start;
-using WebApi.BLL;
-using WebApi.IBLL;
-using WebApi.IRepository;
-using WebApi.Repository;
+
 
 namespace WebApi
 {
@@ -64,11 +62,9 @@ namespace WebApi
                 var container = builder.Build();
                 //注册api容器需要使用HttpConfiguration对象
                 config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+                DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-              
-            
-
-        }
+            }
 
             private static void SetupResolveRules(ContainerBuilder builder)
             {
@@ -82,8 +78,9 @@ namespace WebApi
                 builder.RegisterAssemblyTypes(assemblys.ToArray()).Where(t => t.Name.EndsWith("BLL")).AsImplementedInterfaces();
                 builder.RegisterAssemblyTypes(assemblys.ToArray()).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
 
+                builder.RegisterType<TokenBLL>().As<ITokenBLL>().InstancePerLifetimeScope();
+               
 
-              
 
             }
         }

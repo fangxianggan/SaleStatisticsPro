@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-03-20 17:04
+//        生成时间：2020-04-07 18:37
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -93,15 +93,15 @@ namespace WebApi.BLL
         public HttpReponseModel<SqlLog> SaveData(SqlLog entity)
         {
           
-             
-          if (entity.ID==0)
-            {
-             return  _logic.AddLogic(entity);
-            }
-         else
-         {
-            return  _logic.UpdateLogic(entity);
-           }
+         
+      if (entity.SqlLogId.ToString()=="")
+      {
+        return  _logic.AddLogic(entity);
+      }
+    else
+    {
+        return  _logic.UpdateLogic(entity);
+    }
 
 
         }
@@ -114,13 +114,14 @@ namespace WebApi.BLL
         public HttpReponseModel<List<SqlLog>> SaveData(List<SqlLog> entityList)
         {
 
-           if (entityList.FirstOrDefault().ID==0)
+ 
+        if (entityList.FirstOrDefault().SqlLogId.ToString()=="")
 {
      return  _logic.AddListLogic(entityList);
 }
 else
 {
-     return  _logic.UpdateListLogic(entityList);
+    return  _logic.UpdateListLogic(entityList);
 }
            
         }

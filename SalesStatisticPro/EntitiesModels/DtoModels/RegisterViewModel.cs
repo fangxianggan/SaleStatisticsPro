@@ -15,6 +15,9 @@ namespace EntitiesModels.DtoModels
         [DisplayName("手机号")]
         public string PhoneNumber { set; get; }
 
+        [DisplayName("昵称")]
+        public string NickName { set; get; }
+
         [DisplayName("密码")]
         public string Password { set; get; }
 

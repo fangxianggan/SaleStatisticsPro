@@ -1,6 +1,4 @@
-﻿using FXKJ.Infrastructure.Log.Log4NetWrite;
-using FXKJ.Infrastructure.Log.LogModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,7 +48,7 @@ namespace FXKJ.Infrastructure.Core.Util
             }
             catch (Exception ex)
             {
-                LogWriter.WriteLog(FolderName.Error, ex.Message);
+               
                 return "";
             }
         }
@@ -64,17 +62,12 @@ namespace FXKJ.Infrastructure.Core.Util
         /// <returns></returns>
         public static string GetClientHost()
         {
-            try
-            {
+           
                 var address = IPAddress.Parse(GetClientIp());
                 var ipInfo = Dns.GetHostEntry(address);
                 return ipInfo.HostName;
-            }
-            catch (Exception ex)
-            {
-                LogWriter.WriteLog(FolderName.Error, ex.Message);
-                return "";
-            }
+            
+          
         }
 
         #endregion
@@ -110,7 +103,7 @@ namespace FXKJ.Infrastructure.Core.Util
             }
             catch (Exception ex)
             {
-                LogWriter.WriteLog(FolderName.Error, ex.Message);
+              //  LogWriter.WriteLog(FolderName.Error, ex.Message);
                 return "";
             }
         }
@@ -130,7 +123,7 @@ namespace FXKJ.Infrastructure.Core.Util
             }
             catch (Exception ex)
             {
-                LogWriter.WriteLog(FolderName.Error, ex.Message);
+               // LogWriter.WriteLog(FolderName.Error, ex.Message);
                 return "";
             }
         }
@@ -442,7 +435,7 @@ namespace FXKJ.Infrastructure.Core.Util
             }
             catch (Exception ex)
             {
-                LogWriter.WriteLog(FolderName.Error, ex.Message);
+              //  LogWriter.WriteLog(FolderName.Error, ex.Message);
                 return "";
             }
         }

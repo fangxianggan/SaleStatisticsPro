@@ -1,8 +1,6 @@
 ﻿using EntitiesModels.DtoModels;
 using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.WebApi.BLL;
 using FXKJ.Infrastructure.WebApi.Filter;
-using FXKJ.Infrastructure.WebApi.IBLL;
 using System.Collections.Generic;
 using System.Web.Http;
 
@@ -30,8 +28,6 @@ namespace WebApi.Controllers
         {
 
             return _businessBLL.GetSelectViewModelList();
-
-            
         }
 
 

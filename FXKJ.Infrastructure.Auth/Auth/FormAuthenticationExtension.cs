@@ -1,8 +1,12 @@
-﻿using FXKJ.Infrastructure.Config;
+﻿using EntitiesModels.DtoModels;
+using FXKJ.Infrastructure.Config;
 using System;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Security;
+using FXKJ.Infrastructure.Core.Util;
+using FXKJ.Infrastructure.Token.IBLL;
+using System.Web.Mvc;
 
 namespace FXKJ.Infrastructure.Auth
 {
@@ -11,6 +15,7 @@ namespace FXKJ.Infrastructure.Auth
     /// </summary>
     public class FormAuthenticationExtension
     {
+
         //Cookie默认保存时间1天
         private static int _cookieSaveDays = 1;
 
@@ -130,6 +135,29 @@ namespace FXKJ.Infrastructure.Auth
         //    throw new NotImplementedException();
         //}
 
+        /// <summary>
+        /// 返回当前对象
+        /// </summary>
+        /// <returns></returns>
+        public static AuthInfoViewModel CurrentAuth()
+        {
+            AuthInfoViewModel authInfo=null ;
+            var actionContext = HttpContext.Current;
+            var token = actionContext.Request.Headers.Get("X-Token");
+            if (!string.IsNullOrEmpty(token))
+            {
+                //口令加密秘钥
+                string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
+                var _tokenBLL = DependencyResolver.Current.GetService<ITokenBLL>();
+                var json = _tokenBLL.DecoderToken(token, secretKey);
+                if (json != null)
+                {
+                    authInfo = json;
+                }
+            }
+            return authInfo;
+
+        }
         /// <summary>
         ///     清除授权Cookie信息
         /// </summary>

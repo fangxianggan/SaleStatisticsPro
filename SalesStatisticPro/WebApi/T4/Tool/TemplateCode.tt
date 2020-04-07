@@ -37,59 +37,60 @@
     {
         if(modelType.BaseType.Name=="BaseEntity"||modelType.BaseType.Name=="BaseEntityLog"||modelType.BaseType.Name=="BaseEntityGuid")
         {
+            if(modelType.Name!="BaseEntityPermission"){
 
-            T4ModelInfo model = new T4ModelInfo(modelType);
+                T4ModelInfo model = new T4ModelInfo(modelType);
 
-            NamesList.Add(model);
+                NamesList.Add(model);
 
-            //业务操作接口
-            IBLLTemplate irep0= new IBLLTemplate(model);
-            var path0 = model.UseModuleDir 
-                ? string.Format(@"{0}\IBLL\{1}", projectPath, model.ModuleName)
-                : string.Format(@"{0}\IBLL", projectPath);
-            irep0.Output.Encoding = Encoding.UTF8;
-            irep0.RenderToFile(Path.Combine(path0, irep0.FileName));
+                //业务操作接口
+                IBLLTemplate irep0= new IBLLTemplate(model);
+                var path0 = model.UseModuleDir 
+                    ? string.Format(@"{0}\IBLL\{1}", projectPath, model.ModuleName)
+                    : string.Format(@"{0}\IBLL", projectPath);
+                irep0.Output.Encoding = Encoding.UTF8;
+                irep0.RenderToFile(Path.Combine(path0, irep0.FileName));
 
-            //业务操作
-            BLLTemplate irep1= new BLLTemplate(model);
-            var path1 = model.UseModuleDir 
-                ? string.Format(@"{0}\BLL\{1}", projectPath, model.ModuleName)
-                : string.Format(@"{0}\BLL", projectPath);
-            irep1.Output.Encoding = Encoding.UTF8;
-            irep1.RenderToFile(Path.Combine(path1, irep1.FileName));
+                //业务操作
+                BLLTemplate irep1= new BLLTemplate(model);
+                var path1 = model.UseModuleDir 
+                    ? string.Format(@"{0}\BLL\{1}", projectPath, model.ModuleName)
+                    : string.Format(@"{0}\BLL", projectPath);
+                irep1.Output.Encoding = Encoding.UTF8;
+                irep1.RenderToFile(Path.Combine(path1, irep1.FileName));
 
-            //实体仓储操作接口
-            IRepositoryTemplate irep2= new IRepositoryTemplate(model);
-            var path2 = model.UseModuleDir 
-                ? string.Format(@"{0}\IRepository\{1}", projectPath, model.ModuleName)
-                : string.Format(@"{0}\IRepository", projectPath);
+                //实体仓储操作接口
+                IRepositoryTemplate irep2= new IRepositoryTemplate(model);
+                var path2 = model.UseModuleDir 
+                    ? string.Format(@"{0}\IRepository\{1}", projectPath, model.ModuleName)
+                    : string.Format(@"{0}\IRepository", projectPath);
       
-            irep2.Output.Encoding = Encoding.UTF8;
-            irep2.RenderToFile(Path.Combine(path2, irep2.FileName));
+                irep2.Output.Encoding = Encoding.UTF8;
+                irep2.RenderToFile(Path.Combine(path2, irep2.FileName));
 
-            //实体仓储操作
-            RepositoryTemplate irep3= new RepositoryTemplate(model);
-            var path3 = model.UseModuleDir 
-                ? string.Format(@"{0}\Repository\{1}", projectPath, model.ModuleName)
-                  :string.Format(@"{0}\Repository", projectPath);
-            irep3.Output.Encoding = Encoding.UTF8;
-            irep3.RenderToFile(Path.Combine(path3, irep3.FileName));
+                //实体仓储操作
+                RepositoryTemplate irep3= new RepositoryTemplate(model);
+                var path3 = model.UseModuleDir 
+                    ? string.Format(@"{0}\Repository\{1}", projectPath, model.ModuleName)
+                    :string.Format(@"{0}\Repository", projectPath);
+                irep3.Output.Encoding = Encoding.UTF8;
+                irep3.RenderToFile(Path.Combine(path3, irep3.FileName));
 
 
-              //控制器
-            ApiControllerTemplate irep4= new ApiControllerTemplate(model);
-            var path4 = model.UseModuleDir 
-                ? string.Format(@"{0}\Controllers\{1}", projectPath, model.ModuleName)
-                : string.Format(@"{0}\Controllers", projectPath);
-            irep4.Output.Encoding = Encoding.UTF8;
-            irep4.RenderToFile(Path.Combine(path4, irep4.FileName));
+                //控制器
+                ApiControllerTemplate irep4= new ApiControllerTemplate(model);
+                var path4 = model.UseModuleDir 
+                    ? string.Format(@"{0}\Controllers\{1}", projectPath, model.ModuleName)
+                    : string.Format(@"{0}\Controllers", projectPath);
+                irep4.Output.Encoding = Encoding.UTF8;
+                irep4.RenderToFile(Path.Combine(path4, irep4.FileName));
+            }
         }
-
     }
 
-            //输入文件路径
-            string outputPath1 = Path.Combine(projectPath, @"EntitiesModels");
-            DBContextTemplate dbt=new DBContextTemplate(NamesList);
-            dbt.Output.Encoding = Encoding.UTF8;
-            dbt.RenderToFile(Path.Combine(outputPath1, "Context.cs"));
+    //输入文件路径
+    string outputPath1 = Path.Combine(projectPath, @"EntitiesModels");
+    DBContextTemplate dbt=new DBContextTemplate(NamesList);
+    dbt.Output.Encoding = Encoding.UTF8;
+    dbt.RenderToFile(Path.Combine(outputPath1, "Context.cs"));
 #>

@@ -1,14 +1,18 @@
 ﻿using FXKJ.Infrastructure.Config;
 using FXKJ.Infrastructure.Auth;
-using FXKJ.Infrastructure.Log.LogModel;
 using System;
 using System.Data.SqlClient;
 using System.Web;
+using EntitiesModels.Models.SysModels;
+using EntitiesModels.DtoModels;
+using System.Collections.Generic;
+using FXKJ.Infrastructure.Core.Sql;
+using System.Data;
 
 namespace FXKJ.Infrastructure.Log
 {/// <summary>
-    /// 数据日志记录
-    /// </summary>
+ /// 数据日志记录
+ /// </summary>
     public class DataLogHandler : BaseHandler<DataLog>
     {
         /// <summary>
@@ -20,23 +24,12 @@ namespace FXKJ.Infrastructure.Log
             string operateAfterData)
             : base("DataLogToDatabase")
         {
-            PrincipalUser principalUser = new PrincipalUser
+            AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+            if (authInfo == null)
             {
-                Name = "匿名用户",
-                UserId = Guid.Empty
-            };
-            var current = HttpContext.Current;
-            if (current != null)
-            {
-                principalUser = FormAuthenticationExtension.Current(HttpContext.Current.Request);
-            }
-            if (principalUser == null)
-            {
-                principalUser = new PrincipalUser()
-                {
-                    Name = "匿名用户",
-                    UserId = Guid.Empty
-                };
+                authInfo.Name = "测试用户";
+                authInfo.PhoneNumber = "15255458934";
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
             }
             log = new DataLog()
             {
@@ -44,11 +37,11 @@ namespace FXKJ.Infrastructure.Log
                 OperateTable = operateTable,
                 OperationBefore = operationBefore,
                 OperationAfterData = operateAfterData,
-                OperateTime = DateTime.Now,
-                CreateUserId = principalUser.UserId,
-                CreateUserCode = principalUser.Code,
-                CreateUserName = principalUser.Name,
-                DataLogId =Guid.NewGuid()
+                CreateTime = DateTime.Now,
+                CreateUserId = authInfo.GuidId,
+                CreateUserCode = authInfo.PhoneNumber,
+                CreateUserName = authInfo.Name,
+                DataLogId = Guid.NewGuid()
             };
         }
 
@@ -67,17 +60,56 @@ namespace FXKJ.Infrastructure.Log
             int result = 0;
             try
             {
-                string conStr = GlobalParams.ReadConnectionString();
-                using (SqlConnection con = new SqlConnection(conStr))
-                {
-                    //插入sql语句
-                    string sqlStr = "insert into [dbo].[Sys_DataLog] ([DataLogId],[OperateTable],[OperateType],[OperationBefore],[OperationAfterData],[CreateUserId],[CreateUserCode],[CreateUserName],[OperateTime]) values('" + log.DataLogId + "','" + log.OperateTable + "','" + log.OperateType + "','" + log.OperationBefore + "','" + log.OperationAfterData + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.OperateTime.ToString(DateTimeConfig.DateTimeFormatS) + "');";
-                    using (SqlCommand cmd = new SqlCommand(sqlStr, con))
-                    {
-                        con.Open();
-                        result = cmd.ExecuteNonQuery();
-                    }
-                }
+                string sql = string.Format(@"insert into [dbo].[Log_DataLog] values (
+                         @DataLogId,
+                         @OperateTable,
+                         @OperateType,
+                         @OperationBefore,
+                         @OperationAfterData  
+                         @CreateTime,
+                         @CreateUserId,
+                         @CreateUserCode,
+                         @CreateUserName,
+                         )");
+                List<SqlParameter> list = new List<SqlParameter>() {
+                    new SqlParameter{
+                      ParameterName = "DataLogId",
+                      Value = log.DataLogId,
+                     },
+                      new SqlParameter{
+                      ParameterName = "OperateTable",
+                      Value = log.OperateTable,
+                     },
+                        new SqlParameter{
+                      ParameterName = "OperateType",
+                      Value = log.OperateType,
+                     },
+                          new SqlParameter{
+                      ParameterName = "OperationBefore",
+                      Value = log.OperationBefore,
+                     },
+                            new SqlParameter{
+                      ParameterName = "OperationAfterData",
+                      Value = log.OperationAfterData,
+                     },
+                              new SqlParameter{
+                      ParameterName = "CreateTime",
+                      Value = log.CreateTime,
+                     },
+                               new SqlParameter{
+                      ParameterName = "CreateUserId",
+                      Value = log.CreateUserId,
+                     },
+                       new SqlParameter{
+                      ParameterName = "CreateUserCode",
+                      Value = log.CreateUserCode,
+                     },  new SqlParameter{
+                      ParameterName = "CreateUserName",
+                      Value = log.CreateUserName,
+                     }
+                };
+                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+
             }
             catch (Exception ex)
             {

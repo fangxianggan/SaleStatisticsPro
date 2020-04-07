@@ -9,7 +9,7 @@ namespace EntitiesModels.Models
     /// </summary>
     /// 
     [Table("SaleOrderInfo")]
-    public partial class SaleOrderInfo:BaseEntity
+    public partial class SaleOrderInfo: BaseEntityPermission
     {
 
         /// <summary>

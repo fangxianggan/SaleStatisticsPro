@@ -103,7 +103,7 @@
       @pagination="getList"
     />
 
-    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :top="10" >
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <el-row>
           <el-col :span="24">
@@ -156,11 +156,21 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="是否掩藏" prop="hidden" :rules="rules.checkNull">
-             <el-switch
-  v-model="temp.hidden"
-  active-color="#13ce66"
-  inactive-color="#ff4949">
-</el-switch>
+              <el-switch v-model="temp.hidden"  ></el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="排序" prop="sort" :rules="rules.checkNull">
+              <el-input v-model="temp.sort" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="是否子节点" prop="noChildren" :rules="rules.checkNull">
+              <el-switch v-model="temp.noChildren"  ></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -206,7 +216,7 @@ var currentData = {
     menuName: "",
     path: "",
     icon: "",
-    hidden:false,
+    hidden: false,
     parentId: 0,
     id: 0,
     createTime: "",
@@ -214,7 +224,9 @@ var currentData = {
     updateTime: "",
     updateUserCode: "",
     remark: "",
-    merchantId: ""
+    merchantId: "",
+    sort: 0,
+    noChildren: false
   },
   orderArr: []
 };
@@ -283,7 +295,7 @@ export default {
         menuName: "",
         path: "",
         icon: "",
-        hidden:false,
+        hidden: false,
         parentId: 0,
         id: 0,
         createTime: "",
@@ -291,7 +303,9 @@ export default {
         updateTime: "",
         updateUserCode: "",
         remark: "",
-        merchantId: ""
+        merchantId: "",
+        sort: 0,
+        noChildren: false
       };
     },
     //新增 页面
@@ -362,7 +376,7 @@ export default {
         .then(() => {
           this.$ajax(
             "/Menu/GetIsDeleteFlag",
-            { code: row.menuCode },
+            { menuId: row.id },
             { method: "get" }
           ).then(d => {
             if (d.resultSign == 1) {

@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EntitiesModels.Models.SysModels
 {
     /// <summary>
     /// 异常记录日志
     /// </summary>
-   [Table("Log_ExceptionLog")]
+    [Table("Log_ExceptionLog")]
    public class ExceptionLog: BaseEntityLog
     {
         

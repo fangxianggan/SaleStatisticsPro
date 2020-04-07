@@ -73,18 +73,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseApiController.cs" />
-    <Compile Include="BLL\TokenBLL.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Filter\ApiAuthorizeAttribute.cs" />
     <Compile Include="Filter\ApiMenuAuthAttribute.cs" />
     <Compile Include="Filter\ApiExceptionAttribute.cs" />
     <Compile Include="Filter\ApiDCTAttribute.cs" />
     <Compile Include="Filter\ApiFilterAttribute.cs" />
-    <Compile Include="IBLL\ITokenBLL.cs" />
-    <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Token\AuthInfo.cs" />
-    <Compile Include="Models\Token\LoginRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -98,6 +92,10 @@
     <Content Include="NetDLL\System.Web.Http.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Auth\FXKJ.Infrastructure.Auth.csproj">
+      <Project>{AE088EC2-B50D-4564-BDCD-865E4B345093}</Project>
+      <Name>FXKJ.Infrastructure.Auth</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
       <Project>{77CF037D-57B0-4338-93EC-7415DD9B40CE}</Project>
       <Name>FXKJ.Infrastructure.Core</Name>
@@ -118,10 +116,17 @@
       <Project>{FD648777-7297-496B-B4F1-D5D46DFA60E7}</Project>
       <Name>EntitiesModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SalesStatisticPro\FXKJ.Infrastructrue.Token\FXKJ.Infrastructrue.Token.csproj">
+      <Project>{98708003-6570-4187-90BE-86B7DB3C7EF9}</Project>
+      <Name>FXKJ.Infrastructrue.Token</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SalesStatisticPro\NetRedisUtil\NetRedisUtil.csproj">
       <Project>{7F890A1A-EE96-486F-957F-9656A4E308DE}</Project>
       <Name>NetRedisUtil</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -109,6 +109,19 @@ namespace WebApi.Controllers
         }
 
 
+        /// <summary>
+        /// 删除条件
+        /// </summary>
+        /// <param name="menuId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetIsDeleteFlag")]
+        public HttpReponseModel<bool> GetIsDeleteFlag(int menuId)
+        {
+            return _menuBLL.GetIsDeleteFlag(menuId);
+        }
+
+
     }
 }
 

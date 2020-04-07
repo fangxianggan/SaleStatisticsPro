@@ -17,6 +17,7 @@ using EntitiesModels.DtoModels;
 using EntitiesModels.Models;
 using FXKJ.Infrastructure.Entities.HttpResponse;
 using FXKJ.Infrastructure.Entities.QueryModel;
+using FXKJ.Infrastructure.WebApi.Filter;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -27,7 +28,7 @@ namespace WebApi.Controllers
    /// <summary>
     /// UserInfo 控制器api 代码自动生成
     /// </summary>
-  
+  [ApiAuthorize]
     public partial class UserInfoController : ApiController
     {
 

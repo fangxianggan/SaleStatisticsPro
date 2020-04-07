@@ -1,6 +1,7 @@
-﻿using FXKJ.Infrastructure.Auth;
+﻿using EntitiesModels.DtoModels;
+using EntitiesModels.Models.SysModels;
+using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Config;
-using FXKJ.Infrastructure.Log.LogModel;
 using FXKJ.Infrastructure.Log.Util;
 using System;
 using System.Data.SqlClient;
@@ -19,37 +20,26 @@ namespace FXKJ.Infrastructure.Log
             : base("OperateLogToDatabase")
         {
 
-            PrincipalUser principalUser = new PrincipalUser
+            AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+            if (authInfo == null)
             {
-                Name = "匿名用户",
-                UserId = Guid.Empty
-            };
-            var current = HttpContext.Current;
-            if (current != null)
-            {
-                principalUser = FormAuthenticationExtension.Current(HttpContext.Current.Request);
+                authInfo.Name = "测试用户";
+                authInfo.PhoneNumber = "15255458934";
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
             }
-            if (principalUser == null)
-            {
-                principalUser = new PrincipalUser()
-                {
-                    Name = "匿名用户",
-                    UserId = Guid.Empty
-                };
-            }
-            var request =System.Web.HttpContext.Current.Request;
+            var request =HttpContext.Current.Request;
             log = new OperateLog()
             {
-                CreateUserId = principalUser.UserId,
-                CreateUserCode = principalUser.Code,
-                CreateUserName = principalUser.Name,
                 OperationLogId = Guid.NewGuid(),
-                OperateTime = DateTime.Now,
+                CreateTime = DateTime.Now,
                 ServerHost = String.Format("{0}【{1}】", IpBrowserUtil.GetServerHost(), IpBrowserUtil.GetServerHostIp()),
                 ClientHost = String.Format("{0}", IpBrowserUtil.GetClientIp()),
                 RequestContentLength = httpRequestBase.ContentLength,
                 RequestType = httpRequestBase.RequestType,
-                UserAgent = httpRequestBase.UserAgent
+                UserAgent = httpRequestBase.UserAgent,
+                CreateUserId = authInfo.GuidId,
+                CreateUserCode = authInfo.PhoneNumber,
+                CreateUserName = authInfo.Name
             };
 
             var inputStream = request.InputStream;
@@ -71,7 +61,7 @@ namespace FXKJ.Infrastructure.Log
         /// </summary>
         public void ActionExecuted()
         {
-            log.ActionExecutionTime = (DateTime.Now - log.OperateTime).TotalSeconds;
+            log.ActionExecutionTime = (DateTime.Now - log.CreateTime).TotalSeconds;
         }
 
         /// <summary>
@@ -82,7 +72,7 @@ namespace FXKJ.Infrastructure.Log
         {
             log.ResponseStatus = responseBase.Status;
             //页面展示时间
-            log.ResultExecutionTime = (DateTime.Now - log.OperateTime).TotalSeconds;
+            log.ResultExecutionTime = (DateTime.Now - log.CreateTime).TotalSeconds;
         }
 
 
@@ -108,7 +98,7 @@ namespace FXKJ.Infrastructure.Log
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     //插入sql语句
-                    string sqlStr = "insert into [dbo].[Sys_OperationLog] ([OperationLogId],[OperateTime],[CreateUserId],[CreateUserCode],[CreateUserName],[ClientHost],[ServerHost],[RequestContentLength],[RequestType],[Url],[UrlReferrer],[RequestData],[UserAgent],[ControllerName],[ActionName],[ActionExecutionTime],[ResultExecutionTime],[ResponseStatus],[Describe]) values('" + log.OperationLogId + "','" + log.OperateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.ClientHost + "','" + log.ServerHost + "'," + log.RequestContentLength + ",'" + log.RequestType + "','" + log.Url + "','" + log.UrlReferrer + "','" + log.RequestData + "','" + log.UserAgent + "','" + log.ControllerName + "','" + log.ActionName + "'," + log.ActionExecutionTime + "," + log.ResultExecutionTime + ",'" + log.ResponseStatus + "','" + log.Describe + "');";
+                    string sqlStr = "insert into [dbo].[Sys_OperationLog] ([OperationLogId],[OperateTime],[CreateUserId],[CreateUserCode],[CreateUserName],[ClientHost],[ServerHost],[RequestContentLength],[RequestType],[Url],[UrlReferrer],[RequestData],[UserAgent],[ControllerName],[ActionName],[ActionExecutionTime],[ResultExecutionTime],[ResponseStatus],[Describe]) values('" + log.OperationLogId + "','" + log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.ClientHost + "','" + log.ServerHost + "'," + log.RequestContentLength + ",'" + log.RequestType + "','" + log.Url + "','" + log.UrlReferrer + "','" + log.RequestData + "','" + log.UserAgent + "','" + log.ControllerName + "','" + log.ActionName + "'," + log.ActionExecutionTime + "," + log.ResultExecutionTime + ",'" + log.ResponseStatus + "','" + log.Describe + "');";
                     using (SqlCommand cmd = new SqlCommand(sqlStr, con))
                     {
                         con.Open();

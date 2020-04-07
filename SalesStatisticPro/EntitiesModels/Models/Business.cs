@@ -8,7 +8,7 @@ namespace EntitiesModels.Models
     /// 商家
     /// </summary>
     [Table("Business"),Description("客户商家")]
-    public partial class Business: BaseEntity
+    public partial class Business: BaseEntityPermission
     {
         /// <summary>
         /// 商户编码code

@@ -9,7 +9,7 @@ namespace EntitiesModels.Models
     /// </summary>
     /// 
     [Table("Category")]      
-    public partial class Category: BaseEntity
+    public partial class Category: BaseEntityPermission
     {
         /// <summary>
         ///分类编码
