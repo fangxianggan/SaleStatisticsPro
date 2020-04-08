@@ -35,7 +35,7 @@
     List<T4ModelInfo> NamesList=new List<T4ModelInfo>();
     foreach(Type modelType in modelTypes)
     {
-        if(modelType.BaseType.Name=="BaseEntity"||modelType.BaseType.Name=="BaseEntityLog"||modelType.BaseType.Name=="BaseEntityGuid")
+        if(modelType.BaseType.Name.IndexOf("BaseEntity")>-1)
         {
             if(modelType.Name!="BaseEntityPermission"){
 

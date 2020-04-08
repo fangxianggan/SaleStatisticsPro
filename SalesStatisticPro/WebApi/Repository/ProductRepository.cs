@@ -13,17 +13,14 @@
 //        生成时间：2020-02-21 16:20
 // </copyright>
 //------------------------------------------------------------------------------
-using EntitiesModels;
-using EntitiesModels.Models;
-using FXKJ.Infrastructure.DataAccess;
 using WebApi.IRepository;
 using FXKJ.Infrastructure.Dapper;
-using System.Configuration;
-using System.Threading.Tasks;
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.Data;
+using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 
 namespace WebApi.Repository
 {
@@ -32,6 +29,22 @@ namespace WebApi.Repository
     /// </summary>
     public partial class ProductRepository : IProductRepository
     {
+        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+        private string permissionWhere
+        {
+            get
+            {
+                if (authInfo.Roles.Contains("admin"))
+                {
+                    return string.Format(" where 1=1 ");
+                }
+                else
+                {
+                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
+                }
+            }
+        }
+
 
         /// <summary>
         /// 
@@ -41,13 +54,12 @@ namespace WebApi.Repository
 
         public IEnumerable<ProductViewModel> GetProductViewModelPageList(QueryModel model)
         {
-            var sql = @"  SELECT 
+            var sql = @" Select * from (  SELECT 
 b.*,a.CategoryName
 from [dbo].[Product] AS b WITH (NOLOCK)
 left join [dbo].[Category] AS a WITH (NOLOCK) 
-on a.CategoryCode=b.CategoryCode
-@where @orderBy @page";
-            var list =  SqlMapperUtil.PagingQueryAsync<ProductViewModel>(sql, model);
+on a.CategoryCode=b.CategoryCode " + permissionWhere + " ) as cc @where @orderBy @page";
+            var list = SqlMapperUtil.PagingQuery<ProductViewModel>(sql, model);
             return list;
         }
 
@@ -80,8 +92,9 @@ sum(a.SaleSettlementAmount) as SaleSettlementAmount
  FROM  [dbo].[SaleOrderInfo] AS a WITH (NOLOCK)
 GROUP BY a.SProductCode
 )
+select * from (
 SELECT 
-ROW_NUMBER() OVER (ORDER BY t.ID) AS ID,
+ROW_NUMBER() OVER (ORDER BY a.ID) AS ID,
 p.ProductCode,
 p.PurchaseCount,
 p.PurchaseAmount,
@@ -93,14 +106,13 @@ p.AllPurchaseAmount,
 (CASE WHEN  s.SaleFreightAmount IS NULL THEN 0 ELSE s.SaleFreightAmount END) AS SaleFreightAmount ,
 (CASE WHEN  s.AllSaleAmount IS NULL THEN 0 ELSE s.AllSaleAmount END) AS AllSaleAmount ,
 (CASE WHEN  s.SaleSettlementAmount IS NULL THEN 0 ELSE s.SaleSettlementAmount END) AS SaleSettlementAmount ,
-t.SimpleCode,
-t.ProductName,
+a.SimpleCode,
+a.ProductName,
 (p.PurchaseCount - (CASE WHEN  s.SaleCount IS NULL THEN 0 ELSE s.SaleCount END )) AS Stock,
 ((CASE WHEN s.AllSaleAmount IS NULL THEN 0 ELSE s.AllSaleAmount END)- p.AllPurchaseAmount) AS ProfitAmount
 FROM p LEFT JOIN s ON p.ProductCode=s.ProductCode
-LEFT JOIN dbo.Product AS t ON  p.ProductCode=t.ProductCode
-@where @orderBy @page";
-            var list = SqlMapperUtil.PagingQueryAsync<ProductStatisticsViewModel>(sql, model);
+LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode  " + permissionWhere + " ) as cc  @where @orderBy @page";
+            var list = SqlMapperUtil.PagingQuery<ProductStatisticsViewModel>(sql, model);
             return list;
         }
 
@@ -130,10 +142,11 @@ sum(a.SaleSettlementAmount) as SaleSettlementAmount
  FROM  [dbo].[SaleOrderInfo] AS a WITH (NOLOCK)
 GROUP BY a.SProductCode
 )
+select * from (
 SELECT 
-ROW_NUMBER() OVER (ORDER BY t.ID) AS ID,
-t.SimpleCode,
-t.ProductName,
+ROW_NUMBER() OVER (ORDER BY a.ID) AS ID,
+a.SimpleCode,
+a.ProductName,
 (p.PurchaseCount - (CASE WHEN  s.SaleCount IS NULL THEN 0 ELSE s.SaleCount END )) AS Stock,
 ((CASE WHEN s.AllSaleAmount IS NULL THEN 0 ELSE s.AllSaleAmount END)- p.AllPurchaseAmount) AS ProfitAmount,
 p.PurchaseCount,
@@ -147,9 +160,7 @@ p.AllPurchaseAmount,
 (CASE WHEN  s.AllSaleAmount IS NULL THEN 0 ELSE s.AllSaleAmount END) AS AllSaleAmount ,
 (CASE WHEN  s.SaleSettlementAmount IS NULL THEN 0 ELSE s.SaleSettlementAmount END) AS SaleSettlementAmount 
 FROM p LEFT JOIN s ON p.ProductCode=s.ProductCode
-LEFT JOIN dbo.Product AS t ON  p.ProductCode=t.ProductCode
-@where ";
-
+LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode  " + permissionWhere + " ) as cc @where ";
             return SqlMapperUtil.GetDataTable(sql, model);
 
         }

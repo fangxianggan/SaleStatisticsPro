@@ -13,16 +13,13 @@
 //        生成时间：2020-02-17 16:30
 // </copyright>
 //------------------------------------------------------------------------------
-using EntitiesModels;
 using EntitiesModels.DtoModels;
-using EntitiesModels.Models;
+using EntitiesModels.QueryModels;
+using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Dapper;
-using FXKJ.Infrastructure.DataAccess;
-using FXKJ.Infrastructure.Entities.QueryModel;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Threading.Tasks;
 using WebApi.IRepository;
 namespace WebApi.Repository
 {
@@ -31,6 +28,22 @@ namespace WebApi.Repository
     /// </summary>
     public partial class PurchaseOrderRepository : IPurchaseOrderRepository
     {
+
+        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+        private string permissionWhere
+        {
+            get
+            {
+                if (authInfo.Roles.Contains("admin"))
+                {
+                    return string.Format(" where 1=1 ");
+                }
+                else
+                {
+                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
+                }
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -42,9 +55,8 @@ namespace WebApi.Repository
             var sql = @" select * from (SELECT distinct  a.*,BusinessName,TransferBinName ,a.POrderNum as Code FROM [dbo].[PurchaseOrder] AS a WITH(NOLOCK) 
 LEFT JOIN [dbo].[Business] AS b WITH (NOLOCK) ON a.BusinessCode=b.BusinessCode
 left join [dbo].[TransferBin] as c with (nolock) on a.TransferBinCode=c.TransferBinCode
-left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum) as cc
-@where @orderBy @page";
-            var list = SqlMapperUtil.PagingQueryAsync<PurchaseOrderViewModel>(sql, model);
+left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum  "+ permissionWhere + ") as cc @where @orderBy @page";
+            var list = SqlMapperUtil.PagingQuery<PurchaseOrderViewModel>(sql, model);
             return list;
 
         }
@@ -85,16 +97,13 @@ GROUP BY a.SProductCode
 ss AS (
 SELECT 
 p.ProductCode,
-t.SimpleCode,
-t.ProductName,
+a.SimpleCode,
+a.ProductName,
 (p.PurchaseCount - (CASE WHEN  s.SaleCount IS NULL THEN 0 ELSE s.SaleCount END )) AS ProductStock
 FROM p LEFT JOIN s ON p.ProductCode=s.ProductCode
-LEFT JOIN dbo.Product AS t ON  p.ProductCode=t.ProductCode
-
-)
-SELECT * FROM ss 
-" + where+" ";
-            var list = SqlMapperUtil.SqlWithParams<ProductStockViewModel>(sql);
+LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode
+"+permissionWhere+" ) SELECT * FROM ss " + where+" ";
+            var list = SqlMapperUtil.GetListData<ProductStockViewModel>(sql);
             return list;
         }
 
@@ -121,8 +130,7 @@ a.AllAmount,
 FROM [dbo].[PurchaseOrder] AS a WITH(NOLOCK) 
 LEFT JOIN [dbo].[Business] AS b WITH (NOLOCK) ON a.BusinessCode=b.BusinessCode
 left join [dbo].[TransferBin] as c with (nolock) on a.TransferBinCode=c.TransferBinCode
-left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum) as cc
-@where  ";
+left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum "+permissionWhere+" ) as cc @where  ";
             return SqlMapperUtil.GetDataTable(sql, model);
         }
     }

@@ -1,10 +1,9 @@
 ﻿
+using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using FXKJ.Infrastructure.DataAccess;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 

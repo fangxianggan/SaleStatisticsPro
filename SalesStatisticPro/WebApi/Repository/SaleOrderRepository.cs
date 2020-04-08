@@ -21,9 +21,11 @@ using FXKJ.Infrastructure.Dapper;
 using System.Configuration;
 using System.Threading.Tasks;
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.Data;
+using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 
 namespace WebApi.Repository
 {
@@ -32,7 +34,21 @@ namespace WebApi.Repository
     /// </summary>
     public partial class SaleOrderRepository : ISaleOrderRepository
     {
-
+        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+        private string permissionWhere
+        {
+            get
+            {
+                if (authInfo.Roles.Contains("admin"))
+                {
+                    return string.Format(" where 1=1 ");
+                }
+                else
+                {
+                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
+                }
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -41,9 +57,8 @@ namespace WebApi.Repository
 
         public IEnumerable<SaleOrderViewModel> GetSaleOrderViewModelPageList(QueryModel model)
         {
-            var sql = @" SELECT  a.*  FROM [dbo].[SaleOrder] AS a WITH(NOLOCK) 
-@where @orderBy @page";
-            var list =  SqlMapperUtil.PagingQueryAsync<SaleOrderViewModel>(sql, model);
+            var sql = @" select * from ( SELECT  a.*  FROM [dbo].[SaleOrder] AS a WITH(NOLOCK) "+permissionWhere+" ) as cc @where @orderBy @page";
+            var list =  SqlMapperUtil.PagingQuery<SaleOrderViewModel>(sql, model);
             return list;
         }
 
@@ -62,8 +77,7 @@ a.AllSaleSumAmount,
 (case when a.SaleOrderState='FF01' then '未完成' else '已锁定' end) as SaleOrderState
 FROM [dbo].[SaleOrder] AS a WITH(NOLOCK) 
 left join [dbo].[SaleOrderInfo] AS d WITH(NOLOCK)  on a.SOrderNum=d.SOrderNum
-left join dbo.UserInfo as e with(nolock) on a.PhoneNumber=e.PhoneNumber) as cc
-@where  ";
+left join dbo.UserInfo as e with(nolock) on a.PhoneNumber=e.PhoneNumber "+permissionWhere+") as cc @where  ";
             return SqlMapperUtil.GetDataTable(sql, model);
         }
     }

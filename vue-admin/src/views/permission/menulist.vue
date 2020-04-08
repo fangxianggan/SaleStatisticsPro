@@ -103,7 +103,7 @@
       @pagination="getList"
     />
 
-    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :top="10" >
+    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" top="1%" >
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <el-row>
           <el-col :span="24">

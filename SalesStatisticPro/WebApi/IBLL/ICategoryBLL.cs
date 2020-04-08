@@ -1,6 +1,6 @@
 ﻿
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
+using EntitiesModels.HttpResponse;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace WebApi.IBLL

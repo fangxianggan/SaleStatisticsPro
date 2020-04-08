@@ -1,11 +1,9 @@
-﻿using FXKJ.Infrastructure.Core.Util;
-using FXKJ.Infrastructure.Entities.QueryModel;
+﻿using EntitiesModels.QueryModels;
+using FXKJ.Infrastructure.Core.Helper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.Core.Extensions
 {
@@ -34,7 +32,7 @@ namespace FXKJ.Infrastructure.Core.Extensions
                     : items.Where(c => c.Prefix == prefix);
             filterItems = filterItems.Where(p => !String.IsNullOrEmpty(p.Value.ToString())&&p.Value!=null);
             if (filterItems.Count() == 0) return table;
-            return QueryableSearcherUtil<TEntity>.Search(table, filterItems);
+            return QueryableSearchFilterHelper<TEntity>.Search(table, filterItems);
         }
     }
 }

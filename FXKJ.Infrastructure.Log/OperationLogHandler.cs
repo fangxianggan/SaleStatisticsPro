@@ -1,9 +1,12 @@
-﻿using EntitiesModels.DtoModels;
-using EntitiesModels.Models.SysModels;
+﻿using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Config;
-using FXKJ.Infrastructure.Log.Util;
+using FXKJ.Infrastructure.Core.Sql;
+using FXKJ.Infrastructure.Core.Util;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Web;
@@ -23,6 +26,7 @@ namespace FXKJ.Infrastructure.Log
             AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
             if (authInfo == null)
             {
+                authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
                 authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
@@ -31,12 +35,12 @@ namespace FXKJ.Infrastructure.Log
             log = new OperateLog()
             {
                 OperationLogId = Guid.NewGuid(),
-                CreateTime = DateTime.Now,
-                ServerHost = String.Format("{0}【{1}】", IpBrowserUtil.GetServerHost(), IpBrowserUtil.GetServerHostIp()),
-                ClientHost = String.Format("{0}", IpBrowserUtil.GetClientIp()),
+                ServerHost = string.Format("{0}【{1}】", IpBrowserUtil.GetServerHost(), IpBrowserUtil.GetServerHostIp()),
+                ClientHost = string.Format("{0}", IpBrowserUtil.GetClientIp()),
                 RequestContentLength = httpRequestBase.ContentLength,
                 RequestType = httpRequestBase.RequestType,
                 UserAgent = httpRequestBase.UserAgent,
+                CreateTime = DateTime.Now,
                 CreateUserId = authInfo.GuidId,
                 CreateUserCode = authInfo.PhoneNumber,
                 CreateUserName = authInfo.Name
@@ -93,18 +97,73 @@ namespace FXKJ.Infrastructure.Log
             //写入sql日志
             try
             {
-                string conStr = GlobalParams.ReadConnectionString();
-              
-                using (SqlConnection con = new SqlConnection(conStr))
-                {
-                    //插入sql语句
-                    string sqlStr = "insert into [dbo].[Sys_OperationLog] ([OperationLogId],[OperateTime],[CreateUserId],[CreateUserCode],[CreateUserName],[ClientHost],[ServerHost],[RequestContentLength],[RequestType],[Url],[UrlReferrer],[RequestData],[UserAgent],[ControllerName],[ActionName],[ActionExecutionTime],[ResultExecutionTime],[ResponseStatus],[Describe]) values('" + log.OperationLogId + "','" + log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.ClientHost + "','" + log.ServerHost + "'," + log.RequestContentLength + ",'" + log.RequestType + "','" + log.Url + "','" + log.UrlReferrer + "','" + log.RequestData + "','" + log.UserAgent + "','" + log.ControllerName + "','" + log.ActionName + "'," + log.ActionExecutionTime + "," + log.ResultExecutionTime + ",'" + log.ResponseStatus + "','" + log.Describe + "');";
-                    using (SqlCommand cmd = new SqlCommand(sqlStr, con))
-                    {
-                        con.Open();
-                        result = cmd.ExecuteNonQuery();
-                    }
-                }
+                string sql = string.Format(@"insert into [dbo].[Log_LoginLog] 
+                         (
+                          OperationLogId,
+                          ServerHost,
+                          ClientHost,
+                          RequestContentLength,
+                          RequestType,  
+                          UserAgent,
+                          CreateTime,
+                          CreateUserId,
+                          CreateUserCode,
+                          CreateUserName
+                         )
+                         values (
+                          @OperationLogId,
+                          @ServerHost,
+                          @ClientHost,
+                          @RequestContentLength,
+                          @RequestType,  
+                          @UserAgent,
+                          @CreateTime,
+                          @CreateUserId,
+                          @CreateUserCode,
+                          @CreateUserName)");
+                List<SqlParameter> list = new List<SqlParameter>() {
+                    new SqlParameter{
+                      ParameterName = "OperationLogId",
+                      Value = log.OperationLogId,
+                     },
+                      new SqlParameter{
+                      ParameterName = "ServerHost",
+                      Value = log.ServerHost,
+                     },
+                        new SqlParameter{
+                      ParameterName = "ClientHost",
+                      Value = log.ClientHost,
+                     },
+                          new SqlParameter{
+                      ParameterName = "UserAgent",
+                      Value = log.UserAgent,
+                     },
+                        new SqlParameter{
+                      ParameterName = "RequestContentLength",
+                      Value = log.RequestContentLength,
+                     },
+                     new SqlParameter{
+                      ParameterName = "RequestType",
+                      Value = log.RequestType,
+                     },
+                      new SqlParameter{
+                      ParameterName = "CreateTime",
+                      Value = log.CreateTime,
+                      DbType=DbType.DateTime
+                     },
+                       new SqlParameter{
+                      ParameterName = "CreateUserId",
+                      Value = log.CreateUserId,
+                     },
+                       new SqlParameter{
+                      ParameterName = "CreateUserCode",
+                      Value = log.CreateUserCode,
+                     },  new SqlParameter{
+                      ParameterName = "CreateUserName",
+                      Value = log.CreateUserName,
+                     }
+                };
+                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             }
             catch (Exception ex)
             {

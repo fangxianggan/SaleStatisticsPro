@@ -10,15 +10,14 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-04-07 18:37
+//        生成时间：2020-04-08 11:41
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
 using EntitiesModels.Models.SysModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Http;
 using WebApi.IBLL;
 using System;

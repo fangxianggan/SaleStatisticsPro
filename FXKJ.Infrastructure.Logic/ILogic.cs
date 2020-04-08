@@ -1,9 +1,8 @@
-﻿using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+﻿using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.Logic
 {

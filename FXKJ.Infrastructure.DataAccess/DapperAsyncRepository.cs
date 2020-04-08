@@ -1,9 +1,6 @@
-﻿using FXKJ.Infrastructure.Dapper;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+﻿using EntitiesModels.QueryModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 

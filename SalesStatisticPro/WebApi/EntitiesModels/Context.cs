@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-04-07 18:37
+//        生成时间：2020-04-08 11:41
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -32,6 +32,11 @@ namespace EntitiesModels
         }
         
                 /// <summary>
+       ///   Business
+      /// </summary>
+       public DbSet<Business> Business { get; set; }
+
+               /// <summary>
        ///   SqlLog
       /// </summary>
        public DbSet<SqlLog> SqlLog { get; set; }
@@ -52,6 +57,21 @@ namespace EntitiesModels
        public DbSet<MerchantInfo> MerchantInfo { get; set; }
 
                /// <summary>
+       ///   Product
+      /// </summary>
+       public DbSet<Product> Product { get; set; }
+
+               /// <summary>
+       ///   PurchaseOrder
+      /// </summary>
+       public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
+
+               /// <summary>
+       ///   PurchaseOrderInfo
+      /// </summary>
+       public DbSet<PurchaseOrderInfo> PurchaseOrderInfo { get; set; }
+
+               /// <summary>
        ///   Role
       /// </summary>
        public DbSet<Role> Role { get; set; }
@@ -62,14 +82,39 @@ namespace EntitiesModels
        public DbSet<RoleMenu> RoleMenu { get; set; }
 
                /// <summary>
+       ///   SaleOrder
+      /// </summary>
+       public DbSet<SaleOrder> SaleOrder { get; set; }
+
+               /// <summary>
+       ///   SaleOrderInfo
+      /// </summary>
+       public DbSet<SaleOrderInfo> SaleOrderInfo { get; set; }
+
+               /// <summary>
        ///   SysConfig
       /// </summary>
        public DbSet<SysConfig> SysConfig { get; set; }
 
                /// <summary>
+       ///   Category
+      /// </summary>
+       public DbSet<Category> Category { get; set; }
+
+               /// <summary>
        ///   ExpressCompany
       /// </summary>
        public DbSet<ExpressCompany> ExpressCompany { get; set; }
+
+               /// <summary>
+       ///   TransferBin
+      /// </summary>
+       public DbSet<TransferBin> TransferBin { get; set; }
+
+               /// <summary>
+       ///   UserInfo
+      /// </summary>
+       public DbSet<UserInfo> UserInfo { get; set; }
 
                /// <summary>
        ///   DataLog

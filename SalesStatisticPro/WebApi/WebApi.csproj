@@ -203,6 +203,8 @@
     <Compile Include="BLL\MenuBLL.cs" />
     <Compile Include="BLL\MerchantRoleBLL.cs" />
     <Compile Include="BLL\RoleBLL.cs" />
+    <Compile Include="BLL\_BusinessBLL.cs" />
+    <Compile Include="BLL\_CategoryBLL.cs" />
     <Compile Include="BLL\_DataLogBLL.cs" />
     <Compile Include="BLL\_ExceptionLogBLL.cs" />
     <Compile Include="BLL\_ExpressCompanyBLL.cs" />
@@ -211,10 +213,17 @@
     <Compile Include="BLL\_MerchantInfoBLL.cs" />
     <Compile Include="BLL\_MerchantRoleBLL.cs" />
     <Compile Include="BLL\_OperateLogBLL.cs" />
+    <Compile Include="BLL\_ProductBLL.cs" />
+    <Compile Include="BLL\_PurchaseOrderBLL.cs" />
+    <Compile Include="BLL\_PurchaseOrderInfoBLL.cs" />
     <Compile Include="BLL\_RoleBLL.cs" />
     <Compile Include="BLL\_RoleMenuBLL.cs" />
+    <Compile Include="BLL\_SaleOrderBLL.cs" />
+    <Compile Include="BLL\_SaleOrderInfoBLL.cs" />
     <Compile Include="BLL\_SqlLogBLL.cs" />
     <Compile Include="BLL\_SysConfigBLL.cs" />
+    <Compile Include="BLL\_TransferBinBLL.cs" />
+    <Compile Include="BLL\_UserInfoBLL.cs" />
     <Compile Include="Controllers\ExpressCompanyController.cs" />
     <Compile Include="Controllers\BusinessController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -230,6 +239,8 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MerchantInfoController.cs" />
+    <Compile Include="Controllers\_BusinessController.cs" />
+    <Compile Include="Controllers\_CategoryController.cs" />
     <Compile Include="Controllers\_DataLogController.cs" />
     <Compile Include="Controllers\_ExceptionLogController.cs" />
     <Compile Include="Controllers\_ExpressCompanyController.cs" />
@@ -238,10 +249,17 @@
     <Compile Include="Controllers\_MerchantInfoController.cs" />
     <Compile Include="Controllers\_MerchantRoleController.cs" />
     <Compile Include="Controllers\_OperateLogController.cs" />
+    <Compile Include="Controllers\_ProductController.cs" />
+    <Compile Include="Controllers\_PurchaseOrderController.cs" />
+    <Compile Include="Controllers\_PurchaseOrderInfoController.cs" />
     <Compile Include="Controllers\_RoleController.cs" />
     <Compile Include="Controllers\_RoleMenuController.cs" />
+    <Compile Include="Controllers\_SaleOrderController.cs" />
+    <Compile Include="Controllers\_SaleOrderInfoController.cs" />
     <Compile Include="Controllers\_SqlLogController.cs" />
     <Compile Include="Controllers\_SysConfigController.cs" />
+    <Compile Include="Controllers\_TransferBinController.cs" />
+    <Compile Include="Controllers\_UserInfoController.cs" />
     <Compile Include="EntitiesModels\Context.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -260,6 +278,8 @@
     <Compile Include="IBLL\IMenuBLL.cs" />
     <Compile Include="IBLL\IMerchantRoleBLL.cs" />
     <Compile Include="IBLL\IRoleBLL.cs" />
+    <Compile Include="IBLL\_IBusinessBLL.cs" />
+    <Compile Include="IBLL\_ICategoryBLL.cs" />
     <Compile Include="IBLL\_IDataLogBLL.cs" />
     <Compile Include="IBLL\_IExceptionLogBLL.cs" />
     <Compile Include="IBLL\_IExpressCompanyBLL.cs" />
@@ -268,15 +288,24 @@
     <Compile Include="IBLL\_IMerchantInfoBLL.cs" />
     <Compile Include="IBLL\_IMerchantRoleBLL.cs" />
     <Compile Include="IBLL\_IOperateLogBLL.cs" />
+    <Compile Include="IBLL\_IProductBLL.cs" />
+    <Compile Include="IBLL\_IPurchaseOrderBLL.cs" />
+    <Compile Include="IBLL\_IPurchaseOrderInfoBLL.cs" />
     <Compile Include="IBLL\_IRoleBLL.cs" />
     <Compile Include="IBLL\_IRoleMenuBLL.cs" />
+    <Compile Include="IBLL\_ISaleOrderBLL.cs" />
+    <Compile Include="IBLL\_ISaleOrderInfoBLL.cs" />
     <Compile Include="IBLL\_ISqlLogBLL.cs" />
     <Compile Include="IBLL\_ISysConfigBLL.cs" />
+    <Compile Include="IBLL\_ITransferBinBLL.cs" />
+    <Compile Include="IBLL\_IUserInfoBLL.cs" />
     <Compile Include="IRepository\IProductRepository.cs" />
     <Compile Include="IRepository\IPurchaseOrderInfoRepository.cs" />
     <Compile Include="IRepository\IPurchaseOrderRepository.cs" />
     <Compile Include="IRepository\ISaleOrderInfoRepository.cs" />
     <Compile Include="IRepository\ISaleOrderRepository.cs" />
+    <Compile Include="IRepository\_IBusinessRepository.cs" />
+    <Compile Include="IRepository\_ICategoryRepository.cs" />
     <Compile Include="IRepository\_IDataLogRepository.cs" />
     <Compile Include="IRepository\_IExceptionLogRepository.cs" />
     <Compile Include="IRepository\_IExpressCompanyRepository.cs" />
@@ -285,10 +314,17 @@
     <Compile Include="IRepository\_IMerchantInfoRepository.cs" />
     <Compile Include="IRepository\_IMerchantRoleRepository.cs" />
     <Compile Include="IRepository\_IOperateLogRepository.cs" />
+    <Compile Include="IRepository\_IProductRepository.cs" />
+    <Compile Include="IRepository\_IPurchaseOrderInfoRepository.cs" />
+    <Compile Include="IRepository\_IPurchaseOrderRepository.cs" />
     <Compile Include="IRepository\_IRoleMenuRepository.cs" />
     <Compile Include="IRepository\_IRoleRepository.cs" />
+    <Compile Include="IRepository\_ISaleOrderInfoRepository.cs" />
+    <Compile Include="IRepository\_ISaleOrderRepository.cs" />
     <Compile Include="IRepository\_ISqlLogRepository.cs" />
     <Compile Include="IRepository\_ISysConfigRepository.cs" />
+    <Compile Include="IRepository\_ITransferBinRepository.cs" />
+    <Compile Include="IRepository\_IUserInfoRepository.cs" />
     <Compile Include="Model\Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
@@ -296,6 +332,8 @@
     <Compile Include="Repository\PurchaseOrderRepository.cs" />
     <Compile Include="Repository\SaleOrderInfoRepository.cs" />
     <Compile Include="Repository\SaleOrderRepository.cs" />
+    <Compile Include="Repository\_BusinessRepository.cs" />
+    <Compile Include="Repository\_CategoryRepository.cs" />
     <Compile Include="Repository\_DataLogRepository.cs" />
     <Compile Include="Repository\_ExceptionLogRepository.cs" />
     <Compile Include="Repository\_ExpressCompanyRepository.cs" />
@@ -304,10 +342,17 @@
     <Compile Include="Repository\_MerchantInfoRepository.cs" />
     <Compile Include="Repository\_MerchantRoleRepository.cs" />
     <Compile Include="Repository\_OperateLogRepository.cs" />
+    <Compile Include="Repository\_ProductRepository.cs" />
+    <Compile Include="Repository\_PurchaseOrderInfoRepository.cs" />
+    <Compile Include="Repository\_PurchaseOrderRepository.cs" />
     <Compile Include="Repository\_RoleMenuRepository.cs" />
     <Compile Include="Repository\_RoleRepository.cs" />
+    <Compile Include="Repository\_SaleOrderInfoRepository.cs" />
+    <Compile Include="Repository\_SaleOrderRepository.cs" />
     <Compile Include="Repository\_SqlLogRepository.cs" />
     <Compile Include="Repository\_SysConfigRepository.cs" />
+    <Compile Include="Repository\_TransferBinRepository.cs" />
+    <Compile Include="Repository\_UserInfoRepository.cs" />
     <Compile Include="T4\Tool\TemplateCode.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -356,6 +401,8 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TemplateCode.cs</LastGenOutput>
       <LastOutputs>
+..\..\BLL\_BusinessBLL.cs
+..\..\BLL\_CategoryBLL.cs
 ..\..\BLL\_DataLogBLL.cs
 ..\..\BLL\_ExceptionLogBLL.cs
 ..\..\BLL\_ExpressCompanyBLL.cs
@@ -364,10 +411,19 @@
 ..\..\BLL\_MerchantInfoBLL.cs
 ..\..\BLL\_MerchantRoleBLL.cs
 ..\..\BLL\_OperateLogBLL.cs
+..\..\BLL\_ProductBLL.cs
+..\..\BLL\_PurchaseOrderBLL.cs
+..\..\BLL\_PurchaseOrderInfoBLL.cs
 ..\..\BLL\_RoleBLL.cs
 ..\..\BLL\_RoleMenuBLL.cs
+..\..\BLL\_SaleOrderBLL.cs
+..\..\BLL\_SaleOrderInfoBLL.cs
 ..\..\BLL\_SqlLogBLL.cs
 ..\..\BLL\_SysConfigBLL.cs
+..\..\BLL\_TransferBinBLL.cs
+..\..\BLL\_UserInfoBLL.cs
+..\..\Controllers\_BusinessController.cs
+..\..\Controllers\_CategoryController.cs
 ..\..\Controllers\_DataLogController.cs
 ..\..\Controllers\_ExceptionLogController.cs
 ..\..\Controllers\_ExpressCompanyController.cs
@@ -376,11 +432,20 @@
 ..\..\Controllers\_MerchantInfoController.cs
 ..\..\Controllers\_MerchantRoleController.cs
 ..\..\Controllers\_OperateLogController.cs
+..\..\Controllers\_ProductController.cs
+..\..\Controllers\_PurchaseOrderController.cs
+..\..\Controllers\_PurchaseOrderInfoController.cs
 ..\..\Controllers\_RoleController.cs
 ..\..\Controllers\_RoleMenuController.cs
+..\..\Controllers\_SaleOrderController.cs
+..\..\Controllers\_SaleOrderInfoController.cs
 ..\..\Controllers\_SqlLogController.cs
 ..\..\Controllers\_SysConfigController.cs
+..\..\Controllers\_TransferBinController.cs
+..\..\Controllers\_UserInfoController.cs
 ..\..\EntitiesModels\Context.cs
+..\..\IBLL\_IBusinessBLL.cs
+..\..\IBLL\_ICategoryBLL.cs
 ..\..\IBLL\_IDataLogBLL.cs
 ..\..\IBLL\_IExceptionLogBLL.cs
 ..\..\IBLL\_IExpressCompanyBLL.cs
@@ -389,10 +454,19 @@
 ..\..\IBLL\_IMerchantInfoBLL.cs
 ..\..\IBLL\_IMerchantRoleBLL.cs
 ..\..\IBLL\_IOperateLogBLL.cs
+..\..\IBLL\_IProductBLL.cs
+..\..\IBLL\_IPurchaseOrderBLL.cs
+..\..\IBLL\_IPurchaseOrderInfoBLL.cs
 ..\..\IBLL\_IRoleBLL.cs
 ..\..\IBLL\_IRoleMenuBLL.cs
+..\..\IBLL\_ISaleOrderBLL.cs
+..\..\IBLL\_ISaleOrderInfoBLL.cs
 ..\..\IBLL\_ISqlLogBLL.cs
 ..\..\IBLL\_ISysConfigBLL.cs
+..\..\IBLL\_ITransferBinBLL.cs
+..\..\IBLL\_IUserInfoBLL.cs
+..\..\IRepository\_IBusinessRepository.cs
+..\..\IRepository\_ICategoryRepository.cs
 ..\..\IRepository\_IDataLogRepository.cs
 ..\..\IRepository\_IExceptionLogRepository.cs
 ..\..\IRepository\_IExpressCompanyRepository.cs
@@ -401,10 +475,19 @@
 ..\..\IRepository\_IMerchantInfoRepository.cs
 ..\..\IRepository\_IMerchantRoleRepository.cs
 ..\..\IRepository\_IOperateLogRepository.cs
+..\..\IRepository\_IProductRepository.cs
+..\..\IRepository\_IPurchaseOrderInfoRepository.cs
+..\..\IRepository\_IPurchaseOrderRepository.cs
 ..\..\IRepository\_IRoleMenuRepository.cs
 ..\..\IRepository\_IRoleRepository.cs
+..\..\IRepository\_ISaleOrderInfoRepository.cs
+..\..\IRepository\_ISaleOrderRepository.cs
 ..\..\IRepository\_ISqlLogRepository.cs
 ..\..\IRepository\_ISysConfigRepository.cs
+..\..\IRepository\_ITransferBinRepository.cs
+..\..\IRepository\_IUserInfoRepository.cs
+..\..\Repository\_BusinessRepository.cs
+..\..\Repository\_CategoryRepository.cs
 ..\..\Repository\_DataLogRepository.cs
 ..\..\Repository\_ExceptionLogRepository.cs
 ..\..\Repository\_ExpressCompanyRepository.cs
@@ -413,10 +496,17 @@
 ..\..\Repository\_MerchantInfoRepository.cs
 ..\..\Repository\_MerchantRoleRepository.cs
 ..\..\Repository\_OperateLogRepository.cs
+..\..\Repository\_ProductRepository.cs
+..\..\Repository\_PurchaseOrderInfoRepository.cs
+..\..\Repository\_PurchaseOrderRepository.cs
 ..\..\Repository\_RoleMenuRepository.cs
 ..\..\Repository\_RoleRepository.cs
+..\..\Repository\_SaleOrderInfoRepository.cs
+..\..\Repository\_SaleOrderRepository.cs
 ..\..\Repository\_SqlLogRepository.cs
 ..\..\Repository\_SysConfigRepository.cs
+..\..\Repository\_TransferBinRepository.cs
+..\..\Repository\_UserInfoRepository.cs
 .\TemplateCode.cs
 </LastOutputs>
     </Content>
@@ -460,6 +550,10 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FXKJ.Infrastructure.Auth\FXKJ.Infrastructure.Auth.csproj">
+      <Project>{AE088EC2-B50D-4564-BDCD-865E4B345093}</Project>
+      <Name>FXKJ.Infrastructure.Auth</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
       <Project>{77CF037D-57B0-4338-93EC-7415DD9B40CE}</Project>
       <Name>FXKJ.Infrastructure.Core</Name>
@@ -472,10 +566,6 @@
       <Project>{410CB82B-7197-48F7-A24F-E8F750C9249F}</Project>
       <Name>FXKJ.Infrastructure.DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\FXKJ.Infrastructure.Entities\FXKJ.Infrastructure.Entities.csproj">
-      <Project>{DCA00954-825A-43AD-B3ED-CD54B38D77FD}</Project>
-      <Name>FXKJ.Infrastructure.Entities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\FXKJ.Infrastructure.Logic\FXKJ.Infrastructure.Logic.csproj">
       <Project>{1A9677BD-1D35-4EBE-8139-017498878A7C}</Project>
       <Name>FXKJ.Infrastructure.Logic</Name>
@@ -487,10 +577,6 @@
     <ProjectReference Include="..\EntitiesModels\EntitiesModels.csproj">
       <Project>{fd648777-7297-496b-b4f1-d5d46dfa60e7}</Project>
       <Name>EntitiesModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FXKJ.Infrastructrue.Token\FXKJ.Infrastructrue.Token.csproj">
-      <Project>{98708003-6570-4187-90be-86b7db3c7ef9}</Project>
-      <Name>FXKJ.Infrastructrue.Token</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetRedisUtil\NetRedisUtil.csproj">
       <Project>{7f890a1a-ee96-486f-957f-9656a4e308de}</Project>

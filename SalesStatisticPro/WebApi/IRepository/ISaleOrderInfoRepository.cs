@@ -16,7 +16,7 @@
 using EntitiesModels.DtoModels;
 using EntitiesModels.Models;
 using FXKJ.Infrastructure.DataAccess;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;

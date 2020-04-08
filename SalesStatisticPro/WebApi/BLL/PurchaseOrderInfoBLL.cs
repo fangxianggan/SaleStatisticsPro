@@ -17,15 +17,15 @@ using EntitiesModels.Models;
 using FXKJ.Infrastructure.Logic;
 using WebApi.IRepository;
 using WebApi.IBLL;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.QueryModels;
 using System.Threading.Tasks;
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
+using EntitiesModels.HttpResponse;
 using FXKJ.Infrastructure.DataAccess;
 using System.Collections.Generic;
 using System;
 using System.Transactions;
-using FXKJ.Infrastructure.Entities.Enum;
+using EntitiesModels.Enum;
 using FXKJ.Infrastructure.Core.Extensions;
 
 namespace WebApi.BLL

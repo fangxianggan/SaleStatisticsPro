@@ -1,11 +1,7 @@
 ﻿using EntitiesModels.DtoModels;
-using EntitiesModels.Models;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.HttpResponse;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Http;
-using WebApi.IBLL;
 
 namespace WebApi.Controllers
 {

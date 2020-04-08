@@ -1,8 +1,5 @@
-﻿using FXKJ.Infrastructure.Attributes.CustomAttributes;
-using FXKJ.Infrastructure.Core.Extensions;
+﻿using FXKJ.Infrastructure.Core.Extensions;
 using FXKJ.Infrastructure.Log;
-using FXKJ.Infrastructure.Dapper.AdoNet;
-using FXKJ.Infrastructure.Entities.Enum;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,6 +9,9 @@ using System.Diagnostics;
 using System.Linq;
 using EntitiesModels.Models.SysModels;
 using EntitiesModels.Models;
+using EntitiesModels.Enum;
+using FXKJ.Infrastructure.Core.Attributes;
+using FXKJ.Infrastructure.Core.Util;
 
 namespace FXKJ.Infrastructure.Dapper
 {
@@ -631,8 +631,8 @@ namespace FXKJ.Infrastructure.Dapper
                                 TableAttribute tableAttr = classAttr as TableAttribute;
                                 bulkCopy.DestinationTableName = tableAttr.Name; //要插入的表的表明 
                             }
-                            ModelHandler<T> mh = new ModelHandler<T>();
-                            DataTable dt = mh.FillDataTable(entitys);
+                           
+                            DataTable dt = DTListConvertUtil<T>.FillDataTable(entitys);
                             destinationConnection.Open();
                             if (dt != null && dt.Rows.Count != 0)
                             {

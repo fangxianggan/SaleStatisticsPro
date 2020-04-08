@@ -47,13 +47,13 @@ using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Logic;
 using WebApi.IRepository;
 using WebApi.IBLL;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
-using System.Threading.Tasks;
+using EntitiesModels.Enum;
 namespace WebApi.BLL
 {
     /// <summary>
@@ -122,30 +122,28 @@ namespace WebApi.BLL
         public HttpReponseModel<<#=_model.Name #>> SaveData(<#=_model.Name #> entity)
         {
           
-         <#+if( _model.KeyTypeName=="Int32"){#>
+       <#+if( _model.KeyTypeName=="Int32"){#>
     
-          if (entity.<#=    _model.KeyName#>==0)
-            {
-             return  _logic.AddLogic(entity);
-            }
+       if (entity.<#=_model.KeyName#>==0)
+          {
+  return  _logic.AddLogic(entity);
+          }
          else
          {
-            return  _logic.UpdateLogic(entity);
-           }
-<#+}else{#>
+ return  _logic.UpdateLogic(entity);
+         }
+        <#+}else{#>
 
-      if (entity.<#=    _model.KeyName#>.ToString()=="")
-      {
+       if (entity.<#=_model.KeyName#>.ToString()=="")
+       {
         return  _logic.AddLogic(entity);
-      }
-    else
-    {
-        return  _logic.UpdateLogic(entity);
-    }
-<#+}#>
-
-
-        }
+       }
+      else
+       {
+         return  _logic.UpdateLogic(entity);
+       }
+       <#+}#>
+          }
 
         /// <summary>
         /// 保存数据 多条 新增或是修改
@@ -166,7 +164,7 @@ else
 }
 <#+}else{#>
 
-        if (entityList.FirstOrDefault().<#=    _model.KeyName#>.ToString()=="")
+        if (entityList.FirstOrDefault().<#=_model.KeyName#>.ToString()=="")
 {
      return  _logic.AddListLogic(entityList);
 }

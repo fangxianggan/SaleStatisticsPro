@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using FXKJ.Infrastructure.WebApi.Filter;
+using System.Web;
 using System.Web.Mvc;
 
 namespace WebApi
@@ -7,7 +8,7 @@ namespace WebApi
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new ApiExceptionAttribute());
         }
     }
 }

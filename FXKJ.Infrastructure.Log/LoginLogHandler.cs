@@ -1,9 +1,12 @@
-﻿using EntitiesModels.DtoModels;
-using EntitiesModels.Models.SysModels;
+﻿using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Config;
-using FXKJ.Infrastructure.Log.Util;
+using FXKJ.Infrastructure.Core.Sql;
+using FXKJ.Infrastructure.Core.Util;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Net;
 using System.Web;
@@ -14,13 +17,14 @@ namespace FXKJ.Infrastructure.Log
     /// </summary>
     public class LoginLogHandler : BaseHandler<LoginLog>
     {
-        
+
         public LoginLogHandler()
             : base("LoginLogToDatabase")
         {
             AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
             if (authInfo == null)
             {
+                authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
                 authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
@@ -40,7 +44,7 @@ namespace FXKJ.Infrastructure.Log
                 CreateUserCode = authInfo.PhoneNumber,
                 CreateUserName = authInfo.Name
             };
-           
+
 
         }
 
@@ -52,31 +56,90 @@ namespace FXKJ.Infrastructure.Log
 
         private int WriteLoginLogData(LoginLog log)
         {
-            //写入sql日志
             int result = 0;
+            //写入sql日志
             try
             {
-                string conStr = GlobalParams.ReadConnectionString();
-                using (SqlConnection con = new SqlConnection(conStr))
-                {
-                    //插入sql语句
-                    string sqlStr = "insert into [dbo].[Log_LoginLog] ([LoginLogId],[CreateUserId],[CreateUserCode],[CreateUserName],[IpAddressName],[ServerHost],[ClientHost],[UserAgent],[OsVersion],[LoginTime],[LoginOutTime],[StandingTime]) values('" + log.LoginLogId + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.IpAddressName + "','" + log.ServerHost + "','" + log.ClientHost + "','" + log.UserAgent + "','" + log.OsVersion + "','" + log.LoginTime.ToString(DateTimeConfig.DateTimeFormatS) + "','','');";
-                    using (SqlCommand cmd = new SqlCommand(sqlStr, con))
-                    {
-                        con.Open();
-                        result = cmd.ExecuteNonQuery();
-                    }
-                }
-
-
-
-
+                string sql = string.Format(@"insert into [dbo].[Log_LoginLog] 
+                         (
+                          LoginLogId,
+                          ServerHost,
+                          ClientHost,
+                          UserAgent,
+                          OsVersion,  
+                          LoginTime,
+                          IpAddressName,
+                          CreateTime,
+                          CreateUserId,
+                          CreateUserCode,
+                          CreateUserName
+                         )
+                         values (
+                          @LoginLogId,
+                          @ServerHost,
+                          @ClientHost,
+                          @UserAgent,
+                          @OsVersion,  
+                          @LoginTime,
+                          @IpAddressName,
+                          @CreateTime,
+                          @CreateUserId,
+                          @CreateUserCode,
+                          @CreateUserName)");
+                List<SqlParameter> list = new List<SqlParameter>() {
+                    new SqlParameter{
+                      ParameterName = "LoginLogId",
+                      Value = log.LoginLogId,
+                     },
+                      new SqlParameter{
+                      ParameterName = "ServerHost",
+                      Value = log.ServerHost,
+                     },
+                        new SqlParameter{
+                      ParameterName = "ClientHost",
+                      Value = log.ClientHost,
+                     },
+                          new SqlParameter{
+                      ParameterName = "UserAgent",
+                      Value = log.UserAgent,
+                     },
+                        new SqlParameter{
+                      ParameterName = "OsVersion",
+                      Value = log.OsVersion,
+                     },
+                     new SqlParameter{
+                      ParameterName = "LoginTime",
+                      Value = log.LoginTime,
+                     },
+                     new SqlParameter{
+                      ParameterName = "IpAddressName",
+                      Value = log.IpAddressName,
+                     },
+                      new SqlParameter{
+                      ParameterName = "CreateTime",
+                      Value = log.CreateTime,
+                      DbType=DbType.DateTime
+                     },
+                       new SqlParameter{
+                      ParameterName = "CreateUserId",
+                      Value = log.CreateUserId,
+                     },
+                       new SqlParameter{
+                      ParameterName = "CreateUserCode",
+                      Value = log.CreateUserCode,
+                     },  new SqlParameter{
+                      ParameterName = "CreateUserName",
+                      Value = log.CreateUserName,
+                     }
+                };
+                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             }
             catch (Exception ex)
             {
 
             }
             return result;
+
         }
 
 

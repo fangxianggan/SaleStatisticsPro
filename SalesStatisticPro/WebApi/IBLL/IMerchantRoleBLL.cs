@@ -16,8 +16,8 @@
 using EntitiesModels.DtoModels;
 using EntitiesModels.Models;
 using EntitiesModels.Models.SysModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

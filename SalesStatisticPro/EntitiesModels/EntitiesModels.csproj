@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="Context.cs" />
     <Compile Include="DtoEnum\OrderEnum.cs" />
-    <Compile Include="DtoModels\AuthInfoViewModel.cs" />
     <Compile Include="DtoModels\DashboardViewModel.cs" />
     <Compile Include="DtoModels\FileStreamViewModel.cs" />
     <Compile Include="DtoModels\LoginRequestViewModel.cs" />
@@ -76,6 +75,11 @@
     <Compile Include="DtoModels\SelectViewModel.cs" />
     <Compile Include="DtoModels\ProductStatisticsViewModel.cs" />
     <Compile Include="DtoModels\TreeViewModel.cs" />
+    <Compile Include="Enum\OperateType.cs" />
+    <Compile Include="Enum\ResultSign.cs" />
+    <Compile Include="Enum\StatusCode.cs" />
+    <Compile Include="HttpResponse\HttpReponseMessage.cs" />
+    <Compile Include="HttpResponse\HttpReponseModel.cs" />
     <Compile Include="Migrations\202002040941411_InitialCreate.cs" />
     <Compile Include="Migrations\202002040941411_InitialCreate.Designer.cs">
       <DependentUpon>202002040941411_InitialCreate.cs</DependentUpon>
@@ -192,6 +196,18 @@
     <Compile Include="Migrations\202004060414262_22998.Designer.cs">
       <DependentUpon>202004060414262_22998.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004080206483_logs1.cs" />
+    <Compile Include="Migrations\202004080206483_logs1.Designer.cs">
+      <DependentUpon>202004080206483_logs1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004080837144_logs123.cs" />
+    <Compile Include="Migrations\202004080837144_logs123.Designer.cs">
+      <DependentUpon>202004080837144_logs123.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004080841332_logs1235.cs" />
+    <Compile Include="Migrations\202004080841332_logs1235.Designer.cs">
+      <DependentUpon>202004080841332_logs1235.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
@@ -219,6 +235,10 @@
     <Compile Include="Models\TransferBin.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryModels\ConditionItem.cs" />
+    <Compile Include="QueryModels\QueryMethod.cs" />
+    <Compile Include="QueryModels\QueryModel.cs" />
+    <Compile Include="QueryModels\QueryOrder.cs" />
     <Compile Include="T4\T4ModelInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -313,11 +333,25 @@
     <EmbeddedResource Include="Migrations\202004060414262_22998.resx">
       <DependentUpon>202004060414262_22998.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004080206483_logs1.resx">
+      <DependentUpon>202004080206483_logs1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004080837144_logs123.resx">
+      <DependentUpon>202004080837144_logs123.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004080841332_logs1235.resx">
+      <DependentUpon>202004080841332_logs1235.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="NetDLL\EntityFramework.dll" />
     <Content Include="NetDLL\EntityFramework.SqlServer.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\FXKJ.Infrastructure.Auth\FXKJ.Infrastructure.Auth.csproj">
+      <Project>{ae088ec2-b50d-4564-bdcd-865e4b345093}</Project>
+      <Name>FXKJ.Infrastructure.Auth</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

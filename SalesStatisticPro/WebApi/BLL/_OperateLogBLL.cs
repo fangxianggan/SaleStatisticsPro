@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-04-07 18:37
+//        生成时间：2020-04-08 11:41
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -18,13 +18,13 @@ using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Logic;
 using WebApi.IRepository;
 using WebApi.IBLL;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
-using System.Threading.Tasks;
+using EntitiesModels.Enum;
 namespace WebApi.BLL
 {
     /// <summary>
@@ -93,18 +93,16 @@ namespace WebApi.BLL
         public HttpReponseModel<OperateLog> SaveData(OperateLog entity)
         {
           
-         
-      if (entity.OperationLogId.ToString()=="")
-      {
+       
+       if (entity.OperationLogId.ToString()=="")
+       {
         return  _logic.AddLogic(entity);
-      }
-    else
-    {
-        return  _logic.UpdateLogic(entity);
-    }
-
-
-        }
+       }
+      else
+       {
+         return  _logic.UpdateLogic(entity);
+       }
+                 }
 
         /// <summary>
         /// 保存数据 多条 新增或是修改

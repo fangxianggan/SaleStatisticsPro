@@ -17,8 +17,6 @@ namespace FXKJ.Infrastructure.WebApi.Filter
             //记录错误日志
             ExceptionLogHandler exceptionLogHandler = new ExceptionLogHandler(actionExecutedContext.Exception);
             Task.Factory.StartNew(() => exceptionLogHandler.WriteLog());
-
-
             base.OnException(actionExecutedContext);
         }
     }

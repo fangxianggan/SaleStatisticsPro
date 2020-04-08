@@ -50,13 +50,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
+      <Project>{77CF037D-57B0-4338-93EC-7415DD9B40CE}</Project>
+      <Name>FXKJ.Infrastructure.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FXKJ.Infrastructure.DataAccess\FXKJ.Infrastructure.DataAccess.csproj">
       <Project>{410cb82b-7197-48f7-a24f-e8f750c9249f}</Project>
       <Name>FXKJ.Infrastructure.DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FXKJ.Infrastructure.Entities\FXKJ.Infrastructure.Entities.csproj">
-      <Project>{dca00954-825a-43ad-b3ed-cd54b38d77fd}</Project>
-      <Name>FXKJ.Infrastructure.Entities</Name>
+    <ProjectReference Include="..\SalesStatisticPro\EntitiesModels\EntitiesModels.csproj">
+      <Project>{FD648777-7297-496B-B4F1-D5D46DFA60E7}</Project>
+      <Name>EntitiesModels</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

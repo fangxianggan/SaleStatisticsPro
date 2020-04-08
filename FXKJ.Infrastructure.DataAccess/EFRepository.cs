@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
 using EntitiesModels;
-using EntitiesModels.DtoModels;
 using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Core.Extensions;
-using FXKJ.Infrastructure.Entities.QueryModel;
-
+using EntitiesModels.QueryModels;
 
 namespace FXKJ.Infrastructure.DataAccess
 {
@@ -22,8 +15,7 @@ namespace FXKJ.Infrastructure.DataAccess
         where T : class, new()
 
     {
-        //当前商户的信息
-        private static AuthInfoViewModel currentMerchantInfo;
+
         public EFRepository()
         {
 
@@ -33,6 +25,7 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
+                model = _SetPropertiesAddData(model);
                 dbContext.Set<T>().Add(model);
                 dbContext.SaveChanges();
                 return model;
@@ -43,6 +36,7 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
+                model = _SetPropertiesAddData(model);
                 dbContext.Set<T>().Add(model);
                 return dbContext.SaveChanges() > 0 ? true : false;
             }
@@ -54,7 +48,7 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 foreach (var _model in list)
                 {
-                    dbContext.Set<T>().Add(_model);
+                    dbContext.Set<T>().Add(_SetPropertiesAddData(_model));
                 }
                 dbContext.SaveChanges();
                 return list.ToList();
@@ -65,16 +59,7 @@ namespace FXKJ.Infrastructure.DataAccess
             using (var dbContext = new MyContext())
             {
 
-                //反射更新时间字段
-                Type type = model.GetType();
-                foreach (var item in type.GetRuntimeProperties())
-                {
-                    if (item.Name == "UpdateTime")
-                    {
-                        item.SetValue(model, DateTime.Now);
-                        break;
-                    }
-                }
+                model = _SetPropertiesUpdateData(model);
                 dbContext.Entry(model).State = EntityState.Modified;
                 dbContext.SaveChanges();
                 return model;
@@ -84,16 +69,7 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-                //反射更新时间字段
-                Type type = model.GetType();
-                foreach (var item in type.GetRuntimeProperties())
-                {
-                    if (item.Name == "UpdateTime")
-                    {
-                        item.SetValue(model, DateTime.Now);
-                        break;
-                    }
-                }
+                model = _SetPropertiesUpdateData(model);
                 dbContext.Entry(model).State = EntityState.Modified;
                 return dbContext.SaveChanges() > 0 ? true : false;
             }
@@ -104,17 +80,7 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 foreach (var model in list)
                 {
-                    //反射更新时间字段
-                    Type type = model.GetType();
-                    foreach (var item in type.GetRuntimeProperties())
-                    {
-                        if (item.Name == "UpdateTime")
-                        {
-                            item.SetValue(model, DateTime.Now);
-                            break;
-                        }
-                    }
-                    dbContext.Entry(model).State = EntityState.Modified;
+                    dbContext.Entry(_SetPropertiesUpdateData(model)).State = EntityState.Modified;
                 }
                 dbContext.SaveChanges();
                 return list.ToList();
@@ -208,7 +174,7 @@ namespace FXKJ.Infrastructure.DataAccess
         }
 
         /// <summary>
-        /// 数据权限过滤
+        /// 查询数据权限过滤
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
@@ -219,7 +185,7 @@ namespace FXKJ.Infrastructure.DataAccess
             var perName = properties.Where(p => p.Name == "P_MerchantNo").FirstOrDefault();
             if (perName != null)
             {
-                currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
+                var currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
                 if (currentMerchantInfo != null)
                 {
                     if (!currentMerchantInfo.Roles.Contains("admin"))
@@ -233,6 +199,52 @@ namespace FXKJ.Infrastructure.DataAccess
             return list;
         }
 
+
+        private T _SetPropertiesAddData(T t)
+        {
+            var currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
+            PropertyInfo[] properties = t.GetType().GetProperties();
+            foreach (var item in properties)
+            {
+                switch (item.Name)
+                {
+                    case "P_MerchantNo":
+                        item.SetValue(t, currentMerchantInfo.MerchantNo);
+                        break;
+                    case "CreateTime":
+                        item.SetValue(t, DateTime.Now);
+                        break;
+                    case "CreateUserCode":
+                        item.SetValue(t, currentMerchantInfo.PhoneNumber);
+                        break;
+                    default: break;
+                }
+            }
+            return t;
+        }
+
+
+        private T _SetPropertiesUpdateData(T t)
+        {
+            var currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
+            PropertyInfo[] properties = t.GetType().GetProperties();
+            foreach (var item in properties)
+            {
+                switch (item.Name)
+                {
+
+                    case "UpdateTime":
+                        item.SetValue(t, DateTime.Now);
+                        break;
+                    case "UpdateUserCode":
+                        item.SetValue(t, currentMerchantInfo.PhoneNumber);
+                        break;
+                    default: break;
+                }
+            }
+
+            return t;
+        }
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Config;
 using log4net.Appender;
 using log4net.Config;
@@ -33,31 +34,24 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
         /// <param name="folderName">文件夹名字</param>
         /// <param name="message">日志内容</param>
         /// <param name="path">日志存放磁盘路径</param>
-      
+
         public static void WriteLog(string folderName,
             string message,
             string path = "")
         {
             try
             {
-                PrincipalUser principalUser = new PrincipalUser()
+
+                AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+                if (authInfo == null)
                 {
-                    Name = "匿名用户",
-                    UserId = Guid.Empty
-                };
-                var current = HttpContext.Current;
-                if (current != null)
-                {
-                    principalUser = FormAuthenticationExtension.Current(HttpContext.Current.Request);
+                    authInfo = new AuthInfoViewModel();
+                    authInfo.Name = "测试用户";
+                    authInfo.PhoneNumber = "15255458934";
+                    authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
                 }
-                if (principalUser == null)
-                {
-                    principalUser = new PrincipalUser()
-                    {
-                        Name = "匿名用户",
-                        UserId = Guid.Empty
-                    };
-                }
+
+
                 var strPath = string.IsNullOrEmpty(path) ? LogPath : path;
                 strPath = strPath + folderName + "\\" + DateTime.Now.ToString("yyyy-MM-dd");
                 lock (Lock)
@@ -73,7 +67,7 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
                     var log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
                     log.Info(
                         "</br>----------------------------------------------</br>\r\n" +
-                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  " + principalUser.Name + "(" + principalUser.UserId + ")" + "</br>\r\n" + message);
+                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  " + authInfo.Name + "(" + authInfo.GuidId + ")" + "</br>\r\n" + message);
                     log4net.LogManager.Shutdown();
                 }
             }
@@ -91,23 +85,13 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
         {
             try
             {
-                PrincipalUser principalUser = new PrincipalUser()
+                AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+                if (authInfo == null)
                 {
-                    Name = "匿名用户",
-                    UserId = Guid.Empty
-                };
-                var current = HttpContext.Current;
-                if (current != null)
-                {
-                    principalUser = FormAuthenticationExtension.Current(HttpContext.Current.Request);
-                }
-                if (principalUser == null)
-                {
-                    principalUser = new PrincipalUser()
-                    {
-                        Name = "匿名用户",
-                        UserId = Guid.Empty
-                    };
+                    authInfo = new AuthInfoViewModel();
+                    authInfo.Name = "测试用户";
+                    authInfo.PhoneNumber = "15255458934";
+                    authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
                 }
 
                 lock (Lock)
@@ -146,23 +130,13 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
         {
             try
             {
-                PrincipalUser principalUser = new PrincipalUser()
+                AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+                if (authInfo == null)
                 {
-                    Name = "匿名用户",
-                    UserId = Guid.Empty
-                };
-                var current = HttpContext.Current;
-                if (current != null)
-                {
-                    //  principalUser = FormAuthenticationExtension.Current(HttpContext.Current.Request);
-                }
-                if (principalUser == null)
-                {
-                    principalUser = new PrincipalUser()
-                    {
-                        Name = "匿名用户",
-                        UserId = Guid.Empty
-                    };
+                    authInfo = new AuthInfoViewModel();
+                    authInfo.Name = "测试用户";
+                    authInfo.PhoneNumber = "15255458934";
+                    authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
                 }
                 var strPath = string.IsNullOrEmpty(path) ? LogPath : path;
                 strPath = strPath + folderName + "\\" + DateTime.Now.ToString("yyyy-MM-dd");
@@ -179,7 +153,7 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
                     var log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
                     log.Info(
                         "</br>----------------------------------------------</br>\r\n" +
-                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  " + principalUser.Name + "(" + principalUser.UserId + ")" + "</br>\r\n" + message);
+                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  " + authInfo.Name + "(" + authInfo.GuidId + ")" + "</br>\r\n" + message);
                     log4net.LogManager.Shutdown();
                 }
             }

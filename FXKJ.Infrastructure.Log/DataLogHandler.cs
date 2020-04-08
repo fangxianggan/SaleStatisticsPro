@@ -2,12 +2,11 @@
 using FXKJ.Infrastructure.Auth;
 using System;
 using System.Data.SqlClient;
-using System.Web;
 using EntitiesModels.Models.SysModels;
-using EntitiesModels.DtoModels;
 using System.Collections.Generic;
 using FXKJ.Infrastructure.Core.Sql;
 using System.Data;
+using FXKJ.Infrastructure.Auth.Auth;
 
 namespace FXKJ.Infrastructure.Log
 {/// <summary>
@@ -27,6 +26,7 @@ namespace FXKJ.Infrastructure.Log
             AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
             if (authInfo == null)
             {
+                authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
                 authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
@@ -60,7 +60,19 @@ namespace FXKJ.Infrastructure.Log
             int result = 0;
             try
             {
-                string sql = string.Format(@"insert into [dbo].[Log_DataLog] values (
+                string sql = string.Format(@"insert into [dbo].[Log_DataLog] 
+                         (
+                          DataLogId,
+                          OperateTable,
+                          OperateType,
+                          OperationBefore,
+                          OperationAfterData  
+                          CreateTime,
+                          CreateUserId,
+                          CreateUserCode,
+                          CreateUserName
+                          )
+                         values (
                          @DataLogId,
                          @OperateTable,
                          @OperateType,
@@ -69,7 +81,7 @@ namespace FXKJ.Infrastructure.Log
                          @CreateTime,
                          @CreateUserId,
                          @CreateUserCode,
-                         @CreateUserName,
+                         @CreateUserName
                          )");
                 List<SqlParameter> list = new List<SqlParameter>() {
                     new SqlParameter{

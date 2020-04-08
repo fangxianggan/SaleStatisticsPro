@@ -1,5 +1,5 @@
 ﻿using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
+using EntitiesModels.HttpResponse;
 
 namespace WebApi.IBLL
 {

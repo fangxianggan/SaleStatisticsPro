@@ -1,11 +1,10 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using FXKJ.Infrastructure.Auth.BLL;
+using FXKJ.Infrastructure.Auth.IBLL;
 using FXKJ.Infrastructure.DataAccess;
 using FXKJ.Infrastructure.Logic;
-using FXKJ.Infrastructure.Token.BLL;
-using FXKJ.Infrastructure.Token.IBLL;
-using System;
 using System.Linq;
 using System.Reflection;
 using System.Web.Compilation;
@@ -29,7 +28,7 @@ namespace WebApi
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+           // FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 
             //程序启动注入
              AutoFacBootStrapper.CoreAutoFacInit();

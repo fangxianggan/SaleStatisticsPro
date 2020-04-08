@@ -1,9 +1,8 @@
-﻿using System;
+﻿using FXKJ.Infrastructure.Core.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using FXKJ.Infrastructure.Attributes.CustomAttributes;
-using FXKJ.Infrastructure.Entities;
 namespace FXKJ.Infrastructure.Dapper
 {
     public static class DapperCacheCommon

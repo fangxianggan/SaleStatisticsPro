@@ -24,7 +24,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -56,8 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLogHandler.cs" />
     <Compile Include="SqlLogHandler.cs" />
-    <Compile Include="Util\IpBrowserUtil.cs" />
-    <Compile Include="Util\RequestUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FXKJ.Infrastructure.Auth\FXKJ.Infrastructure.Auth.csproj">

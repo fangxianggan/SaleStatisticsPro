@@ -2,13 +2,13 @@
 using EntitiesModels.Models;
 using FXKJ.Infrastructure.Logic;
 using WebApi.IBLL;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FXKJ.Infrastructure.DataAccess;
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.Enum;
+using EntitiesModels.Enum;
 using FXKJ.Infrastructure.Core.Extensions;
 using System.Linq;
 

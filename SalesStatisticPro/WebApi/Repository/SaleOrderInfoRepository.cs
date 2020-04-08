@@ -15,11 +15,12 @@
 //------------------------------------------------------------------------------
 using WebApi.IRepository;
 using FXKJ.Infrastructure.Dapper;
-using System.Threading.Tasks;
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.Data;
+using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 
 namespace WebApi.Repository
 {
@@ -29,6 +30,21 @@ namespace WebApi.Repository
     public partial class SaleOrderInfoRepository : ISaleOrderInfoRepository
     {
 
+        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+        private string permissionWhere
+        {
+            get
+            {
+                if (authInfo.Roles.Contains("admin"))
+                {
+                    return string.Format(" where 1=1 ");
+                }
+                else
+                {
+                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
+                }
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -36,8 +52,7 @@ namespace WebApi.Repository
         /// <returns></returns>
         public IEnumerable<SaleOrderInfoViewModel> GetSaleOrderInfoViewModelList(string pOrderNum)
         {
-            var sql = @" 
-
+            var sql = @" select * from (
 SELECT 
 a.*,
 b.ProductName,
@@ -45,7 +60,7 @@ b.SimpleCode
  FROM [dbo].[SaleOrderInfo] AS a WITH (NOLOCK)
 LEFT JOIN [dbo].[Product] AS b WITH (NOLOCK)
 ON a.SProductCode=b.ProductCode
-WHERE a.sOrderNum='" + pOrderNum + "' ";
+WHERE a.sOrderNum='" + pOrderNum + "' ) as a "+permissionWhere+" ";
 
             var list =  SqlMapperUtil.GetListData<SaleOrderInfoViewModel>(sql);
             return list;
@@ -83,9 +98,7 @@ else  '已丢失' end as SaleOrderInfoState
 left join [dbo].[SaleOrderInfo] AS d WITH(NOLOCK)  on a.SOrderNum=d.SOrderNum
 left join [dbo].[Product] AS e WITH (NOLOCK) ON d.SProductCode=e.ProductCode
 left join [dbo].[Category] AS f WITH (NOLOCK) ON f.CategoryCode=e.CategoryCode
-left join dbo.[UserInfo] as g with (nolock) on a.PhoneNumber=g.PhoneNumber
-) as cc
-@where  ";
+left join dbo.[UserInfo] as g with (nolock) on a.PhoneNumber=g.PhoneNumber "+permissionWhere+") as cc @where  ";
             return SqlMapperUtil.GetDataTable(sql, model);
         }
     }

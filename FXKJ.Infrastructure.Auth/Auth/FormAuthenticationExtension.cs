@@ -1,12 +1,11 @@
-﻿using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Config;
+﻿using FXKJ.Infrastructure.Config;
 using System;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Security;
-using FXKJ.Infrastructure.Core.Util;
-using FXKJ.Infrastructure.Token.IBLL;
 using System.Web.Mvc;
+using FXKJ.Infrastructure.Auth.Auth;
+using FXKJ.Infrastructure.Auth.IBLL;
 
 namespace FXKJ.Infrastructure.Auth
 {

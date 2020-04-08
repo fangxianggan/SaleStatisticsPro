@@ -18,7 +18,7 @@ using FXKJ.Infrastructure.Logic;
 using WebApi.IRepository;
 using WebApi.IBLL;
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
+using EntitiesModels.HttpResponse;
 using System.Collections.Generic;
 
 namespace WebApi.BLL

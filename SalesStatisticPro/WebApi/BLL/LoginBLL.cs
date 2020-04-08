@@ -3,13 +3,14 @@ using EntitiesModels.Models;
 using FXKJ.Infrastructure.Core.Extensions;
 using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.DataAccess;
-using FXKJ.Infrastructure.Entities.Enum;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Token.IBLL;
+using EntitiesModels.Enum;
+using EntitiesModels.HttpResponse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebApi.IBLL;
+using FXKJ.Infrastructure.Auth.IBLL;
+using FXKJ.Infrastructure.Auth.Auth;
 
 namespace WebApi.BLL
 {

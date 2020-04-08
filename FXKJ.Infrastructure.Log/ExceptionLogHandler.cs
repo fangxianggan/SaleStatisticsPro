@@ -9,17 +9,17 @@ using FXKJ.Infrastructure.Config;
 using FXKJ.Infrastructure.Log.LogModel;
 using System.Net;
 using EntitiesModels.Models.SysModels;
-using EntitiesModels.DtoModels;
 using System.IO;
 using FXKJ.Infrastructure.Core.Sql;
 using System.Data;
 using System.Collections.Generic;
+using FXKJ.Infrastructure.Auth.Auth;
 
 namespace FXKJ.Infrastructure.Log
 {
     public class ExceptionLogHandler : BaseHandler<ExceptionLog>
     {
-       
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -30,13 +30,14 @@ namespace FXKJ.Infrastructure.Log
             AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
             if (authInfo == null)
             {
+                authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
-                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
             }
             log = new ExceptionLog
             {
-                ExceptionLogId=Guid.NewGuid(),
+                ExceptionLogId = Guid.NewGuid(),
                 Message = exception.Message,
                 StackTrace = exception.StackTrace,
                 ExceptionType = exception.GetType().FullName,
@@ -65,7 +66,7 @@ namespace FXKJ.Infrastructure.Log
         /// </summary>
         public override void WriteLog()
         {
-         
+
             //写入基类
             base.WriteLog();
 
@@ -90,25 +91,30 @@ namespace FXKJ.Infrastructure.Log
 
         private int WriteExceptionLogData(ExceptionLog log)
         {
+            int result = 0;
             //写入sql日志
-            int result=0;
             try
             {
-                string conStr = GlobalParams.ReadConnectionString();
-                using (SqlConnection con = new SqlConnection(conStr))
-                {
-                    //插入sql语句
-                    string sqlStr = "insert into [dbo].[Sys_ExceptionLog] ([ExceptionLogId],[ExceptionTime]" +
-                        ",[CreateUserId],[CreateUserCode],[CreateUserName],[Message],[StackTrace]" +
-                        ",[InnerException],[ExceptionType],[ServerHost],[ClientHost],[Runtime],[RequestUrl],[RequestData],[UserAgent],[HttpMethod]) values('" + log.ExceptionLogId + "','" + log.CreateTime.ToString(DateTimeConfig.DateTimeFormatS) + "','" + log.CreateUserId + "','" + log.CreateUserCode + "','" + log.CreateUserName + "','" + log.Message + "','" + log.StackTrace + "','" + log.InnerException + "','" + log.ExceptionType + "','" + log.ServerHost + "','" + log.ClientHost + "','" + log.Runtime + "','" + log.RequestUrl + "','" + log.RequestData + "','" + log.UserAgent + "','" + log.HttpMethod +"');";
-                    using (SqlCommand cmd = new SqlCommand(sqlStr, con))
-                    {
-                        con.Open();
-                        result = cmd.ExecuteNonQuery();
-                    }
-                }
-
-                string sql = string.Format(@"insert into [dbo].[Log_ExceptionLog] values (
+                string sql = string.Format(@"insert into [dbo].[Log_ExceptionLog] 
+                         (
+                          ExceptionLogId,
+                          Message,
+                          StackTrace,
+                          InnerException,
+                          ExceptionType,  
+                          ServerHost,
+                          ClientHost,
+                          Runtime,
+                          RequestUrl,
+                          RequestData,
+                          UserAgent,
+                          HttpMethod,
+                          CreateTime,
+                          CreateUserId,
+                          CreateUserCode,
+                          CreateUserName
+                         )
+                         values (
                          @ExceptionLogId,
                          @Message,
                          @StackTrace,
@@ -124,8 +130,7 @@ namespace FXKJ.Infrastructure.Log
                          @CreateTime,
                          @CreateUserId,
                          @CreateUserCode,
-                         @CreateUserName,
-                         )");
+                         @CreateUserName)");
                 List<SqlParameter> list = new List<SqlParameter>() {
                     new SqlParameter{
                       ParameterName = "ExceptionLogId",
@@ -170,9 +175,10 @@ namespace FXKJ.Infrastructure.Log
                       ParameterName = "HttpMethod",
                       Value = log.HttpMethod,
                      },
-                              new SqlParameter{
+                      new SqlParameter{
                       ParameterName = "CreateTime",
                       Value = log.CreateTime,
+                      DbType=DbType.DateTime
                      },
                                new SqlParameter{
                       ParameterName = "CreateUserId",
@@ -186,8 +192,7 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.CreateUserName,
                      }
                 };
-                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
-
+                result= SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             }
             catch (Exception ex)
             {
@@ -201,7 +206,7 @@ namespace FXKJ.Infrastructure.Log
         /// </summary>
         /// <param name="log"></param>
         /// <returns></returns>
-        private  string ExceptionHtml(ExceptionLog log)
+        private string ExceptionHtml(ExceptionLog log)
         {
             string html = @"<style>
                                 .edit-table {
@@ -392,7 +397,7 @@ namespace FXKJ.Infrastructure.Log
         /// 获取完整的异常消息，包括内部异常消息
         /// </summary>
         /// <returns></returns>
-        private  string GetExceptionFullMessage(Exception exception)
+        private string GetExceptionFullMessage(Exception exception)
         {
             if (exception == null)
             {

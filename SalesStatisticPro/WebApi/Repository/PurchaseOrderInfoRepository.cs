@@ -13,17 +13,15 @@
 //        生成时间：2020-02-17 16:30
 // </copyright>
 //------------------------------------------------------------------------------
-using EntitiesModels;
 using EntitiesModels.DtoModels;
-using EntitiesModels.Models;
 using FXKJ.Infrastructure.Dapper;
-using FXKJ.Infrastructure.DataAccess;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Threading.Tasks;
 using WebApi.IRepository;
+using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
+
 namespace WebApi.Repository
 {
     /// <summary>
@@ -31,6 +29,22 @@ namespace WebApi.Repository
     /// </summary>
     public partial class PurchaseOrderInfoRepository : IPurchaseOrderInfoRepository
     {
+
+        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+        private string permissionWhere
+        {
+            get
+            {
+                if (authInfo.Roles.Contains("admin"))
+                {
+                    return string.Format(" where 1=1 ");
+                }
+                else
+                {
+                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
+                }
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -38,11 +52,11 @@ namespace WebApi.Repository
         /// <returns></returns>
         public IEnumerable<PurchaseOrderInfoViewModel> GetPurchaseOrderInfoViewModelList(string pOrderNum)
         {
-            var sql = @"  SELECT a.*,b.ProductName,b.SimpleCode ,b.ProductCode FROM  [dbo].[PurchaseOrderInfo] AS a WITH (NOLOCK) 
+            var sql = @" select * from ( SELECT a.*,b.ProductName,b.SimpleCode ,b.ProductCode FROM  [dbo].[PurchaseOrderInfo] AS a WITH (NOLOCK) 
  LEFT JOIN [dbo].[Product] AS  b WITH (NOLOCK) ON a.PProductCode=b.ProductCode
 
- WHERE a.POrderNum='" + pOrderNum + "'";
-            var list = SqlMapperUtil.SqlWithParams<PurchaseOrderInfoViewModel>(sql);
+ WHERE a.POrderNum='" + pOrderNum + "') as a "+ permissionWhere + " ";
+            var list = SqlMapperUtil.GetListData<PurchaseOrderInfoViewModel>(sql);
             return list;
 
         }
@@ -88,8 +102,7 @@ left join [dbo].[TransferBin] as c with (nolock) on a.TransferBinCode=c.Transfer
 left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum
 left join [dbo].[Product] AS e WITH (NOLOCK) ON d.PProductCode=e.ProductCode
 left join [dbo].[Category] AS f WITH (NOLOCK) ON f.CategoryCode=e.CategoryCode
-) as cc
-@where  ";
+"+ permissionWhere + " ) as cc @where  ";
             return SqlMapperUtil.GetDataTable(sql, model);
         }
     }

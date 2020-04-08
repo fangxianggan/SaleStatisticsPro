@@ -1,5 +1,5 @@
 ﻿using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
+using EntitiesModels.HttpResponse;
 using FXKJ.Infrastructure.WebApi.Filter;
 using System.Collections.Generic;
 using System.Web.Http;

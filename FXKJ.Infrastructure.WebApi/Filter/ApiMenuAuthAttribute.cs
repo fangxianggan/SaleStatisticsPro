@@ -1,6 +1,6 @@
-﻿using FXKJ.Infrastructure.Entities.Enum;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Token.IBLL;
+﻿using EntitiesModels.Enum;
+using EntitiesModels.HttpResponse;
+using FXKJ.Infrastructure.Auth.IBLL;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;

@@ -1,6 +1,5 @@
-﻿
-using FXKJ.Infrastructure.Core.Util;
-using FXKJ.Infrastructure.Entities.QueryModel;
+﻿using EntitiesModels.QueryModels;
+using FXKJ.Infrastructure.Core.Helper;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace FXKJ.Infrastructure.Dapper
             return dbBase;
         }
 
-        #region 映射
+        #region 映射 增删改查
         /// <summary>
         /// 增加实体
         /// </summary>
@@ -294,7 +293,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="querySql"></param>
         /// <param name="queryParam"></param>
         /// <returns></returns>
-        public static IEnumerable<T> PagingQueryAsync<T>(string querySql, QueryModel queryParam)
+        public static IEnumerable<T> PagingQuery<T>(string querySql, QueryModel queryParam)
         {
             var sql = querySql;
             var page = " ";
@@ -310,14 +309,14 @@ namespace FXKJ.Infrastructure.Dapper
             queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
             if (queryParam.Items.Count() > 0)
             {
-                where += SearchFilterUtil.ConvertFilters(queryParam.Items);
+                where += SearchFilterHelper.ConvertFilters(queryParam.Items);
             }
 
             //排序字段 
             var orderString = "";
             if (queryParam.OrderList.Count() > 0)
             {
-                orderString = string.Format("{0}", SearchFilterUtil.ConvertOrderBy(queryParam.OrderList));
+                orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
             }
             sql = sql.Replace("@orderBy", orderString)
                 .Replace("@where", where)
@@ -335,7 +334,7 @@ namespace FXKJ.Infrastructure.Dapper
             queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
             if (queryParam.Items.Count() > 0)
             {
-                where += SearchFilterUtil.ConvertFilters(queryParam.Items);
+                where += SearchFilterHelper.ConvertFilters(queryParam.Items);
             }
             sql = sql.Replace("@where", where);
             var data = SqlWithParamsToDataTable(sql);
@@ -348,7 +347,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <typeparam name="T">实体</typeparam>
         /// <param name="queryParam">分页参数</param>
         /// <returns>返回值</returns>
-        public static IEnumerable<T> PagingQueryProcAsync<T>(QueryModel queryParam, SqlQuery sql = null) where T : class
+        public static IEnumerable<T> PagingQueryProc<T>(QueryModel queryParam, SqlQuery sql = null) where T : class
         {
             using (var dbs = CreateDbBase())
             {
@@ -362,7 +361,7 @@ namespace FXKJ.Infrastructure.Dapper
                 var filter = "";
                 if (queryParam.Items.Count() > 0)
                 {
-                    filter = SearchFilterUtil.ConvertFilters(queryParam.Items);
+                    filter = SearchFilterHelper.ConvertFilters(queryParam.Items);
                 }
                 parms.Add("Filters", " 1=1 " + filter);
                 parms.Add("PageIndex", queryParam.PageIndex);
@@ -371,7 +370,7 @@ namespace FXKJ.Infrastructure.Dapper
                 var orderString = "";
                 if (queryParam.OrderList.Count() > 0)
                 {
-                    orderString = string.Format("{0}", SearchFilterUtil.ConvertOrderBy(queryParam.OrderList));
+                    orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
                 }
                 parms.Add("Sort", orderString);
                 parms.Add("RecordCount", value: 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -384,7 +383,7 @@ namespace FXKJ.Infrastructure.Dapper
 
         #endregion
 
-        #region 增删改
+        #region 增删改  纯sql语句执行
         /// <summary>
         ///     执行增加删除修改语句
         /// </summary>
@@ -580,7 +579,6 @@ namespace FXKJ.Infrastructure.Dapper
             }
         }
         #endregion
-
 
     }
 }

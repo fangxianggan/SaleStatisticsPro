@@ -1,15 +1,15 @@
-﻿using FXKJ.Infrastructure.Entities.Enum;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using FXKJ.Infrastructure.Auth;
-using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Token.IBLL;
 using FXKJ.Infrastructure.Core.Util;
 using System.Linq;
+using EntitiesModels.HttpResponse;
+using EntitiesModels.Enum;
+using FXKJ.Infrastructure.Auth.Auth;
+using FXKJ.Infrastructure.Auth.IBLL;
 
 namespace FXKJ.Infrastructure.WebApi.Filter
 {

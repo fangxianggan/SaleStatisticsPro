@@ -1,6 +1,6 @@
 ﻿
-using FXKJ.Infrastructure.Core.Util;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.QueryModels;
+using FXKJ.Infrastructure.Core.Helper;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -314,7 +314,7 @@ namespace FXKJ.Infrastructure.Dapper
             queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
             if (queryParam.Items.Count() > 0)
             {
-                where += SearchFilterUtil.ConvertFilters(queryParam.Items);
+                where += SearchFilterHelper.ConvertFilters(queryParam.Items);
                
             }
 
@@ -322,7 +322,7 @@ namespace FXKJ.Infrastructure.Dapper
             var orderString = "";
             if (queryParam.OrderList.Count() > 0)
             {
-                orderString = string.Format("{0}", SearchFilterUtil.ConvertOrderBy(queryParam.OrderList));
+                orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
             }
             sql = sql.Replace("@orderBy", orderString)
                 .Replace("@where", where)
@@ -354,7 +354,7 @@ namespace FXKJ.Infrastructure.Dapper
                 var filter = "";
                 if (queryParam.Items.Count() > 0)
                 {
-                    filter = SearchFilterUtil.ConvertFilters(queryParam.Items);
+                    filter = SearchFilterHelper.ConvertFilters(queryParam.Items);
                 }
                 parms.Add("Filters", " 1=1 " + filter);
                 parms.Add("PageIndex", queryParam.PageIndex);
@@ -363,7 +363,7 @@ namespace FXKJ.Infrastructure.Dapper
                 var orderString = "";
                 if (queryParam.OrderList.Count() > 0)
                 {
-                    orderString = string.Format("{0}", SearchFilterUtil.ConvertOrderBy(queryParam.OrderList));
+                    orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
                 }
                 parms.Add("Sort", orderString);
                 parms.Add("RecordCount", value: 0, dbType: DbType.Int32, direction: ParameterDirection.Output);

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ConfigUtil.cs" />
     <Compile Include="Config\DateTimeConfig.cs" />
     <Compile Include="Config\GlobalParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,21 +17,20 @@ using EntitiesModels.Models;
 using FXKJ.Infrastructure.Logic;
 using WebApi.IRepository;
 using WebApi.IBLL;
-using FXKJ.Infrastructure.Entities.QueryModel;
-using System.Threading.Tasks;
+using EntitiesModels.QueryModels;
 using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Entities.HttpResponse;
+using EntitiesModels.HttpResponse;
 using FXKJ.Infrastructure.DataAccess;
 using System.Collections.Generic;
 using System;
 using FXKJ.Infrastructure.Core.Extensions;
 using System.Transactions;
-using FXKJ.Infrastructure.Entities.Enum;
 using static EntitiesModels.DtoEnum.OrderEnum;
 using System.Linq;
 using System.Data;
 using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.Core.Helper;
+using EntitiesModels.Enum;
 
 namespace WebApi.BLL
 {

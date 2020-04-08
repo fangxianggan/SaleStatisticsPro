@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.Core.Util
 {
-  public static  class TypeUtil
+    public static  class TypeUtil
     {
         /// <summary>
         /// 判断类型是否为Nullable类型
@@ -32,6 +28,32 @@ namespace FXKJ.Infrastructure.Core.Util
                 return nullableConverter.UnderlyingType;
             }
             return type;
+        }
+
+        public static object ConvertForType(object value, Type type)
+        {
+            switch (type.FullName)
+            {
+                case "System.String":
+                    value = value.ToString();
+                    break;
+                case "System.Boolean":
+                    value = bool.Parse(value.ToString());
+                    break;
+                case "System.Int16":
+                case "System.Int32":
+                case "System.Int64":
+                    value = int.Parse(value.ToString());
+                    break;
+                case "System.Double":
+                    value = double.Parse(value.ToString());
+                    break;
+                case "System.Decimal":
+                    value = new decimal(double.Parse(value.ToString()));
+                    break;
+            }
+
+            return value;
         }
     }
 }

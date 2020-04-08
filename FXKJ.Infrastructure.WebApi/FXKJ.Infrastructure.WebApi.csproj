@@ -104,10 +104,6 @@
       <Project>{410CB82B-7197-48F7-A24F-E8F750C9249F}</Project>
       <Name>FXKJ.Infrastructure.DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FXKJ.Infrastructure.Entities\FXKJ.Infrastructure.Entities.csproj">
-      <Project>{DCA00954-825A-43AD-B3ED-CD54B38D77FD}</Project>
-      <Name>FXKJ.Infrastructure.Entities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FXKJ.Infrastructure.Log\FXKJ.Infrastructure.Log.csproj">
       <Project>{3BEF85F5-E1D8-4526-AE3A-416C19D32E81}</Project>
       <Name>FXKJ.Infrastructure.Log</Name>
@@ -115,10 +111,6 @@
     <ProjectReference Include="..\SalesStatisticPro\EntitiesModels\EntitiesModels.csproj">
       <Project>{FD648777-7297-496B-B4F1-D5D46DFA60E7}</Project>
       <Name>EntitiesModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SalesStatisticPro\FXKJ.Infrastructrue.Token\FXKJ.Infrastructrue.Token.csproj">
-      <Project>{98708003-6570-4187-90BE-86B7DB3C7EF9}</Project>
-      <Name>FXKJ.Infrastructrue.Token</Name>
     </ProjectReference>
     <ProjectReference Include="..\SalesStatisticPro\NetRedisUtil\NetRedisUtil.csproj">
       <Project>{7F890A1A-EE96-486F-957F-9656A4E308DE}</Project>

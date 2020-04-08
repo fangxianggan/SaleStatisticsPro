@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FXKJ.Infrastructure.WebApi.Filter;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -43,6 +44,8 @@ namespace WebApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            //过滤器注册
+            config.Filters.Add(new  ApiExceptionAttribute());
 
             InitJsonConfig.Init(config);
 

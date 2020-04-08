@@ -8,7 +8,7 @@ namespace FXKJ.Infrastructure.Core.WebApi
 {
     public class HttpContentTypes
     {
-        public   enum HttpContentTypeEnum
+        public enum HttpContentTypeEnum
         {
             JSON,
             FORM,

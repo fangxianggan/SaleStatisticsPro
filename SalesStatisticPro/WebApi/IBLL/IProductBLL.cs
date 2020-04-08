@@ -1,8 +1,8 @@
 ﻿
 using EntitiesModels.DtoModels;
 using EntitiesModels.Models;
-using FXKJ.Infrastructure.Entities.HttpResponse;
-using FXKJ.Infrastructure.Entities.QueryModel;
+using EntitiesModels.HttpResponse;
+using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;

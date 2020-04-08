@@ -74,10 +74,17 @@
   <ItemGroup>
     <Compile Include="AES\AesSecurity.cs" />
     <Compile Include="Attributes\AntiSqlInjectAttribute.cs" />
+    <Compile Include="Attributes\BaseAttribute.cs" />
     <Compile Include="Attributes\ByAttribute.cs" />
+    <Compile Include="Attributes\ColumnAttribute.cs" />
+    <Compile Include="Attributes\DbAttribute.cs" />
     <Compile Include="Attributes\DTCAPIAttribute.cs" />
     <Compile Include="Attributes\DTCAttribute.cs" />
+    <Compile Include="Attributes\FieldAttribute.cs" />
+    <Compile Include="Attributes\IdAttribute.cs" />
     <Compile Include="Attributes\IgnoreAttribute.cs" />
+    <Compile Include="Attributes\IgnoreColumnAttribute.cs" />
+    <Compile Include="Attributes\TableAttribute.cs" />
     <Compile Include="Extensions\AssemblyExtension.cs" />
     <Compile Include="Extensions\AutoMapperExtension.cs" />
     <Compile Include="Extensions\BooleanExtension.cs" />
@@ -91,7 +98,9 @@
     <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="Extensions\RandomExtension.cs" />
     <Compile Include="Extensions\StringExtension.cs" />
+    <Compile Include="Helper\QueryableSearchFilterHelper.cs" />
     <Compile Include="Helper\RecursiveHelper.cs" />
+    <Compile Include="Helper\SearchFilterHelper.cs" />
     <Compile Include="Helper\ZipFloHelper.cs" />
     <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,14 +120,15 @@
     <Compile Include="Util\DEncryptUtil.cs" />
     <Compile Include="Util\DisplayNameModelUtil.cs" />
     <Compile Include="Util\DownLoadUtil.cs" />
+    <Compile Include="Util\DTListConvertUtil.cs" />
+    <Compile Include="Util\DynamicMethodCompilerUtil.cs" />
     <Compile Include="Util\EmailUtil.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Util\IpBrowserUtil.cs" />
     <Compile Include="Util\JsonUtil.cs" />
-    <Compile Include="Util\QueryableSearcherUtil.cs" />
     <Compile Include="Util\RandomUtil.cs" />
+    <Compile Include="Util\ReflectionUtil.cs" />
     <Compile Include="Util\RequestUtil.cs" />
-    <Compile Include="Util\SearchFilterUtil.cs" />
     <Compile Include="Util\SqlUtil.cs" />
     <Compile Include="Util\TypeUtil.cs" />
     <Compile Include="Util\WebApiUtil.cs" />
@@ -148,9 +158,9 @@
       <Project>{91938935-5697-44A0-9B10-A86BEEDCF045}</Project>
       <Name>FXKJ.Infrastructure.Config</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FXKJ.Infrastructure.Entities\FXKJ.Infrastructure.Entities.csproj">
-      <Project>{dca00954-825a-43ad-b3ed-cd54b38d77fd}</Project>
-      <Name>FXKJ.Infrastructure.Entities</Name>
+    <ProjectReference Include="..\SalesStatisticPro\EntitiesModels\EntitiesModels.csproj">
+      <Project>{FD648777-7297-496B-B4F1-D5D46DFA60E7}</Project>
+      <Name>EntitiesModels</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

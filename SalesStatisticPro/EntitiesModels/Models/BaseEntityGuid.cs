@@ -13,8 +13,7 @@ namespace EntitiesModels.Models
 
         public BaseEntityGuid()
         {
-            CreateTime = DateTime.Now;
-            UpdateTime = DateTime.Now;
+          
         }
         [Key]
         [Required, DisplayName("ID")]
@@ -26,6 +25,6 @@ namespace EntitiesModels.Models
 
 
         [Required, DisplayName("修改时间")]
-        public DateTime UpdateTime { set; get; }
+        public DateTime? UpdateTime { set; get; }
     }
 }

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using EntitiesModels;
 using FXKJ.Infrastructure.Core.Extensions;
-using FXKJ.Infrastructure.Entities.QueryModel;
-
+using EntitiesModels.QueryModels;
 
 namespace FXKJ.Infrastructure.DataAccess
 {
