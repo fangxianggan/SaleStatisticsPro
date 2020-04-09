@@ -1,4 +1,5 @@
 ﻿using EntitiesModels.Models;
+using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.DataAccess;
 using FXKJ.Infrastructure.WebApi;
 using FXKJ.Infrastructure.WebApi.Filter;
@@ -29,6 +30,9 @@ namespace WebApi.Controllers
         // GET api/values
         public IEnumerable<string> Get()
         {
+            
+           // FileUtil.GetFileNames();
+
             return new string[] { "value1", "value2" };
         }
 

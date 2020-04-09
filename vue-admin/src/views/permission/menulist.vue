@@ -65,16 +65,34 @@
           <span>{{ row.menuName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="菜单编码" prop="menuCode" sortable="custom" width="180">
+        <template slot-scope="{row}">
+          <span>{{ row.menuCode }}</span>
+        </template>
+      </el-table-column>
+       <el-table-column label="路径地址" prop="path" sortable="custom" width="180">
+        <template slot-scope="{row}">
+          <span>{{ row.path }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="菜单icon" prop="icon" sortable="custom" width="180">
+        <template slot-scope="{row}">
+          <span>
+            <svg-icon :icon-class="row.icon" />
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="排序" prop="sort" sortable="custom" width="180">
+        <template slot-scope="{row}">
+          <span>{{ row.sort }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="添加时间" prop="createTime" sortable="custom" width="180px">
         <template slot-scope="{row}">
           <span>{{ row.createTime|formatTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="修改时间" width="180px">
-        <template slot-scope="{row}">
-          <span>{{ row.updateTime|formatTime}}</span>
-        </template>
-      </el-table-column>
+
       <el-table-column label="备注信息" min-width="100px">
         <template slot-scope="{row}">
           <span>{{ row.remark }}</span>
@@ -103,7 +121,7 @@
       @pagination="getList"
     />
 
-    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" top="1%" >
+    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" top="10">
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <el-row>
           <el-col :span="24">
@@ -148,15 +166,16 @@
 
         <el-row>
           <el-col :span="24">
-            <el-form-item label="icon图标" prop="icon" :rules="rules.checkNull">
-              <el-input v-model="temp.icon" />
+            <el-form-item id="icon-input" label="icon图标" prop="icon" :rules="rules.checkNull">
+              <el-input v-model="temp.icon" readonly @focus="openIcon" />
+              <svg-icon :icon-class="temp.icon" class="fs40" style="vertical-align: -0.35em;" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="是否掩藏" prop="hidden" :rules="rules.checkNull">
-              <el-switch v-model="temp.hidden"  ></el-switch>
+              <el-switch v-model="temp.hidden"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -170,7 +189,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="是否子节点" prop="noChildren" :rules="rules.checkNull">
-              <el-switch v-model="temp.noChildren"  ></el-switch>
+              <el-switch v-model="temp.noChildren"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -185,6 +204,175 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">关闭</el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">保存</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog v-el-drag-dialog title="icon图标" :visible.sync="dialogIconVisible">
+      <el-row id="icon-el-row">
+        <el-col :span="2">
+          <svg-icon icon-class="404" class="fs40" @click="iconClick('404')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="bug" class="fs40" @click="iconClick('bug')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="chart" class="fs40" @click="iconClick('chart')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="clipboard" class="fs40" @click="iconClick('clipboard')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="component" class="fs40" @click="iconClick('component')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="dashboard" class="fs40" @click="iconClick('dashboard')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="documentation" class="fs40" @click="iconClick('documentation')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="drag" class="fs40" @click="iconClick('drag')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="edit" class="fs40" @click="iconClick('edit')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="education" class="fs40" @click="iconClick('education')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="email" class="fs40" @click="iconClick('email')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="example" class="fs40" @click="iconClick('example')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="excel" class="fs40" @click="iconClick('excel')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon
+            icon-class="exit-fullscreen"
+            class="fs40"
+            @click="iconClick('exit-fullscreen')"
+          />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="eye-open" class="fs40" @click="iconClick('eye-open')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="eye" class="fs40" @click="iconClick('eye')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="form" class="fs40" @click="iconClick('form')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="fullscreen" class="fs40" @click="iconClick('fullscreen')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="guide" class="fs40" @click="iconClick('guide')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="icon" class="fs40" @click="iconClick('icon')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="international" class="fs40" @click="iconClick('international')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="language" class="fs40" @click="iconClick('language')" />
+        </el-col>
+
+        <el-col :span="2">
+          <svg-icon icon-class="link" class="fs40" @click="iconClick('link')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="list" class="fs40" @click="iconClick('list')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="lock" class="fs40" @click="iconClick('lock')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="message" class="fs40" @click="iconClick('message')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="mobile" class="fs40" @click="iconClick('mobile')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="money" class="fs40" @click="iconClick('money')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="nested" class="fs40" @click="iconClick('nested')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="password" class="fs40" @click="iconClick('password')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="pdf" class="fs40" @click="iconClick('pdf')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="people" class="fs40" @click="iconClick('people')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="peoples" class="fs40" @click="iconClick('peoples')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="qq" class="fs40" @click="iconClick('qq')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="search" class="fs40" @click="iconClick('search')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="shopping" class="fs40" @click="iconClick('shopping')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="size" class="fs40" @click="iconClick('size')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="skill" class="fs40" @click="iconClick('skill')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="star" class="fs40" @click="iconClick('star')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="tab" class="fs40" @click="iconClick('tab')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="table" class="fs40" @click="iconClick('table')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="theme" class="fs40" @click="iconClick('theme')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="tree-table" class="fs40" @click="iconClick('tree-table')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="tree" class="fs40" @click="iconClick('tree')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="user" class="fs40" @click="iconClick('user')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="wechat" class="fs40" @click="iconClick('wechat')" />
+        </el-col>
+        <el-col :span="2">
+          <svg-icon icon-class="zip" class="fs40" @click="iconClick('zip')" />
+        </el-col>
+      </el-row>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogIconVisible = false">关闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -215,7 +403,7 @@ var currentData = {
     menuCode: "",
     menuName: "",
     path: "",
-    icon: "",
+    icon: "example",
     hidden: false,
     parentId: 0,
     id: 0,
@@ -250,6 +438,7 @@ export default {
     };
     data.leafCheckArr = [];
     data.oldCheckKey = "";
+    data.dialogIconVisible = false;
     return data;
   },
   created() {
@@ -294,7 +483,7 @@ export default {
         menuCode: "",
         menuName: "",
         path: "",
-        icon: "",
+        icon: "example",
         hidden: false,
         parentId: 0,
         id: 0,
@@ -326,11 +515,9 @@ export default {
           var url = "/Menu/_SaveData";
           var data = this.temp;
           this.$ajax(url, data).then(response => {
-            var d = response.data;
-            this.list.unshift(d);
-            this.total++;
             this.dialogFormVisible = false;
             myAction.getNotifyFunc(response, this);
+            this.getList();
           });
         }
       });
@@ -426,6 +613,13 @@ export default {
       this.$ajax(url, data, { method: "get" }).then(res => {
         this.treeData = res.data;
       });
+    },
+    openIcon() {
+      this.dialogIconVisible = true;
+    },
+    iconClick(icon) {
+      this.temp.icon = icon;
+      this.dialogIconVisible = false;
     }
   }
 };
@@ -433,6 +627,13 @@ export default {
 <style scoped>
 .el-form-item {
   margin-left: 22px;
+}
+#icon-el-row .el-col {
+  margin-top: 30px;
+  cursor: pointer;
+}
+#icon-input .el-input {
+  width: 90%;
 }
 </style>
 

@@ -14,7 +14,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
-using EntitiesModels.Models.SysModels;
 using EntitiesModels.HttpResponse;
 using EntitiesModels.QueryModels;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ using System;
 namespace WebApi.Controllers
 
 {
-   /// <summary>
+    /// <summary>
     /// SysConfig 控制器api 代码自动生成
     /// </summary>
     [RoutePrefix("dev-api/SysConfig")]

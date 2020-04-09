@@ -15,7 +15,7 @@
 
         <el-form-item prop="UserName">
           <span class="svg-container">
-            <svg-icon icon-class="user" />
+            <svg-icon icon-class="mobile"  />
           </span>
           <el-input
             ref="username"
@@ -76,7 +76,7 @@
 
         <el-form-item prop="phoneNumber">
           <span class="svg-container">
-            <i class="ele-icon-shouji"></i>
+            <svg-icon icon-class="mobile"  />
           </span>
           <el-input
             ref="phoneNumber"
@@ -90,7 +90,7 @@
         </el-form-item>
             <el-form-item prop="nickName">
           <span class="svg-container">
-            <i class="ele-icon-shouji"></i>
+            <svg-icon icon-class="user"  />
           </span>
           <el-input
             ref="nickName"

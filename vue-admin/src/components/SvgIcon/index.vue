@@ -59,4 +59,5 @@ export default {
   mask-size: cover!important;
   display: inline-block;
 }
+
 </style>
