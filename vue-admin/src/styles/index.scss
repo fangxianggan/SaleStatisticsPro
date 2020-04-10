@@ -1,8 +1,8 @@
-@import './variables.scss';
-@import './mixin.scss';
-@import './transition.scss';
-@import './element-ui.scss';
-@import './sidebar.scss';
+@import "./variables.scss";
+@import "./mixin.scss";
+@import "./transition.scss";
+@import "./element-ui.scss";
+@import "./sidebar.scss";
 
 body {
   height: 100%;
@@ -64,7 +64,43 @@ div:focus {
   padding: 20px;
 }
 
-.fs40
+.fs40 {
+  font-size: 40px;
+}
+
+/*
+**filter-container**
+*/
+.filter-container .el-form .el-form-item {
+  width: 350px;
+  margin: 10px !important;
+}
+.filter-container .el-form .el-form-item__label {
+  width: 80px;
+}
+
+.filter-container .el-form .el-form-item__content {
+  width: 250px;
+}
+
+
+.filter-container .el-form .el-form-item__content .el-date-editor .el-range-separator {
+  width: 12%;
+}
+
+.filter-container .el-collapse-item__header {
+  font-size: 18px;
+  font-weight: bold;
+  color: #409eff;
+  padding-left: 5px;;
+  // background-color: #409eff;
+}
+
+.el-table-header-buttom
 {
- font-size: 40px;
+  margin: 5px 0;
+}
+.el-sel
+{
+  width: 100px;
 }
