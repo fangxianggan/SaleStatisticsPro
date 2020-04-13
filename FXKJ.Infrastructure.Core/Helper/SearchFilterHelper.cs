@@ -1,10 +1,7 @@
 ﻿using EntitiesModels.QueryModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.Core.Helper
 {
@@ -33,34 +30,34 @@ namespace FXKJ.Infrastructure.Core.Helper
                     switch (rule.Method)
                     {
                         case QueryMethod.Equal: //等于
-                            searchCase += group + rule.Field + " ='" + data + "'";
+                            searchCase += group + rule.Prefix+ rule.Field + " ='" + data + "'";
                             break;
                         case QueryMethod.NotEqual: //不等于
-                            searchCase += group + rule.Field + " !='" + data + "'";
+                            searchCase += group + rule.Prefix + rule.Field + " !='" + data + "'";
                             break;
                         case QueryMethod.StartsWith: //以...开始
-                            searchCase += group + rule.Field + " like '" + data + "%'";
+                            searchCase += group + rule.Prefix + rule.Field + " like '" + data + "%'";
                             break;
                         case QueryMethod.NotStartsWith: //不以...开始
-                            searchCase += group + rule.Field + " not like '" + data + "%'";
+                            searchCase += group + rule.Prefix + rule.Field + " not like '" + data + "%'";
                             break;
                         case QueryMethod.EndsWith: //结束于
-                            searchCase += group + rule.Field + " like '%" + data + "'";
+                            searchCase += group + rule.Prefix + rule.Field + " like '%" + data + "'";
                             break;
                         case QueryMethod.NotEndsWith: //不结束于
-                            searchCase += group + rule.Field + " not like '%" + data + "'";
+                            searchCase += group + rule.Prefix + rule.Field + " not like '%" + data + "'";
                             break;
                         case QueryMethod.LessThan: //小于
-                            searchCase += group + rule.Field + " <'" + data + "'";
+                            searchCase += group + rule.Prefix + rule.Field + " <'" + data + "'";
                             break;
                         case QueryMethod.LessThanOrEqual: //小于等于
-                            searchCase += group + rule.Field + " <='" + data + "'";
+                            searchCase += group + rule.Prefix + rule.Field + " <='" + data + "'";
                             break;
                         case QueryMethod.GreaterThan: //大于
-                            searchCase += group + rule.Field + " >'" + data + "'";
+                            searchCase += group + rule.Prefix + rule.Field + " >'" + data + "'";
                             break;
                         case QueryMethod.GreaterThanOrEqual: //大于等于
-                            searchCase += group + rule.Field + " >='" + data + "'";
+                            searchCase += group + rule.Prefix + rule.Field + " >='" + data + "'";
                             break;
                         case QueryMethod.In: //包括
                             var arr = data.Split(',');
@@ -70,35 +67,35 @@ namespace FXKJ.Infrastructure.Core.Helper
                                 inStr += "'" + data + "',";
                             }
                             inStr = inStr.Substring(0, inStr.Length - 1);
-                            searchCase += group + rule.Field + " in (" + inStr + ")";
+                            searchCase += group + rule.Prefix + rule.Field + " in (" + inStr + ")";
                             break;
                         case QueryMethod.NotIn: //不包含
-                            searchCase += group + rule.Field + " not in ('" + data + "')";
+                            searchCase += group + rule.Prefix + rule.Field + " not in ('" + data + "')";
                             break;
                         case QueryMethod.Contains://包含
-                            searchCase += group + rule.Field + " like '%" + data + "%'";
+                            searchCase += group + rule.Prefix + rule.Field + " like '%" + data + "%'";
                             break;
                         case QueryMethod.NotContains://不包含
-                            searchCase += group + rule.Field + " not like '%" + data + "%'";
+                            searchCase += group + rule.Prefix + rule.Field + " not like '%" + data + "%'";
                             break;
                         case QueryMethod.Null://空值
-                            searchCase += group + rule.Field + " =null";
+                            searchCase += group + rule.Prefix + rule.Field + " =null";
                             break;
                         case QueryMethod.NotNull://非空值
-                            searchCase += group + rule.Field + " !=null";
+                            searchCase += group + rule.Prefix + rule.Field + " !=null";
                             break;
                         case QueryMethod.Time://针对时间特别处理
-                            searchCase += group + rule.Field + " between '" + data + " 00:00:00' AND '" + data + " 23:59:59'";
+                            searchCase += group + rule.Prefix + rule.Field + " between '" + data + " 00:00:00' AND '" + data + " 23:59:59'";
                             break;
                         case QueryMethod.Between:
                             var start = data.Split(',')[0];
                             var end = data.Split(',')[1];
-                            searchCase += group + rule.Field + " between '" + start + " ' AND '" + end + " '";
+                            searchCase += group + rule.Prefix + rule.Field + " between '" + start + " ' AND '" + end + " '";
                             break;
                         case QueryMethod.BetweenTime:
                             var start1 = data.Split(',')[0];
                             var end1 = data.Split(',')[1];
-                            searchCase += group + rule.Field + " between '" + start1 + " 00:00:00' AND '" + end1 + " 23:59:59'";
+                            searchCase += group + rule.Prefix + rule.Field + " between '" + start1 + " 00:00:00' AND '" + end1 + " 23:59:59'";
                             break;
                     }
                 }

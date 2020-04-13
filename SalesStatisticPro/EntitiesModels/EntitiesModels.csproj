@@ -208,6 +208,22 @@
     <Compile Include="Migrations\202004080841332_logs1235.Designer.cs">
       <DependentUpon>202004080841332_logs1235.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004111431273_123qwe.cs" />
+    <Compile Include="Migrations\202004111431273_123qwe.Designer.cs">
+      <DependentUpon>202004111431273_123qwe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004111450344_123qwehht.cs" />
+    <Compile Include="Migrations\202004111450344_123qwehht.Designer.cs">
+      <DependentUpon>202004111450344_123qwehht.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004130556287_rr12.cs" />
+    <Compile Include="Migrations\202004130556287_rr12.Designer.cs">
+      <DependentUpon>202004130556287_rr12.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004130909268_rr126.cs" />
+    <Compile Include="Migrations\202004130909268_rr126.Designer.cs">
+      <DependentUpon>202004130909268_rr126.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
@@ -341,6 +357,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004080841332_logs1235.resx">
       <DependentUpon>202004080841332_logs1235.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004111431273_123qwe.resx">
+      <DependentUpon>202004111431273_123qwe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004111450344_123qwehht.resx">
+      <DependentUpon>202004111450344_123qwehht.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004130556287_rr12.resx">
+      <DependentUpon>202004130556287_rr12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004130909268_rr126.resx">
+      <DependentUpon>202004130909268_rr126.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using EntitiesModels.QueryModels;
 using FXKJ.Infrastructure.Core.Helper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace FXKJ.Infrastructure.Dapper
         }
 
         #region 映射 增删改查
+
+        #region 增
+
         /// <summary>
         /// 增加实体
         /// </summary>
@@ -117,6 +121,10 @@ namespace FXKJ.Infrastructure.Dapper
                 return Task.Factory.StartNew(() => lt);
             }
         }
+
+        #endregion
+
+        #region 修改
         /// <summary>
         /// 更新
         /// </summary>
@@ -147,6 +155,10 @@ namespace FXKJ.Infrastructure.Dapper
                 return t;
             }
         }
+
+        #endregion
+
+        #region 删
         /// <summary>
         /// 删除所有
         /// </summary>
@@ -195,6 +207,9 @@ namespace FXKJ.Infrastructure.Dapper
             }
         }
 
+        #endregion
+
+        #region 查
         /// <summary>
         /// 查询
         /// </summary>
@@ -257,89 +272,6 @@ namespace FXKJ.Infrastructure.Dapper
             }
         }
 
-        /// <summary>
-        /// 获取总数
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public static int Count<T>(string sql = null)
-        {
-            using (var db = CreateDbBase())
-            {
-                var result = db.DbConnecttion.Query<T>(sql).Count();
-                return result;
-            }
-        }
-
-        public static IEnumerable<T> GetListData<T>(string querySql)
-        {
-            var result = SqlWithParams<T>(querySql, null);
-            return result;
-        }
-
-
-        public static IEnumerable<dynamic> GetDynamicData(string querySql)
-        {
-            var sql = string.Format(@"select * from ({0}) seq ", querySql);
-            var result = SqlWithParams(sql, null);
-            return result;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="querySql"></param>
-        /// <param name="queryParam"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> PagingQuery<T>(string querySql, QueryModel queryParam)
-        {
-            var sql = querySql;
-            var page = " ";
-            if (!queryParam.IsReport)
-            {
-                var currentPage = queryParam.PageIndex; //当前页号
-                var pageSize = queryParam.PageSize; //每页记录数
-                var lower = ((currentPage - 1) * pageSize); //记录起点
-                var upper = currentPage * pageSize; //记录终点
-                page = "  OFFSET " + lower + " ROWS FETCH NEXT " + upper + " ROWS ONLY ";
-            }
-            var where = @" where 1=1 ";
-            queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
-            if (queryParam.Items.Count() > 0)
-            {
-                where += SearchFilterHelper.ConvertFilters(queryParam.Items);
-            }
-
-            //排序字段 
-            var orderString = "";
-            if (queryParam.OrderList.Count() > 0)
-            {
-                orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
-            }
-            sql = sql.Replace("@orderBy", orderString)
-                .Replace("@where", where)
-                .Replace("@page", page);
-            string countSql = querySql.Replace("@where", where).Replace("@orderBy", " ").Replace("@page", "");
-            var data = SqlWithParams<T>(sql);
-            queryParam.Total = Count<T>(countSql);
-            return data;
-        }
-
-        public static DataTable GetDataTable(string querySql, QueryModel queryParam)
-        {
-            var sql = querySql;
-            var where = @" where 1=1 ";
-            queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
-            if (queryParam.Items.Count() > 0)
-            {
-                where += SearchFilterHelper.ConvertFilters(queryParam.Items);
-            }
-            sql = sql.Replace("@where", where);
-            var data = SqlWithParamsToDataTable(sql);
-            return data;
-        }
 
         /// <summary>
         /// 单表存储过程分页
@@ -374,14 +306,42 @@ namespace FXKJ.Infrastructure.Dapper
                 }
                 parms.Add("Sort", orderString);
                 parms.Add("RecordCount", value: 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
-                var data = StoredProcWithParams<T>("System_Proc_Paging", parms);
+                var data = dbs.StoredProcWithParams<T>("System_Proc_Paging", parms);
                 queryParam.Total = parms.Get<int>("RecordCount");
                 return data;
 
             }
         }
 
+        /// <summary>
+        /// 分页 单表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="queryParam"></param>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> PagingQuery<T>(QueryModel queryParam, SqlQuery sql = null) where T : class
+        {
+            using (var db = CreateDbBase())
+            {
+                int count = 0;
+                var result = db.Page<T>(queryParam.PageIndex, queryParam.PageSize, out count, sql);
+                queryParam.Total = count;
+                return result;
+            }
+        }
+
+
+
         #endregion
+
+
+
+
+        #endregion
+
+
+        #region sql  to  dapper
 
         #region 增删改  纯sql语句执行
         /// <summary>
@@ -415,18 +375,18 @@ namespace FXKJ.Infrastructure.Dapper
                 return result;
             }
         }
+
         #endregion
 
         #region 查询
         /// <summary>
-        ///     执行Sql语句带参数
+        /// 执行Sql语句带参数
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <param name="parms"></param>
-        /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static IEnumerable<T> SqlWithParams<T>(string sql, dynamic parms = null, bool isSetConnectionStr = true)
+        public static IEnumerable<T> SqlWithParams<T>(string sql, dynamic parms = null)
         {
             using (var db = CreateDbBase())
             {
@@ -435,15 +395,14 @@ namespace FXKJ.Infrastructure.Dapper
             }
         }
 
+
         /// <summary>
         /// 动态类型
         /// </summary>
-        /// <typeparam name="dynamic"></typeparam>
         /// <param name="sql"></param>
         /// <param name="parms"></param>
-        /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static IEnumerable<dynamic> SqlWithParams(string sql, dynamic parms = null, bool isSetConnectionStr = true)
+        public static IEnumerable<dynamic> SqlWithParams(string sql, dynamic parms = null)
         {
             using (var db = CreateDbBase())
             {
@@ -455,12 +414,10 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 返回dataTable
         /// </summary>
-        /// <typeparam name="dynamic"></typeparam>
         /// <param name="sql"></param>
         /// <param name="parms"></param>
-        /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static DataTable SqlWithParamsToDataTable(string sql, dynamic parms = null, bool isSetConnectionStr = true)
+        public static DataTable SqlWithParamsToDataTable(string sql, dynamic parms = null)
         {
             using (var db = CreateDbBase())
             {
@@ -472,13 +429,13 @@ namespace FXKJ.Infrastructure.Dapper
 
 
         /// <summary>
-        ///     执行语句返回bool
+        /// 执行语句返回bool
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <param name="parms"></param>
-        /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static bool SqlWithParamsBool<T>(string sql, dynamic parms, bool isSetConnectionStr = true)
+        public static bool SqlWithParamsBool<T>(string sql, dynamic parms = null)
         {
             using (var db = CreateDbBase())
             {
@@ -493,9 +450,8 @@ namespace FXKJ.Infrastructure.Dapper
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <param name="parms"></param>
-        /// <param name="isSetConnectionStr"></param>
         /// <returns></returns>
-        public static T SqlWithParamsSingle<T>(string sql, dynamic parms = null, bool isSetConnectionStr = true)
+        public static T SqlWithParamsSingle<T>(string sql, dynamic parms = null)
         {
             using (var db = CreateDbBase())
             {
@@ -503,6 +459,158 @@ namespace FXKJ.Infrastructure.Dapper
                 return result;
             }
         }
+
+        /// <summary>
+        /// 获取数据总数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public static int Count<T>(string sql = null)
+        {
+            using (var db = CreateDbBase())
+            {
+                var result = db.DbConnecttion.Query<T>(sql).Count();
+                return result;
+            }
+        }
+
+
+        /// <summary>
+        /// 执行sql 获取list 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="querySql"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> GetListData<T>(string querySql)
+        {
+            var result = SqlWithParams<T>(querySql, null);
+            return result;
+        }
+
+
+        /// <summary>
+        /// 执行sql 获取动态类型list
+        /// </summary>
+        /// <param name="querySql"></param>
+        /// <returns></returns>
+        public static IEnumerable<dynamic> GetDynamicData(string querySql)
+        {
+            var sql = string.Format(@"select * from ({0}) seq ", querySql);
+            var result = SqlWithParams(sql, null);
+            return result;
+        }
+
+        /// <summary>
+        /// 执行 sql 获取分页list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="querySql"></param>
+        /// <param name="queryParam"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> PagingQuery<T>(string querySql, QueryModel queryParam)
+        {
+            using (var db = CreateDbBase())
+            {
+                var sql = querySql;
+                var page = " ";
+                if (!queryParam.IsReport)
+                {
+                    var currentPage = queryParam.PageIndex; //当前页号
+                    var pageSize = queryParam.PageSize; //每页记录数
+                    var lower = ((currentPage - 1) * pageSize); //记录起点
+                    var upper = currentPage * pageSize; //记录终点
+                    page = "  OFFSET " + lower + " ROWS FETCH NEXT " + upper + " ROWS ONLY ";
+                }
+                var where = @" where 1=1 ";
+                queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
+                if (queryParam.Items.Count() > 0)
+                {
+                    where += SearchFilterHelper.ConvertFilters(queryParam.Items);
+                }
+
+                //排序字段 
+                var orderString = "";
+                if (queryParam.OrderList.Count() > 0)
+                {
+                    orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
+                }
+                sql = sql.Replace("@orderBy", orderString)
+                    .Replace("@where", where)
+                    .Replace("@page", page);
+                string countSql = querySql.Replace("@where", where).Replace("@orderBy", " ").Replace("@page", "");
+                countSql = string.Format(@"select count(*) as DataCount from ({0}) seq ", countSql);
+                int total = 0;
+                var data = db.SqlWithParamsPage<T>(sql, countSql, out total, null);
+                queryParam.Total = total;
+                return data;
+            }
+        }
+
+
+        public static IEnumerable<T> PagingQueryMult<T>(string querySql, string countSql, QueryModel queryParam, Type[] types, Func<object[], T> map, string splitOn = "Id") where T : class
+        {
+            using (var db = CreateDbBase())
+            {
+                var sql = querySql;
+                var page = " ";
+                if (!queryParam.IsReport)
+                {
+                    var currentPage = queryParam.PageIndex; //当前页号
+                    var pageSize = queryParam.PageSize; //每页记录数
+                    var lower = ((currentPage - 1) * pageSize); //记录起点
+                    var upper = currentPage * pageSize; //记录终点
+                    page = "  OFFSET " + lower + " ROWS FETCH NEXT " + upper + " ROWS ONLY ";
+                }
+                var whereM = @" where 1=1 ";
+                var whereF = @" where 1=1 ";
+                queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
+                if (queryParam.Items.Count() > 0)
+                {
+                    var whereMList = queryParam.Items.Where(p => p.Prefix.Contains("M")).ToList();
+                    whereM += SearchFilterHelper.ConvertFilters(whereMList);
+                    var whereFList = queryParam.Items.Where(p => p.Prefix.Contains("F")).ToList();
+                    whereF += SearchFilterHelper.ConvertFilters(whereFList);
+                }
+                //排序字段 
+                var orderString = "";
+                if (queryParam.OrderList.Count() > 0)
+                {
+                    orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
+                }
+                sql = sql.Replace("@orderBy", orderString)
+                    .Replace("@whereM", whereM)
+                    .Replace("@whereF", whereF)
+                    .Replace("@page", page);
+                if (!string.IsNullOrEmpty(countSql))
+                    countSql = string.Format(@"select count(*) as DataCount from ({0}) seq ", countSql.Replace("@whereM", whereM).Replace("@orderBy", " ").Replace("@page", ""));
+                int total = 0;
+                var data = db.SqlWithParamsPageMult<T>(sql, countSql, out total, types, map, null, splitOn);
+                queryParam.Total = total;
+                return data;
+            }
+        }
+
+        /// <summary>
+        /// 获取 datatable数据
+        /// </summary>
+        /// <param name="querySql"></param>
+        /// <param name="queryParam"></param>
+        /// <returns></returns>
+        public static DataTable GetDataTable(string querySql, QueryModel queryParam)
+        {
+            var sql = querySql;
+            var where = @" where 1=1 ";
+            queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
+            if (queryParam.Items.Count() > 0)
+            {
+                where += SearchFilterHelper.ConvertFilters(queryParam.Items);
+            }
+            sql = sql.Replace("@where", where);
+            var data = SqlWithParamsToDataTable(sql);
+            return data;
+        }
+
 
         #endregion
 
@@ -578,6 +686,10 @@ namespace FXKJ.Infrastructure.Dapper
                 return result;
             }
         }
+        #endregion
+
+
+
         #endregion
 
     }

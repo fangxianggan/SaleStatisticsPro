@@ -67,7 +67,6 @@ namespace WebApi.Repository
 a.POrderNum ,
 a.POrderTitle,
 a.POrderCreateTime,
-a.USANumber,
 b.BusinessCode,
 b.BusinessName,
 c.TransferBinCode,

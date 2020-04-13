@@ -20,6 +20,7 @@ using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Dapper;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using WebApi.IRepository;
 namespace WebApi.Repository
 {
@@ -51,12 +52,39 @@ namespace WebApi.Repository
         /// <returns></returns>
         public IEnumerable<PurchaseOrderViewModel> GetPurchaseOrderViewModelPageList(QueryModel model)
         {
-
-            var sql = @" select * from (SELECT distinct  a.*,BusinessName,TransferBinName ,a.POrderNum as Code FROM [dbo].[PurchaseOrder] AS a WITH(NOLOCK) 
-LEFT JOIN [dbo].[Business] AS b WITH (NOLOCK) ON a.BusinessCode=b.BusinessCode
-left join [dbo].[TransferBin] as c with (nolock) on a.TransferBinCode=c.TransferBinCode
-left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum  "+ permissionWhere + ") as cc @where @orderBy @page";
-            var list = SqlMapperUtil.PagingQuery<PurchaseOrderViewModel>(sql, model);
+            List<PurchaseOrderViewModel> list = new List<PurchaseOrderViewModel>();
+            var zsql = @" select M.* from (SELECT a.*,b.BusinessName,c.TransferBinName  FROM  dbo.PurchaseOrder AS a (NOLOCK) 
+LEFT JOIN  dbo.Business AS b (NOLOCK) ON a.BusinessCode=b.BusinessCode
+LEFT JOIN dbo.TransferBin AS c (NOLOCK) ON a.TransferBinCode=c.TransferBinCode 
+" + permissionWhere + @"
+) AS M  @whereM @orderBy @page";
+      var sql = @"SELECT t1.*,t2.* FROM 
+(
+" + zsql + @" 
+ ) AS t1
+LEFT JOIN ( select F.* from (
+SELECT a.*,b.ProductName,c.ExpressCompanyName FROM  PurchaseOrderInfo AS a (NOLOCK) 
+LEFT JOIN dbo.Product AS b (NOLOCK) ON a.PProductCode=b.ProductCode
+LEFT JOIN dbo.ExpressCompany AS c(NOLOCK) ON a.ExpressCompanyCode=c.ExpressCompanyCode
+) as F @whereF
+) as t2 ON t1.POrderNum=t2.POrderNum
+  ";
+            SqlMapperUtil.PagingQueryMult<PurchaseOrderViewModel>(sql, zsql, model,
+                new[] { typeof(PurchaseOrderViewModel), typeof(PurchaseOrderInfoViewModel) },
+                (objs) =>
+                {
+                    PurchaseOrderViewModel purchaseOrder = objs[0] as PurchaseOrderViewModel;
+                    PurchaseOrderInfoViewModel purchaseOrderInfo = objs[1] as PurchaseOrderInfoViewModel;
+                    PurchaseOrderViewModel ent = list.FirstOrDefault(p => p.POrderNum == purchaseOrder.POrderNum);
+                    if (ent == null)
+                    {
+                        purchaseOrder.PurchaseOrderInfoViewModels = new List<PurchaseOrderInfoViewModel>();
+                        ent = purchaseOrder;
+                        list.Add(ent);
+                    }
+                    ent.PurchaseOrderInfoViewModels.Add(purchaseOrderInfo);
+                    return ent;
+                }, splitOn: "ID");
             return list;
 
         }
@@ -65,16 +93,17 @@ left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNu
         /// 库存统计
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ProductStockViewModel> GetProductStockViewModelList(string keyName,string productCode)
+        public IEnumerable<ProductStockViewModel> GetProductStockViewModelList(string keyName, string productCode)
         {
             string where = "  where  ss.ProductStock>0  ";
-            if (!string.IsNullOrEmpty(keyName)) {
+            if (!string.IsNullOrEmpty(keyName))
+            {
 
                 where += @" and ( ProductName like '%" + keyName + "%' OR  SimpleCode like '%" + keyName + "%' ) ";
-               // where += @"  OR  BusinessName like '%" + keyName + "%' OR BrandName like '%" + keyName + "%' ";
-               // where += @" OR CategoryName like '%" + keyName + "%' OR SpecsName like '5" + keyName + "%' ";
-               // where += @" OR UnitName like '%" + keyName + "%' OR ProductColor like '%" + keyName + "%' ";
-              //  where += @" OR ProductTypeName like '%" + keyName + "%' ) ";
+                // where += @"  OR  BusinessName like '%" + keyName + "%' OR BrandName like '%" + keyName + "%' ";
+                // where += @" OR CategoryName like '%" + keyName + "%' OR SpecsName like '5" + keyName + "%' ";
+                // where += @" OR UnitName like '%" + keyName + "%' OR ProductColor like '%" + keyName + "%' ";
+                //  where += @" OR ProductTypeName like '%" + keyName + "%' ) ";
             }
             if (!string.IsNullOrEmpty(productCode))
             {
@@ -102,7 +131,7 @@ a.ProductName,
 (p.PurchaseCount - (CASE WHEN  s.SaleCount IS NULL THEN 0 ELSE s.SaleCount END )) AS ProductStock
 FROM p LEFT JOIN s ON p.ProductCode=s.ProductCode
 LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode
-"+permissionWhere+" ) SELECT * FROM ss " + where+" ";
+" + permissionWhere + " ) SELECT * FROM ss " + where + " ";
             var list = SqlMapperUtil.GetListData<ProductStockViewModel>(sql);
             return list;
         }
@@ -116,7 +145,6 @@ select * from (SELECT distinct
 a.POrderNum ,
 a.POrderTitle,
 a.POrderCreateTime,
-a.USANumber,
 b.BusinessCode,
 b.BusinessName,
 c.TransferBinCode,
@@ -130,7 +158,7 @@ a.AllAmount,
 FROM [dbo].[PurchaseOrder] AS a WITH(NOLOCK) 
 LEFT JOIN [dbo].[Business] AS b WITH (NOLOCK) ON a.BusinessCode=b.BusinessCode
 left join [dbo].[TransferBin] as c with (nolock) on a.TransferBinCode=c.TransferBinCode
-left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum "+permissionWhere+" ) as cc @where  ";
+left join [dbo].[PurchaseOrderInfo] AS d WITH(NOLOCK)  on a.POrderNum=d.POrderNum " + permissionWhere + " ) as cc @where  ";
             return SqlMapperUtil.GetDataTable(sql, model);
         }
     }

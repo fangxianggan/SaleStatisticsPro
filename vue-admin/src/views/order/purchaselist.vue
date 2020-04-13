@@ -132,6 +132,17 @@
                 </el-select>
               </el-input>
             </el-form-item>
+
+ <el-form-item label="产品名称">
+              <el-input
+                v-model="filterModel.pOrderTitle.value"
+                placeholder="产品名称"
+                class="filter-item"
+                @keyup.enter.native="handleFilter"
+              />
+            </el-form-item>
+
+
           </el-form>
         </el-collapse-item>
       </el-collapse>
@@ -730,63 +741,56 @@ export default {
           field: "POrderNum",
           method: "Contains",
           value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         },
         pOrderTitle: {
           field: "POrderTitle",
           method: "Contains",
           value: "",
-          prefix: "",
-          operator: "And"
-        },
-        usaNumber: {
-          field: "USANumber",
-          method: "Contains",
-          value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         },
         transferBinCode: {
           field: "TransferBinCode",
           method: "Equal",
           value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         },
         businessCode: {
           field: "BusinessCode",
           method: "Equal",
           value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         },
         pOrderCreateTime: {
           field: "POrderCreateTime",
           method: "BetweenTime",
           value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         },
         allPurchaseAmount: {
           field: "AllPurchaseAmount",
           method: "Equal",
           value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         },
         allInternationFreightAmount: {
           field: "AllInternationFreightAmount",
           method: "Equal",
           value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         },
         allDomesticFreightAmount: {
           field: "AllDomesticFreightAmount",
           method: "Equal",
           value: "",
-          prefix: "",
+          prefix: "M.",
           operator: "And"
         }
       },
@@ -975,11 +979,11 @@ export default {
     },
     //获取订单详情 row expand
     getPurchaseOrderInfoViewModelList(row, expandedRows) {
-      if (row.purchaseOrderInfoViewModels == null) {
-        fetchPurchaseOrderInfoList(row).then(response => {
-          row.purchaseOrderInfoViewModels = response.data;
-        });
-      }
+      // if (row.purchaseOrderInfoViewModels == null) {
+      //   fetchPurchaseOrderInfoList(row).then(response => {
+      //     row.purchaseOrderInfoViewModels = response.data;
+      //   });
+      // }
     },
     //新增
     handleAddPurchaseOrderInfo(row) {
@@ -1142,7 +1146,6 @@ export default {
           break;
       }
     },
-
     tableRowClassName({ row, rowIndex }) {
      
       if (rowIndex === 1) {

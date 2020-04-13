@@ -73,7 +73,12 @@ div:focus {
 */
 .filter-container .el-form .el-form-item {
   width: 350px;
-  margin: 10px !important;
+  
+}
+.filter-container .el-form--inline .el-form-item 
+{
+  
+  margin-bottom: 10px;
 }
 .filter-container .el-form .el-form-item__label {
   width: 80px;
@@ -87,7 +92,10 @@ div:focus {
 .filter-container .el-form .el-form-item__content .el-date-editor .el-range-separator {
   width: 12%;
 }
-
+.filter-container .el-collapse-item__content
+{
+  padding-bottom: 5px !important;
+}
 .filter-container .el-collapse-item__header {
   font-size: 18px;
   font-weight: bold;

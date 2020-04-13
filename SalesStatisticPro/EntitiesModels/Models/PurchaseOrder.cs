@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,12 +42,6 @@ namespace EntitiesModels.Models
         /// 
         [Required, DisplayName("购买时间")]
         public DateTime POrderCreateTime { set; get; }
-
-        /// <summary>
-        /// 美国单号
-        /// </summary>
-        [MaxLength(32), DisplayName("美国单号")]
-        public string USANumber { set; get; }
 
         /// <summary>
         /// 转运仓code

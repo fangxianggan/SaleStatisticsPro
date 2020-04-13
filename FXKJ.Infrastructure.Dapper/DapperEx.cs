@@ -48,9 +48,8 @@ namespace FXKJ.Infrastructure.Dapper
 
         #region 映射
 
-
-        #region 插入数据
-        #endregion
+        #region 插入
+       
         /// <summary>
         ///     插入数据
         /// </summary>
@@ -206,7 +205,9 @@ namespace FXKJ.Infrastructure.Dapper
             WriteDataLog(datalog);
             return result;
         }
+        #endregion
 
+        #region 删除
         /// <summary>
         /// 按条件删除
         /// </summary>
@@ -324,7 +325,9 @@ namespace FXKJ.Infrastructure.Dapper
             WriteDataLog(datalog);
             return result;
         }
+        #endregion
 
+        #region 修改
         /// <summary>
         ///     修改
         /// </summary>
@@ -420,7 +423,9 @@ namespace FXKJ.Infrastructure.Dapper
             WriteDataLog(datalog);
             return result;
         }
+        #endregion
 
+        #region 查询
         /// <summary>
         ///     获取默认一条数据，没有则为NULL
         /// </summary>
@@ -490,7 +495,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="dataCount"></param>
         /// <param name="sqlQuery"></param>
         /// <returns></returns>
-        public static IEnumerable<T> Page<T>(this DbBase dbs, int pageIndex, int pageSize, out long dataCount,
+        public static IEnumerable<T> Page<T>(this DbBase dbs, int pageIndex, int pageSize, out int dataCount,
             SqlQuery sqlQuery = null) where T : class
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -508,7 +513,7 @@ namespace FXKJ.Infrastructure.Dapper
             sqlQuery = sqlQuery.Page(pageIndex, pageSize);
             var para = sqlQuery.Param;
             var cr = db.Query(sqlQuery.CountSql, para).SingleOrDefault();
-            dataCount = (long)cr.DataCount;
+            dataCount = cr.DataCount;
             var result = db.Query<T>(sqlQuery.PageSql, para).ToList();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
@@ -516,6 +521,8 @@ namespace FXKJ.Infrastructure.Dapper
             return result;
         }
 
+
+      
         /// <summary>
         ///     查询
         /// </summary>
@@ -544,6 +551,7 @@ namespace FXKJ.Infrastructure.Dapper
             return result;
         }
 
+       
         /// <summary>
         ///     数据数量
         /// </summary>
@@ -571,8 +579,12 @@ namespace FXKJ.Infrastructure.Dapper
             // WriteSqlLog(log);
             return result;
         }
+        #endregion
 
         #endregion
+
+
+        #region  sql to dapper
 
         #region  纯sql语句的 增删改
 
@@ -631,7 +643,7 @@ namespace FXKJ.Infrastructure.Dapper
                                 TableAttribute tableAttr = classAttr as TableAttribute;
                                 bulkCopy.DestinationTableName = tableAttr.Name; //要插入的表的表明 
                             }
-                           
+
                             DataTable dt = DTListConvertUtil<T>.FillDataTable(entitys);
                             destinationConnection.Open();
                             if (dt != null && dt.Rows.Count != 0)
@@ -719,7 +731,36 @@ namespace FXKJ.Infrastructure.Dapper
             return result;
         }
 
-
+        /// <summary>
+        /// 执行 sql 分页
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dbs"></param>
+        /// <param name="sql"></param>
+        /// <param name="countSql"></param>
+        /// <param name="totalCount"></param>
+        /// <param name="parms"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> SqlWithParamsPage<T>(this DbBase dbs, string sql,string countSql, out int totalCount, dynamic parms = null)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            var db = dbs.DbConnecttion;
+            stopwatch.Start();
+            SqlLog log = new SqlLog
+            {
+                CreateTime = DateTime.Now,
+                OperateSql = sql,
+                Parameter = parms == null ? "" : JsonUtil.JsonSerialize(parms)
+            };
+            stopwatch.Stop();
+            log.EndDateTime = DateTime.Now;
+            log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
+            var result = db.Query<T>(sql, (object)parms);
+            var cr = db.Query<dynamic>(countSql,(object)parms).SingleOrDefault();
+            totalCount = cr.DataCount;
+            WriteSqlLog(log);
+            return result;
+        }
         public static IEnumerable<dynamic> SqlWithParams(this DbBase dbs, string sql, dynamic parms)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -738,8 +779,6 @@ namespace FXKJ.Infrastructure.Dapper
             return result;
         }
 
-
-
         public static DataTable SqlWithParamsToDataTable(this DbBase dbs, string sql, dynamic parms)
         {
             DataTable dataTable = new DataTable();
@@ -751,26 +790,15 @@ namespace FXKJ.Infrastructure.Dapper
                 OperateSql = sql,
                 Parameter = parms == null ? "" : parms.ToString()
             };
-            WriteSqlLog(log);
             var result = dbs.DbConnecttion.ExecuteReader(sql, (object)parms);
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
             dataTable.Load(result);
-            // WriteSqlLog(log);
+            WriteSqlLog(log);
             return dataTable;
         }
 
-
-
-        /// <summary>
-        ///     返回符合要求的第一个
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dbs"></param>
-        /// <param name="sql"></param>
-        /// <param name="parms"></param>
-        /// <returns></returns>
         public static T SqlWithParamsSingle<T>(this DbBase dbs, string sql, dynamic parms = null)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -782,6 +810,43 @@ namespace FXKJ.Infrastructure.Dapper
                 Parameter = parms == null ? "" : parms.ToString()
             };
             var result = dbs.DbConnecttion.Query<T>(sql, (object)parms).FirstOrDefault();
+            stopwatch.Stop();
+            log.EndDateTime = DateTime.Now;
+            log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
+            WriteSqlLog(log);
+            return result;
+        }
+
+
+        /// <summary>
+        /// 查询  一对一 或是一对多
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dbs"></param>
+        /// <param name="sql"></param>
+        /// <param name="types"></param>
+        /// <param name="map"></param>
+        /// <param name="splitOn"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> SqlWithParamsPageMult<T>(this DbBase dbs, string sql,string countSql, out int total, Type[] types, Func<object[], T> map, object param, string splitOn = "Id") where T : class
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var db = dbs.DbConnecttion;
+            SqlLog log = new SqlLog
+            {
+                CreateTime = DateTime.Now,
+                OperateSql = sql,
+                Parameter = param == null ? "" : JsonUtil.JsonSerialize(param)
+            };
+            var result = db.Query<T>(sql, types, map, param, null, true, splitOn);
+            if (!string.IsNullOrEmpty(countSql))
+            {
+                total = db.Query(countSql).SingleOrDefault().DataCount;
+            }
+            else {
+                total = 0;
+            }
             stopwatch.Stop();
             log.EndDateTime = DateTime.Now;
             log.ElapsedTime = stopwatch.Elapsed.TotalSeconds;
@@ -872,5 +937,10 @@ namespace FXKJ.Infrastructure.Dapper
         }
 
         #endregion
+
+        #endregion
+
+
+
     }
 }

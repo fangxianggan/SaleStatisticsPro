@@ -15,7 +15,6 @@ namespace FXKJ.Infrastructure.DataAccess
         where T : class, new()
 
     {
-
         public EFRepository()
         {
 
@@ -131,6 +130,8 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
+
+               
                 var list = dbContext.Set<T>().Where(whereLambda);
                 //权限过滤
                 list = _GetFilterPermissionList(list);
