@@ -30,21 +30,7 @@ namespace WebApi.Repository
     public partial class PurchaseOrderRepository : IPurchaseOrderRepository
     {
 
-        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
-        private string permissionWhere
-        {
-            get
-            {
-                if (authInfo.Roles.Contains("admin"))
-                {
-                    return string.Format(" where 1=1 ");
-                }
-                else
-                {
-                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
-                }
-            }
-        }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -62,7 +48,7 @@ LEFT JOIN dbo.TransferBin AS c (NOLOCK) ON a.TransferBinCode=c.TransferBinCode
 (
 " + zsql + @" 
  ) AS t1
-LEFT JOIN ( select F.* from (
+inner JOIN ( select F.* from (
 SELECT a.*,b.ProductName,c.ExpressCompanyName FROM  PurchaseOrderInfo AS a (NOLOCK) 
 LEFT JOIN dbo.Product AS b (NOLOCK) ON a.PProductCode=b.ProductCode
 LEFT JOIN dbo.ExpressCompany AS c(NOLOCK) ON a.ExpressCompanyCode=c.ExpressCompanyCode

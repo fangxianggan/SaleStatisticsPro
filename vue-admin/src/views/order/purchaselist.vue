@@ -135,7 +135,7 @@
 
  <el-form-item label="产品名称">
               <el-input
-                v-model="filterModel.pOrderTitle.value"
+                v-model="filterModel.productName.value"
                 placeholder="产品名称"
                 class="filter-item"
                 @keyup.enter.native="handleFilter"
@@ -792,7 +792,14 @@ export default {
           value: "",
           prefix: "M.",
           operator: "And"
-        }
+        },
+         productName: {
+          field: "ProductName",
+          method: "Contains",
+          value: "",
+          prefix: "F.",
+          operator: "And"
+        },
       },
       temp: {
         businessName: "",

@@ -49,6 +49,8 @@ using FXKJ.Infrastructure.DataAccess;
 using WebApi.IRepository;
 using FXKJ.Infrastructure.Dapper;
 using System.Configuration;
+using FXKJ.Infrastructure.Auth;
+using FXKJ.Infrastructure.Auth.Auth;
 namespace WebApi.Repository
 {
     /// <summary>
@@ -57,13 +59,32 @@ namespace WebApi.Repository
     public partial class <#= _model.Name #>Repository : I<#=_model.Name#>Repository
     { 
           private readonly string connString = "MyStrConn";
-         /// <summary>
-        ///   数据——
-       /// </summary>
+          private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+          private string permissionWhere
+          {
+              get
+              {
+                  if (authInfo.Roles.Contains("admin"))
+                  {
+                      return string.Format(" where 1=1 ");
+                  }
+                  else
+                  {
+                      return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
+                  }
+              }
+          }
+            /// <summary>
+           ///   数据——
+          /// </summary>
          public <#= _model.Name #>Repository()
          {
            SqlMapperUtil.ConnectionName=connString;
          }
+         
+
+
+
     }
 }
 

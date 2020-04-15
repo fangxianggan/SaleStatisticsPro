@@ -30,21 +30,7 @@ namespace WebApi.Repository
     public partial class SaleOrderInfoRepository : ISaleOrderInfoRepository
     {
 
-        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
-        private string permissionWhere
-        {
-            get
-            {
-                if (authInfo.Roles.Contains("admin"))
-                {
-                    return string.Format(" where 1=1 ");
-                }
-                else
-                {
-                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
-                }
-            }
-        }
+       
         /// <summary>
         /// 
         /// </summary>

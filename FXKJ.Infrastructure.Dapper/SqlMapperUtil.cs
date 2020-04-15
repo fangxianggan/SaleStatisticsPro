@@ -583,7 +583,7 @@ namespace FXKJ.Infrastructure.Dapper
                     .Replace("@whereF", whereF)
                     .Replace("@page", page);
                 if (!string.IsNullOrEmpty(countSql))
-                    countSql = string.Format(@"select count(*) as DataCount from ({0}) seq ", countSql.Replace("@whereM", whereM).Replace("@orderBy", " ").Replace("@page", ""));
+                    countSql = string.Format(@"select count(*) as DataCount from ({0}) seq ", countSql.Replace("@whereM", whereM).Replace("@whereF", whereF).Replace("@orderBy", " ").Replace("@page", ""));
                 int total = 0;
                 var data = db.SqlWithParamsPageMult<T>(sql, countSql, out total, types, map, null, splitOn);
                 queryParam.Total = total;

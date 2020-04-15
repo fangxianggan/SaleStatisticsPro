@@ -19,8 +19,7 @@ using EntitiesModels.DtoModels;
 using EntitiesModels.QueryModels;
 using System.Collections.Generic;
 using System.Data;
-using FXKJ.Infrastructure.Auth;
-using FXKJ.Infrastructure.Auth.Auth;
+
 
 namespace WebApi.Repository
 {
@@ -29,22 +28,7 @@ namespace WebApi.Repository
     /// </summary>
     public partial class ProductRepository : IProductRepository
     {
-        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
-        private string permissionWhere
-        {
-            get
-            {
-                if (authInfo.Roles.Contains("admin"))
-                {
-                    return string.Format(" where 1=1 ");
-                }
-                else
-                {
-                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
-                }
-            }
-        }
-
+       
 
         /// <summary>
         /// 
