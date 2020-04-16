@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Data;
 using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Auth.Auth;
+using System.Linq;
 
 namespace WebApi.Repository
 {
@@ -43,9 +44,36 @@ namespace WebApi.Repository
 
         public IEnumerable<SaleOrderViewModel> GetSaleOrderViewModelPageList(QueryModel model)
         {
-            var sql = @" select * from ( SELECT  a.*  FROM [dbo].[SaleOrder] AS a WITH(NOLOCK) "+permissionWhere+" ) as cc @where @orderBy @page";
-            var list =  SqlMapperUtil.PagingQuery<SaleOrderViewModel>(sql, model);
+            //var sql = @" select * from ( SELECT  a.*  FROM [dbo].[SaleOrder] AS a WITH(NOLOCK) "+permissionWhere+" ) as cc @where @orderBy @page";
+            //var list =  SqlMapperUtil.PagingQuery<SaleOrderViewModel>(sql, model);
+            //return list;
+
+            List<SaleOrderViewModel> list = new List<SaleOrderViewModel>();
+            var fSql = string.Format(@" select * from  (SELECT a.*,b.ProductName,b.SimpleCode,c.ExpressCompanyName FROM  SaleOrderInfo AS a (NOLOCK) 
+LEFT JOIN dbo.Product AS b (NOLOCK) ON a.SProductCode=b.ProductCode
+LEFT JOIN dbo.ExpressCompany AS c(NOLOCK) ON a.ExpressCompanyCode=c.ExpressCompanyCode {0} ) as F  @whereF ", permissionWhere);
+            var mSql = string.Format(@" select M.* from (SELECT a.*  FROM  dbo.SaleOrder AS a (NOLOCK)  
+{0} AND  @whereMF 
+) AS M  @whereM @orderBy @page ", permissionWhere);
+            var querySql = string.Format(@"SELECT t1.*,t2.* FROM ({0}) as t1 left JOIN ({1}) as t2 ON t1.SOrderNum=t2.SOrderNum ", mSql, fSql);
+            SqlMapperUtil.PagingQueryMult<SaleOrderViewModel>(fSql, mSql, querySql, "SOrderNum", model,
+                new[] { typeof(SaleOrderViewModel), typeof(SaleOrderInfoViewModel) },
+                (objs) =>
+                {
+                    SaleOrderViewModel saleOrder = objs[0] as SaleOrderViewModel;
+                    SaleOrderInfoViewModel saleOrderInfo = objs[1] as SaleOrderInfoViewModel;
+                    SaleOrderViewModel ent = list.FirstOrDefault(p => p.SOrderNum == saleOrder.SOrderNum);
+                    if (ent == null)
+                    {
+                        saleOrder.SaleOrderInfoViewModels = new List<SaleOrderInfoViewModel>();
+                        ent = saleOrder;
+                        list.Add(ent);
+                    }
+                    ent.SaleOrderInfoViewModels.Add(saleOrderInfo);
+                    return ent;
+                }, splitOn: "ID");
             return list;
+
         }
 
         public DataTable GetSaleOrderViewModelDataTable(QueryModel model)

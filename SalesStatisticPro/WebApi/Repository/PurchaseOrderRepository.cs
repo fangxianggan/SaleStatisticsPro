@@ -30,7 +30,7 @@ namespace WebApi.Repository
     public partial class PurchaseOrderRepository : IPurchaseOrderRepository
     {
 
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -39,23 +39,16 @@ namespace WebApi.Repository
         public IEnumerable<PurchaseOrderViewModel> GetPurchaseOrderViewModelPageList(QueryModel model)
         {
             List<PurchaseOrderViewModel> list = new List<PurchaseOrderViewModel>();
-            var zsql = @" select M.* from (SELECT a.*,b.BusinessName,c.TransferBinName  FROM  dbo.PurchaseOrder AS a (NOLOCK) 
-LEFT JOIN  dbo.Business AS b (NOLOCK) ON a.BusinessCode=b.BusinessCode
-LEFT JOIN dbo.TransferBin AS c (NOLOCK) ON a.TransferBinCode=c.TransferBinCode 
-" + permissionWhere + @"
-) AS M  @whereM @orderBy @page";
-      var sql = @"SELECT t1.*,t2.* FROM 
-(
-" + zsql + @" 
- ) AS t1
-inner JOIN ( select F.* from (
-SELECT a.*,b.ProductName,c.ExpressCompanyName FROM  PurchaseOrderInfo AS a (NOLOCK) 
+            var fSql = string.Format(@" select * from  (SELECT a.*,b.ProductName,b.SimpleCode,c.ExpressCompanyName FROM  PurchaseOrderInfo AS a (NOLOCK) 
 LEFT JOIN dbo.Product AS b (NOLOCK) ON a.PProductCode=b.ProductCode
-LEFT JOIN dbo.ExpressCompany AS c(NOLOCK) ON a.ExpressCompanyCode=c.ExpressCompanyCode
-) as F @whereF
-) as t2 ON t1.POrderNum=t2.POrderNum
-  ";
-            SqlMapperUtil.PagingQueryMult<PurchaseOrderViewModel>(sql, zsql, model,
+LEFT JOIN dbo.ExpressCompany AS c(NOLOCK) ON a.ExpressCompanyCode=c.ExpressCompanyCode {0} ) as F  @whereF ", permissionWhere);
+            var mSql = string.Format(@" select M.* from (SELECT a.*,b.BusinessName,c.TransferBinName  FROM  dbo.PurchaseOrder AS a (NOLOCK) 
+LEFT JOIN  dbo.Business AS b (NOLOCK) ON a.BusinessCode=b.BusinessCode
+LEFT JOIN dbo.TransferBin AS c (NOLOCK) ON a.TransferBinCode=c.TransferBinCode   
+{0} AND  @whereMF 
+) AS M  @whereM @orderBy @page ", permissionWhere);
+            var querySql = string.Format(@"SELECT t1.*,t2.* FROM ({0}) as t1 left JOIN ({1}) as t2 ON t1.POrderNum=t2.POrderNum ", mSql,fSql );
+            SqlMapperUtil.PagingQueryMult<PurchaseOrderViewModel>(fSql, mSql, querySql, "POrderNum", model,
                 new[] { typeof(PurchaseOrderViewModel), typeof(PurchaseOrderInfoViewModel) },
                 (objs) =>
                 {

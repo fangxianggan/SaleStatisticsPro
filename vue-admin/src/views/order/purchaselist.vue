@@ -133,7 +133,7 @@
               </el-input>
             </el-form-item>
 
- <el-form-item label="产品名称">
+             <el-form-item label="产品名称">
               <el-input
                 v-model="filterModel.productName.value"
                 placeholder="产品名称"
@@ -141,6 +141,56 @@
                 @keyup.enter.native="handleFilter"
               />
             </el-form-item>
+
+             <el-form-item label="产品简码">
+              <el-input
+                v-model="filterModel.simpleCode.value"
+                placeholder="产品简码"
+                class="filter-item"
+                @keyup.enter.native="handleFilter"
+              />
+            </el-form-item>
+
+              <el-form-item label="产品数量">
+              <el-input
+                v-model="filterModel.purchaseCount.value"
+                placeholder="产品数量"
+                class="input-with-select"
+                @keyup.enter.native="handleFilter"
+              >
+                <el-select
+                  v-model="filterModel.purchaseCount.method"
+                  class="el-sel"
+                  slot="prepend"
+                  placeholder="请选择"
+                >
+                  <el-option label="等于" value="Equal"></el-option>
+                  <el-option label="大于" value="GreaterThan"></el-option>
+                  <el-option label="小于" value="LessThan"></el-option>
+                </el-select>
+              </el-input>
+            </el-form-item>
+
+<el-form-item label="产品单价">
+              <el-input
+                v-model="filterModel.purchasePrice.value"
+                placeholder="产品单价"
+                class="input-with-select"
+                @keyup.enter.native="handleFilter"
+              >
+                <el-select
+                  v-model="filterModel.purchasePrice.method"
+                  class="el-sel"
+                  slot="prepend"
+                  placeholder="请选择"
+                >
+                  <el-option label="等于" value="Equal"></el-option>
+                  <el-option label="大于" value="GreaterThan"></el-option>
+                  <el-option label="小于" value="LessThan"></el-option>
+                </el-select>
+              </el-input>
+            </el-form-item>
+
 
 
           </el-form>
@@ -796,6 +846,27 @@ export default {
          productName: {
           field: "ProductName",
           method: "Contains",
+          value: "",
+          prefix: "F.",
+          operator: "And"
+        },
+         simpleCode: {
+          field: "SimpleCode",
+          method: "Contains",
+          value: "",
+          prefix: "F.",
+          operator: "And"
+        },
+         purchasePrice: {
+          field: "PurchasePrice",
+          method: "Equal",
+          value: "",
+          prefix: "F.",
+          operator: "And"
+        },
+         purchaseCount: {
+          field: "PurchaseCount",
+          method: "Equal",
           value: "",
           prefix: "F.",
           operator: "And"

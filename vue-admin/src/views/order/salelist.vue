@@ -424,7 +424,7 @@
             field: "SOrderNum",
             method: "Contains",
             value: "",
-            prefix: "",
+            prefix: "M.",
             operator: "And"
           },
           phoneNumber:
@@ -432,14 +432,14 @@
             field: "PhoneNumber",
             method: "Contains",
             value: "",
-            prefix: "",
+            prefix: "M.",
             operator: "And"
           },
           sOrderCreateTime: {
             field: "SOrderCreateTime",
             method: "BetweenTime",
             value: "",
-            prefix: "",
+            prefix: "M.",
             operator: "And"
           }
 
@@ -615,9 +615,9 @@
       getSaleOrderInfoViewModelList(row) {
 
         if (row.saleOrderInfoViewModels == null) {
-          fetchSaleOrderInfoList(row).then(response => {
-            row.saleOrderInfoViewModels = response.data;
-          });
+          // fetchSaleOrderInfoList(row).then(response => {
+          //   row.saleOrderInfoViewModels = response.data;
+          // });
         }
 
       },

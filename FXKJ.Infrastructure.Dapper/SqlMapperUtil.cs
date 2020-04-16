@@ -548,7 +548,7 @@ namespace FXKJ.Infrastructure.Dapper
         }
 
 
-        public static IEnumerable<T> PagingQueryMult<T>(string querySql, string countSql, QueryModel queryParam, Type[] types, Func<object[], T> map, string splitOn = "Id") where T : class
+        public static IEnumerable<T> PagingQueryMult<T>(string fSql, string mSql,string querySql,string eqlName, QueryModel queryParam, Type[] types, Func<object[], T> map, string splitOn = "Id") where T : class
         {
             using (var db = CreateDbBase())
             {
@@ -563,6 +563,7 @@ namespace FXKJ.Infrastructure.Dapper
                     page = "  OFFSET " + lower + " ROWS FETCH NEXT " + upper + " ROWS ONLY ";
                 }
                 var whereM = @" where 1=1 ";
+                var whereMF = @" 1=1 ";
                 var whereF = @" where 1=1 ";
                 queryParam.Items = queryParam.Items.Where(p => p.Value.ToString() != "").ToList();
                 if (queryParam.Items.Count() > 0)
@@ -570,7 +571,12 @@ namespace FXKJ.Infrastructure.Dapper
                     var whereMList = queryParam.Items.Where(p => p.Prefix.Contains("M")).ToList();
                     whereM += SearchFilterHelper.ConvertFilters(whereMList);
                     var whereFList = queryParam.Items.Where(p => p.Prefix.Contains("F")).ToList();
-                    whereF += SearchFilterHelper.ConvertFilters(whereFList);
+                    if (whereFList.Count>0) {
+                        var w = SearchFilterHelper.ConvertFilters(whereFList);
+                        whereMF +=" and "+ eqlName +" IN ( SELECT "+ eqlName + "  FROM  ( "+fSql+" )  as d   ) ";
+                        whereF += w ;
+                    }
+                    
                 }
                 //排序字段 
                 var orderString = "";
@@ -579,13 +585,14 @@ namespace FXKJ.Infrastructure.Dapper
                     orderString = string.Format("{0}", SearchFilterHelper.ConvertOrderBy(queryParam.OrderList));
                 }
                 sql = sql.Replace("@orderBy", orderString)
-                    .Replace("@whereM", whereM)
-                    .Replace("@whereF", whereF)
-                    .Replace("@page", page);
-                if (!string.IsNullOrEmpty(countSql))
-                    countSql = string.Format(@"select count(*) as DataCount from ({0}) seq ", countSql.Replace("@whereM", whereM).Replace("@whereF", whereF).Replace("@orderBy", " ").Replace("@page", ""));
+                      .Replace("@whereMF", whereMF)
+                      .Replace("@whereM", whereM)
+                      .Replace("@whereF", whereF)
+                      .Replace("@page", page);
+                if (!string.IsNullOrEmpty(mSql))
+                    mSql = string.Format(@"select count(*) as DataCount from ({0}) seq ", mSql.Replace("@whereMF", whereMF).Replace("@whereM", whereM).Replace("@whereF", whereF).Replace("@orderBy", " ").Replace("@page", ""));
                 int total = 0;
-                var data = db.SqlWithParamsPageMult<T>(sql, countSql, out total, types, map, null, splitOn);
+                var data = db.SqlWithParamsPageMult<T>(sql, mSql, out total, types, map, null, splitOn);
                 queryParam.Total = total;
                 return data;
             }
