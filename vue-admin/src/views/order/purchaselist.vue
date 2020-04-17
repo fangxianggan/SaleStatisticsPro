@@ -3,7 +3,9 @@
     <div class="filter-container">
       <el-collapse accordion v-model="activeName">
         <el-collapse-item title="查询条件" name="1">
+
           <el-form :inline="true" :model="filterModel">
+
             <el-form-item label="订单号">
               <el-input
                 v-model="filterModel.pOrderNum.value"
@@ -73,6 +75,7 @@
                 @keyup.enter.native="handleFilter"
               />
             </el-form-item>
+
             <el-form-item label="购货金额">
               <el-input
                 v-model="filterModel.allPurchaseAmount.value"
@@ -133,7 +136,7 @@
               </el-input>
             </el-form-item>
 
-             <el-form-item label="产品名称">
+            <el-form-item label="产品名称">
               <el-input
                 v-model="filterModel.productName.value"
                 placeholder="产品名称"
@@ -142,7 +145,7 @@
               />
             </el-form-item>
 
-             <el-form-item label="产品简码">
+            <el-form-item label="产品简码">
               <el-input
                 v-model="filterModel.simpleCode.value"
                 placeholder="产品简码"
@@ -151,7 +154,7 @@
               />
             </el-form-item>
 
-              <el-form-item label="产品数量">
+            <el-form-item label="产品数量">
               <el-input
                 v-model="filterModel.purchaseCount.value"
                 placeholder="产品数量"
@@ -171,7 +174,7 @@
               </el-input>
             </el-form-item>
 
-<el-form-item label="产品单价">
+            <el-form-item label="产品单价">
               <el-input
                 v-model="filterModel.purchasePrice.value"
                 placeholder="产品单价"
@@ -190,9 +193,7 @@
                 </el-select>
               </el-input>
             </el-form-item>
-
-
-
+            
           </el-form>
         </el-collapse-item>
       </el-collapse>
@@ -843,34 +844,34 @@ export default {
           prefix: "M.",
           operator: "And"
         },
-         productName: {
+        productName: {
           field: "ProductName",
           method: "Contains",
           value: "",
           prefix: "F.",
           operator: "And"
         },
-         simpleCode: {
+        simpleCode: {
           field: "SimpleCode",
           method: "Contains",
           value: "",
           prefix: "F.",
           operator: "And"
         },
-         purchasePrice: {
+        purchasePrice: {
           field: "PurchasePrice",
           method: "Equal",
           value: "",
           prefix: "F.",
           operator: "And"
         },
-         purchaseCount: {
+        purchaseCount: {
           field: "PurchaseCount",
           method: "Equal",
           value: "",
           prefix: "F.",
           operator: "And"
-        },
+        }
       },
       temp: {
         businessName: "",
@@ -1225,7 +1226,6 @@ export default {
       }
     },
     tableRowClassName({ row, rowIndex }) {
-     
       if (rowIndex === 1) {
         return "warning-row";
       } else if (rowIndex === 3) {
@@ -1543,13 +1543,13 @@ export default {
   background-color: #fff;
 }
 
- .el-table .warning-row {
-    background: oldlace;
-  }
+.el-table .warning-row {
+  background: oldlace;
+}
 
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
+.el-table .success-row {
+  background: #f0f9eb;
+}
 </style>
 
 
