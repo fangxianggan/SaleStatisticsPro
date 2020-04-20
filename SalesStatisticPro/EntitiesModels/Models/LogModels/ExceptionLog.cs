@@ -60,7 +60,7 @@ namespace EntitiesModels.Models.SysModels
         ///     运行环境
         /// </summary>
         /// 
-        [DisplayName("客户端"), MaxLength(128)]
+        [DisplayName("运行环境"), MaxLength(128)]
         public string Runtime { get; set; }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace EntitiesModels.Models.SysModels
         ///     请求方式
         /// </summary>
         /// 
-        [DisplayName("浏览器代理"), MaxLength(16)]
+        [DisplayName("请求方式"), MaxLength(16)]
         public string HttpMethod { get; set; }
     }
 }

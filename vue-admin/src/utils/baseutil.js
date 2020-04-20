@@ -64,7 +64,9 @@ let myAction = {
     //弹出框状态
     dialogStatus: '',
     //弹出框title
-    dialogTitle: ''
+    dialogTitle: '',
+    //展开
+    activeName: "1"
 
   },
   /*
@@ -112,7 +114,7 @@ let myAction = {
         },
         checkNull
       ],
-      
+
 
     }
 

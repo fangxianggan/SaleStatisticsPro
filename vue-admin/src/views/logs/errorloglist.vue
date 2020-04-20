@@ -1,206 +1,309 @@
 <template>
   <div class="app-container">
-
     <div class="filter-container">
-      <el-form :inline="true" :model="filterModel">
- 
-        <el-form-item label="记录时间">
-          <el-date-picker v-model="filterModel.createTime.value" :picker-options="daterangeOptions" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" style="width: 350px;" type="daterange" placement="bottom-end" @keyup.enter.native="handleFilter" />
-        </el-form-item>
-        <el-form-item>
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
-         
-        </el-form-item>
-      </el-form>
-      <!--<el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        导出
-      </el-button>-->
-
+      <el-collapse accordion v-model="activeName">
+        <el-collapse-item title="查询条件" name="1">
+          <el-form :inline="true" :model="filterModel">
+            <el-form-item label="记录时间">
+              <el-date-picker
+                v-model="filterModel.createTime.value"
+                :picker-options="daterangeOptions"
+                value-format="yyyy-MM-dd"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                style="width: 250px;"
+                type="daterange"
+                placement="bottom-end"
+                @keyup.enter.native="handleFilter"
+              />
+            </el-form-item>
+          </el-form>
+        </el-collapse-item>
+      </el-collapse>
     </div>
-
-    <el-table :key="tableKey"
-              v-loading="listLoading"
-              :data="list"
-              border
-              fit
-              highlight-current-row
-              style="width: 100%;"
-              @sort-change="sortChange">
-      <el-table-column label="ID" prop="id" sortable="custom">
+    <el-row class="el-table-header-buttom">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >查询</el-button>
+    </el-row>
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+     
+      @sort-change="sortChange"
+    >
+      <!-- <el-table-column label="exceptionLogId" prop="exceptionLogId" sortable="custom">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.exceptionLogId }}</span>
+        </template>
+      </el-table-column>-->
+
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="堆栈信息">
+              <span>{{ props.row.stackTrace }}</span>
+            </el-form-item>
+
+            <el-form-item label="请求数据">
+              <span>{{ props.row.requestData }}</span>
+            </el-form-item>
+          </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="记录日期" prop="createTime" sortable="custom">
+
+      <el-table-column label="记录日期" prop="createTime" sortable="custom" width="120px">
         <template slot-scope="{row}">
           <span>{{ row.createTime|formatTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="执行时间" prop="elapsedTime" sortable="custom">
-        <template slot-scope="{row}">
-          <span>{{ row.elapsedTime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="sql参数">
-        <template slot-scope="{row}">
-          <span>{{ row.Parameter }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="sql语句">
-        <template slot-scope="{row}">
-          <span>{{ row.OperateSql }}</span>
-        </template>
-      </el-table-column>
 
-      <el-table-column label="操作" width="250" class-name="small-padding fixed-width">
+      <el-table-column label="错误消息">
+        <template slot-scope="{row}">
+          <span>{{ row.message }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="堆栈信息" width="600px">
+        <template slot-scope="{row}">
+          <span>{{ row.stackTrace }}</span>
+        </template>
+      </el-table-column>-->
+      <!-- <el-table-column label="内部信息">
+        <template slot-scope="{row}">
+          <span>{{ row.innerException }}</span>
+        </template>
+      </el-table-column>-->
+      <el-table-column label="异常类型">
+        <template slot-scope="{row}">
+          <span>{{ row.exceptionType }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="服务器">
+        <template slot-scope="{row}">
+          <span>{{ row.serverHost }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="客户端">
+        <template slot-scope="{row}">
+          <span>{{ row.clientHost }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="运行环境" width="60px">
+        <template slot-scope="{row}">
+          <span>{{ row.runtime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="请求Url">
+        <template slot-scope="{row}">
+          <span>{{ row.requestUrl }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="请求数据">
+        <template slot-scope="{row}">
+          <span>{{ row.requestData }}</span>
+        </template>
+      </el-table-column>-->
+      <el-table-column label="浏览器代理">
+        <template slot-scope="{row}">
+          <span>{{ row.userAgent }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="请求方式" width="60px">
+        <template slot-scope="{row}">
+          <span>{{ row.httpMethod }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="操作" width="250" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            删除
-          </el-button>
+          <el-button
+            v-if="row.status!='deleted'"
+            size="mini"
+            type="danger"
+            @click="handleDelete(row,$index)"
+          >删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
- 
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+    />
   </div>
 </template>
 
 <script>
-  import waves from '@/directive/waves' // waves directive
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-  import myAction from '@/utils/baseutil'
-  var currentData = {
-    filterModel:
-    {
-    
-      createTime: {
-        field: "CreateTime",
-        method: "Between",
-        value: "",
-        prefix: "",
-        operator: "And"
-      }
-
-    },
-    temp: {
-      "sqlLogId": "",
-      "operateSql": "",
-      "endDateTime": "",
-      "elapsedTime": 0,
-      "parameter": "",
-      "id": 0,
-      "createTime": "",
-      "createUserCode": "",
-      "updateTime": "",
-      "updateUserCode": "",
-      "remark": ""
-    },
-    orderArr: []
-  };
-  var data = $.extend(true, myAction.setBaseVueData, currentData);
-  export default {
-    name: 'sqlloglist',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      formatTime: function (val) {
-        return myAction.formatTime(val);
-      }
-    },
-    data() {
-     
-      return data
-    },
-    created() {
-      this.getList()
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        var url = "/Brand/_GetPageList"
-        var data = myAction.getQueryModel(this.listQuery.limit, this.listQuery.page, this.total, this.filterModel, this.orderArr)
-        //var data = myAction.getItemsModel(this.filterModel);
-        this.$ajax(url, data).then(response => {
-          this.list = response.data
-          this.total = response.total
-
-          // Just to simulate the time of the request
-          setTimeout(() => {
-            this.listLoading = false
-          }, 1.5 * 300)
-        })
-      },
-      //查询处理的事件
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      },
-      //排序事件
-      sortChange(data) {
-        this.orderArr = [];
-        this.orderArr.push(data);
-        this.handleFilter()
-      },
-      resetTemp() {
-       
-        this.temp = {
-          "sqlLogId": "",
-          "operateSql": "",
-          "endDateTime": "",
-          "elapsedTime": 0,
-          "parameter": "",
-          "id": 0,
-          "createTime": "",
-          "createUserCode": "",
-          "updateTime": "",
-          "updateUserCode": "",
-          "remark": ""
-        }
-      },
-      //删除数据
-      handleDelete(row, index) {
-        var title = '<span style="color: red;">是否要删除这条数据?</span>';
-        this.$confirm(title, '提示', {
-          dangerouslyUseHTMLString: true,
-          type: 'warning',
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        })
-          .then(() => {
-            
-            this.$ajax("/Brand/GetIsDeleteFlag", { code: row.brandCode }, { method: "get" }).then(d => {
-              if (d.resultSign == 1) {
-                myAction.getNotifyFunc(d, this);
-                return false;
-              }
-              let url = "/Brand/_DelData"
-              let data = { "id": row.id }
-              this.$ajax(url, data, { method: "get" }).then(response => {
-                if (response.resultSign == 0) {
-                  this.list.splice(index, 1)
-                  this.total--;
-                }
-                myAction.getNotifyFunc(response, this);
-              })
-            })
-          })
-          .catch(action => {
-
-          });
-      },
+import waves from "@/directive/waves"; // waves directive
+import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
+import myAction from "@/utils/baseutil";
+var currentData = {
+  filterModel: {
+    createTime: {
+      field: "CreateTime",
+      method: "Between",
+      value: "",
+      prefix: "",
+      operator: "And"
     }
+  },
+  temp: {
+    exceptionLogId: "",
+    message: "",
+    stackTrace: "",
+    innerException: "",
+    exceptionType: "",
+    serverHost: "",
+    clientHost: "sring",
+    runtime: "",
+    requestUrl: "",
+    requestData: "",
+    userAgent: "",
+    httpMethod: "",
+    createUserId: "",
+    createUserCode: "",
+    createUserName: "",
+    createTime: ""
+  },
+  orderArr: [{ order: "descing", prop: "createTime" }]
+};
+var data = $.extend(true, myAction.setBaseVueData, currentData);
+export default {
+  name: "exceptionloglist",
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    formatTime: function(val) {
+      return myAction.formatTime(val);
+    }
+  },
+  data() {
+    data.activeName = "1";
+    return data;
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      this.listLoading = true;
+      var url = "/ExceptionLog/_GetPageList";
+      var data = myAction.getQueryModel(
+        this.listQuery.limit,
+        this.listQuery.page,
+        this.total,
+        this.filterModel,
+        this.orderArr
+      );
+      //var data = myAction.getItemsModel(this.filterModel);
+      this.$ajax(url, data).then(response => {
+        this.list = response.data;
+        this.total = response.total;
 
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 1.5 * 300);
+      });
+    },
+    //查询处理的事件
+    handleFilter() {
+      this.listQuery.page = 1;
+      this.getList();
+    },
+    //排序事件
+    sortChange(data) {
+      this.orderArr = [];
+      this.orderArr.push(data);
+      this.handleFilter();
+    },
+    resetTemp() {
+      this.temp = {
+        exceptionLogId: "",
+        message: "",
+        stackTrace: "",
+        innerException: "",
+        exceptionType: "",
+        serverHost: "",
+        clientHost: "",
+        runtime: "",
+        requestUrl: "",
+        requestData: "",
+        userAgent: "",
+        httpMethod: "",
+        createUserId: "",
+        createUserCode: "",
+        createUserName: "",
+        createTime: ""
+      };
+    },
+    //删除数据
+    handleDelete(row, index) {
+      var title = '<span style="color: red;">是否要删除这条数据?</span>';
+      this.$confirm(title, "提示", {
+        dangerouslyUseHTML: true,
+        type: "warning",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(() => {
+          this.$ajax(
+            "/ExceptionLog/GetIsDeleteFlag",
+            { code: row.ExceptionLogCode },
+            { method: "get" }
+          ).then(d => {
+            if (d.resultSign == 1) {
+              myAction.getNotifyFunc(d, this);
+              return false;
+            }
+            let url = "/ExceptionLog/_DelData";
+            let data = { id: row.id };
+            this.$ajax(url, data, { method: "get" }).then(response => {
+              if (response.resultSign == 0) {
+                this.list.splice(index, 1);
+                this.total--;
+              }
+              myAction.getNotifyFunc(response, this);
+            });
+          });
+        })
+        .catch(action => {});
+    }
   }
+};
 </script>
-<style scoped>
-  .el-form-item {
-    margin-left: 22px;
-  }
+<style >
+.el-form-item {
+  margin-left: 22px;
+}
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 100%;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 100%;
+}
+.el-form--inline .el-form-item__content  {
+  line-height: 25px !important;
+  position: relative;
+  font-size: 14px;
+}
 </style>
 
 

@@ -54,8 +54,7 @@ on a.CategoryCode=b.CategoryCode " + permissionWhere + " ) as cc @where @orderBy
         /// <returns></returns>
         public IEnumerable<ProductStatisticsViewModel> GetProductStatisticsViewModelPageList(QueryModel model)
         {
-            var sql = @"  WITH  p as(
-SELECT 
+            var p = string.Format(@"SELECT 
 a.PProductCode AS ProductCode,
 SUM(a.PurchaseCount) AS PurchaseCount  ,
 SUM(a.PurchaseAmount) AS PurchaseAmount ,
@@ -63,10 +62,8 @@ SUM(a.DomesticFreightAmount+a.InternationFreightAmount) AS PurchaseFreightAmount
 SUM(a.Amount) AS AllPurchaseAmount,
 sum(a.PurchaseSettlementAmount) as PurchaseSettlementAmount
 FROM [dbo].[PurchaseOrderInfo]  AS a WITH (NOLOCK)
-GROUP BY a.PProductCode
-),
-s AS (
-SELECT 
+GROUP BY a.PProductCode");
+            var s = string.Format(@"SELECT 
 a.SProductCode AS ProductCode,
 SUM(a.SaleCount) AS SaleCount,
 SUM(a.SaleAmount) AS SaleAmount,
@@ -74,9 +71,8 @@ SUM(a.SaleFreightAmount) AS SaleFreightAmount,
 SUM(a.SaleSumAmount) AS AllSaleAmount,
 sum(a.SaleSettlementAmount) as SaleSettlementAmount
  FROM  [dbo].[SaleOrderInfo] AS a WITH (NOLOCK)
-GROUP BY a.SProductCode
-)
-select * from (
+GROUP BY a.SProductCode");
+            var sql = string.Format(@"select * from (
 SELECT 
 ROW_NUMBER() OVER (ORDER BY a.ID) AS ID,
 p.ProductCode,
@@ -94,8 +90,8 @@ a.SimpleCode,
 a.ProductName,
 (p.PurchaseCount - (CASE WHEN  s.SaleCount IS NULL THEN 0 ELSE s.SaleCount END )) AS Stock,
 ((CASE WHEN s.AllSaleAmount IS NULL THEN 0 ELSE s.AllSaleAmount END)- p.AllPurchaseAmount) AS ProfitAmount
-FROM p LEFT JOIN s ON p.ProductCode=s.ProductCode
-LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode  " + permissionWhere + " ) as cc  @where @orderBy @page";
+FROM ({0}) as p LEFT JOIN ({1}) as s ON p.ProductCode=s.ProductCode
+LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode  " + permissionWhere + " ) as cc  @where @orderBy @page", p, s);
             var list = SqlMapperUtil.PagingQuery<ProductStatisticsViewModel>(sql, model);
             return list;
         }

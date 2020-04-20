@@ -1,52 +1,46 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form :inline="true" :model="filterModel">
-        <el-form-item label="角色名称">
-          <el-input
-            v-model="filterModel.roleName.value"
-            placeholder="角色名称"
-            style="width: 200px;"
-            class="filter-item"
-            @keyup.enter.native="handleFilter"
-          />
-        </el-form-item>
-        <el-form-item label="添加时间">
-          <el-date-picker
-            v-model="filterModel.createTime.value"
-            :picker-options="daterangeOptions"
-            value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            style="width: 350px;"
-            type="daterange"
-            placement="bottom-end"
-            @keyup.enter.native="handleFilter"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            v-waves
-            class="filter-item"
-            type="primary"
-            icon="el-icon-search"
-            @click="handleFilter"
-          >查询</el-button>
-          <el-button
-            class="filter-item"
-            style="margin-left: 10px;"
-            type="primary"
-            icon="el-icon-edit"
-            @click="handleCreate"
-          >新增</el-button>
-        </el-form-item>
-      </el-form>
-      <!--<el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        导出
-      </el-button>-->
+      <el-collapse accordion v-model="activeName">
+        <el-collapse-item title="查询条件" name="1">
+          <el-form :inline="true" :model="filterModel">
+            <el-form-item label="角色名称">
+              <el-input
+                v-model="filterModel.roleName.value"
+                placeholder="角色名称"
+                class="filter-item"
+                @keyup.enter.native="handleFilter"
+              />
+            </el-form-item>
+            <el-form-item label="添加时间">
+              <el-date-picker
+                v-model="filterModel.createTime.value"
+                :picker-options="daterangeOptions"
+                value-format="yyyy-MM-dd"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                style="width: 250px;"
+                type="daterange"
+                placement="bottom-end"
+                @keyup.enter.native="handleFilter"
+              />
+            </el-form-item>
+          </el-form>
+        </el-collapse-item>
+      </el-collapse>
     </div>
+    <el-row class="el-table-header-buttom">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >查询</el-button>
 
+      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
+    </el-row>
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -382,20 +376,18 @@ export default {
         this.dialogStatus = "update";
         this.dialogTitle = "配置权限菜单";
         this.dialogPermissionVisible = true;
-        
+
         this.$nextTick(() => {
-          this.$refs.menuTree.setCheckedKeys(res.data)
+          this.$refs.menuTree.setCheckedKeys(res.data);
           this.$refs["permissionForm"].clearValidate();
         });
-
-         
       });
     },
     //权限数据
     permissionData() {
       this.$refs["permissionForm"].validate(valid => {
         if (valid) {
-           this.dialogPermissionVisible = false;
+          this.dialogPermissionVisible = false;
           let roleCode = this.permissionTemp.roleCode;
           let menuIds = this.$refs.menuTree.getCheckedKeys();
           setRoleMenuPermission(roleCode, menuIds).then(res => {
