@@ -1,8 +1,7 @@
 ﻿using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Auth.Auth;
-using FXKJ.Infrastructure.Config;
-using FXKJ.Infrastructure.Core.Sql;
+using FXKJ.Infrastructure.Core.Helper;
 using FXKJ.Infrastructure.Core.Util;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace FXKJ.Infrastructure.Log
                 authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
-                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
             }
             var request = HttpContext.Current.Request;
             log = new LoginLog
@@ -110,6 +109,7 @@ namespace FXKJ.Infrastructure.Log
                      new SqlParameter{
                       ParameterName = "LoginTime",
                       Value = log.LoginTime,
+                        DbType=DbType.DateTime
                      },
                      new SqlParameter{
                       ParameterName = "IpAddressName",
@@ -132,7 +132,7 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.CreateUserName,
                      }
                 };
-                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+                result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             }
             catch (Exception ex)
             {

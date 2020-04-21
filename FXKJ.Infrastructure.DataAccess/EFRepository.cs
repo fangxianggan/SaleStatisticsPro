@@ -8,6 +8,13 @@ using EntitiesModels;
 using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Core.Extensions;
 using EntitiesModels.QueryModels;
+using EntitiesModels.Models.SysModels;
+using FXKJ.Infrastructure.Log;
+using EntitiesModels.Enum;
+using FXKJ.Infrastructure.Core.Util;
+using FXKJ.Infrastructure.Dapper;
+using FXKJ.Infrastructure.Core.Helper;
+using System.ComponentModel.DataAnnotations;
 
 namespace FXKJ.Infrastructure.DataAccess
 {
@@ -15,6 +22,7 @@ namespace FXKJ.Infrastructure.DataAccess
         where T : class, new()
 
     {
+
         public EFRepository()
         {
 
@@ -57,7 +65,7 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-
+                
                 model = _SetPropertiesUpdateData(model);
                 dbContext.Entry(model).State = EntityState.Modified;
                 dbContext.SaveChanges();
@@ -92,6 +100,8 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 var _model = dbContext.Set<T>().Find(keyValues);
                 dbContext.Set<T>().Remove(_model);
+                //数据操作日志
+                WriteDataLog(GetDataLog(_model, OperateType.Delete));
                 return dbContext.SaveChanges();
             }
         }
@@ -103,6 +113,8 @@ namespace FXKJ.Infrastructure.DataAccess
                 var _modelList = dbContext.Set<T>().Where(whereLambda);
                 foreach (var _model in _modelList)
                 {
+                    //数据操作日志
+                    WriteDataLog(GetDataLog(_model, OperateType.Delete));
                     dbContext.Set<T>().Remove(_model);
                 }
                 return dbContext.SaveChanges();
@@ -130,8 +142,6 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-
-               
                 var list = dbContext.Set<T>().Where(whereLambda);
                 //权限过滤
                 list = _GetFilterPermissionList(list);
@@ -200,7 +210,6 @@ namespace FXKJ.Infrastructure.DataAccess
             return list;
         }
 
-
         private T _SetPropertiesAddData(T t)
         {
             var currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
@@ -221,10 +230,10 @@ namespace FXKJ.Infrastructure.DataAccess
                     default: break;
                 }
             }
+            //数据操作日志
+            WriteDataLog(GetDataLog(t, OperateType.Add));
             return t;
         }
-
-
         private T _SetPropertiesUpdateData(T t)
         {
             var currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
@@ -233,7 +242,6 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 switch (item.Name)
                 {
-
                     case "UpdateTime":
                         item.SetValue(t, DateTime.Now);
                         break;
@@ -243,8 +251,48 @@ namespace FXKJ.Infrastructure.DataAccess
                     default: break;
                 }
             }
-
+            //数据操作日志
+            WriteDataLog(GetDataLog(t, OperateType.Edit));
             return t;
+        }
+
+        private DataLog GetDataLog(T model, OperateType operateType)
+        {
+            DbBase db = new DbBase("MyStrConn");
+            var sql = SqlQuery<T>.Builder(db);
+            T t1 = null;//原来
+            T t2 = null;//新的
+            if (operateType == OperateType.Edit)
+            {
+                #region 之前的数据
+                Type Ts = model.GetType();
+                var name = Ts.GetProperties().Where(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Length > 0).FirstOrDefault().Name;
+                var prikey = Ts.GetProperty(name).GetValue(model, null);
+                t1 = GetEntity(prikey);
+                #endregion
+
+                t2 = model;
+            }
+            else if (operateType == OperateType.Delete)
+            {
+                t1 = model;
+            }
+            else {
+                t2 = model;
+            }
+            DataLog datalog = new DataLog
+            {
+                OperateType = operateType.ToString(),
+                OperateTable = sql._ModelDes.TableName,
+                OperationBefore = t1 ==  null?"":JsonUtil.JsonSerialize(t1),
+                OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(t2),
+            };
+            return datalog;
+        }
+        private void WriteDataLog(DataLog log)
+        {
+            DataLogHandler handler = new DataLogHandler(log.OperateType, log.OperateTable, log.OperationBefore, log.OperationAfterData);
+            handler.WriteLog();
         }
     }
 }

@@ -9,16 +9,11 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
-    /// <summary>
-    /// 测试控制器
-    /// </summary>
-    /// 
 
-    // [RoutePrefix("dev-api/Values")]
-    // [ApiAuthorizeAttribute]
-    // [ApiExceptionAttribute]
-    //[ApiDTC]
-    public class ValuesController : BaseApiController
+    /// <summary>
+    /// bcbcbcbcbcbcbccbcb
+    /// </summary>
+    public class ValuesController : ApiController
     {
         private readonly IEFRepository<Business> _businessEFRepository;
         private readonly IEFRepository<Category> _categoryEFRepository;
@@ -28,6 +23,11 @@ namespace WebApi.Controllers
             _categoryEFRepository = categoryEFRepository;
         }
         // GET api/values
+
+            /// <summary>
+            /// gggg
+            /// </summary>
+            /// <returns></returns>
         public IEnumerable<string> Get()
         {
             
@@ -36,7 +36,11 @@ namespace WebApi.Controllers
             return new string[] { "value1", "value2" };
         }
 
-
+        /// <summary>
+        /// hhhh
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET api/values/5
         public string Get(int id)
         {

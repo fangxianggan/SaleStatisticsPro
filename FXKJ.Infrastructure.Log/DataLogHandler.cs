@@ -1,16 +1,16 @@
-﻿using FXKJ.Infrastructure.Config;
-using FXKJ.Infrastructure.Auth;
+﻿using FXKJ.Infrastructure.Auth;
 using System;
 using System.Data.SqlClient;
 using EntitiesModels.Models.SysModels;
 using System.Collections.Generic;
-using FXKJ.Infrastructure.Core.Sql;
 using System.Data;
 using FXKJ.Infrastructure.Auth.Auth;
+using FXKJ.Infrastructure.Core.Helper;
+using FXKJ.Infrastructure.Core.Util;
 
 namespace FXKJ.Infrastructure.Log
 {/// <summary>
- /// 数据日志记录
+ /// 数据操作日志记录
  /// </summary>
     public class DataLogHandler : BaseHandler<DataLog>
     {
@@ -58,15 +58,14 @@ namespace FXKJ.Infrastructure.Log
         {
             //写入sql日志
             int result = 0;
-            try
-            {
-                string sql = string.Format(@"insert into [dbo].[Log_DataLog] 
+
+            string sql = string.Format(@"insert into [dbo].[Log_DataLog] 
                          (
                           DataLogId,
                           OperateTable,
                           OperateType,
                           OperationBefore,
-                          OperationAfterData  
+                          OperationAfterData, 
                           CreateTime,
                           CreateUserId,
                           CreateUserCode,
@@ -77,13 +76,12 @@ namespace FXKJ.Infrastructure.Log
                          @OperateTable,
                          @OperateType,
                          @OperationBefore,
-                         @OperationAfterData  
+                         @OperationAfterData, 
                          @CreateTime,
                          @CreateUserId,
                          @CreateUserCode,
-                         @CreateUserName
-                         )");
-                List<SqlParameter> list = new List<SqlParameter>() {
+                         @CreateUserName )");
+            List<SqlParameter> list = new List<SqlParameter>() {
                     new SqlParameter{
                       ParameterName = "DataLogId",
                       Value = log.DataLogId,
@@ -107,6 +105,7 @@ namespace FXKJ.Infrastructure.Log
                               new SqlParameter{
                       ParameterName = "CreateTime",
                       Value = log.CreateTime,
+                        DbType=DbType.DateTime
                      },
                                new SqlParameter{
                       ParameterName = "CreateUserId",
@@ -120,13 +119,9 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.CreateUserName,
                      }
                 };
-                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+            result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
 
-            }
-            catch (Exception ex)
-            {
 
-            }
             return result;
         }
     }

@@ -57,9 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FXKJ.Infrastructure.Config\FXKJ.Infrastructure.Config.csproj">
-      <Project>{91938935-5697-44a0-9b10-a86beedcf045}</Project>
-      <Name>FXKJ.Infrastructure.Config</Name>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
+      <Project>{77CF037D-57B0-4338-93EC-7415DD9B40CE}</Project>
+      <Name>FXKJ.Infrastructure.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\SalesStatisticPro\NetRedisUtil\NetRedisUtil.csproj">
       <Project>{7f890a1a-ee96-486f-957f-9656a4e308de}</Project>

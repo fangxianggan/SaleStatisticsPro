@@ -1,4 +1,4 @@
-﻿using FXKJ.Infrastructure.Config;
+﻿using FXKJ.Infrastructure.Core.Helper;
 using log4net;
 using log4net.Config;
 using System.Xml;
@@ -73,7 +73,7 @@ namespace FXKJ.Infrastructure.Log
                     if (!hasLoad)
                     {
                         //读取log4net配置文件信息
-                        var configStr = (string)GlobalParams.Get("log4net");
+                        var configStr = (string)GlobalParamsHelper.Get("log4net");
                         //序列化xml
                         var xml = new XmlDocument();
                         xml.LoadXml(configStr);

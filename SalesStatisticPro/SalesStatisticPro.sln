@@ -15,13 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.Log", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.Logic", "..\FXKJ.Infrastructure.Logic\FXKJ.Infrastructure.Logic.csproj", "{1A9677BD-1D35-4EBE-8139-017498878A7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.Web", "..\FXKJ.Infrastructure.Web\FXKJ.Infrastructure.Web.csproj", "{50993A5A-E677-4E28-A589-C3ECA45C16E3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntitiesModels", "EntitiesModels\EntitiesModels.csproj", "{FD648777-7297-496B-B4F1-D5D46DFA60E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.Auth", "..\FXKJ.Infrastructure.Auth\FXKJ.Infrastructure.Auth.csproj", "{AE088EC2-B50D-4564-BDCD-865E4B345093}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.Config", "..\FXKJ.Infrastructure.Config\FXKJ.Infrastructure.Config.csproj", "{91938935-5697-44A0-9B10-A86BEEDCF045}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXKJ.Infrastructure.WebApi", "..\FXKJ.Infrastructure.WebApi\FXKJ.Infrastructure.WebApi.csproj", "{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}"
 EndProject
@@ -78,10 +74,6 @@ Global
 		{1A9677BD-1D35-4EBE-8139-017498878A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A9677BD-1D35-4EBE-8139-017498878A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A9677BD-1D35-4EBE-8139-017498878A7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50993A5A-E677-4E28-A589-C3ECA45C16E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50993A5A-E677-4E28-A589-C3ECA45C16E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50993A5A-E677-4E28-A589-C3ECA45C16E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50993A5A-E677-4E28-A589-C3ECA45C16E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FD648777-7297-496B-B4F1-D5D46DFA60E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD648777-7297-496B-B4F1-D5D46DFA60E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD648777-7297-496B-B4F1-D5D46DFA60E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,10 +82,6 @@ Global
 		{AE088EC2-B50D-4564-BDCD-865E4B345093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE088EC2-B50D-4564-BDCD-865E4B345093}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE088EC2-B50D-4564-BDCD-865E4B345093}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91938935-5697-44A0-9B10-A86BEEDCF045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91938935-5697-44A0-9B10-A86BEEDCF045}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91938935-5697-44A0-9B10-A86BEEDCF045}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91938935-5697-44A0-9B10-A86BEEDCF045}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU

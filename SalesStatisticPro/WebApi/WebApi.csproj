@@ -44,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\WebApi.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -569,6 +570,10 @@
     <ProjectReference Include="..\..\FXKJ.Infrastructure.Logic\FXKJ.Infrastructure.Logic.csproj">
       <Project>{1A9677BD-1D35-4EBE-8139-017498878A7C}</Project>
       <Name>FXKJ.Infrastructure.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FXKJ.Infrastructure.Log\FXKJ.Infrastructure.Log.csproj">
+      <Project>{3BEF85F5-E1D8-4526-AE3A-416C19D32E81}</Project>
+      <Name>FXKJ.Infrastructure.Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\FXKJ.Infrastructure.WebApi\FXKJ.Infrastructure.WebApi.csproj">
       <Project>{7EFBF10D-EEC6-449F-BF61-C94C4CA08DF4}</Project>

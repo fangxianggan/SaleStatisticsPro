@@ -1,13 +1,12 @@
 ﻿using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Auth.Auth;
-using FXKJ.Infrastructure.Config;
+using FXKJ.Infrastructure.Core.Helper;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Layout;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Web;
 
 namespace FXKJ.Infrastructure.Log.Log4NetWrite
 {
@@ -22,7 +21,7 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
         /// <summary>
         ///     日志记录地址
         /// </summary>
-        private static readonly string LogPath = GlobalParams.Get("logPath").ToString();
+        private static readonly string LogPath = GlobalParamsHelper.Get("logPath").ToString();
 
         #endregion
 

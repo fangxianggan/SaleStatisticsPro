@@ -6,12 +6,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-namespace FXKJ.Infrastructure.Config
+namespace FXKJ.Infrastructure.Core.Helper
 {
-    /// <summary>
-    /// 读取数据库中配置信息
-    /// </summary>
-    public static class GlobalParams
+    public static class GlobalParamsHelper
     {
         #region 参数
         private static readonly object ObjectToLock = new object();
@@ -83,7 +80,7 @@ namespace FXKJ.Infrastructure.Config
             }
             if (throwOnError)
             {
-               // throw new ConfigurationErrorsException(string.Format("键值【{0}】没有在系统配置中配置。", code));
+                // throw new ConfigurationErrorsException(string.Format("键值【{0}】没有在系统配置中配置。", code));
             }
             return null;
         }
@@ -120,7 +117,7 @@ namespace FXKJ.Infrastructure.Config
             string queryString = GetQueryString();
             var data = new List<string[]>();
 
-           
+
             using (var connection = new SqlConnection(connectionString))
             {
                 var command = new SqlCommand(queryString, connection);
@@ -142,7 +139,7 @@ namespace FXKJ.Infrastructure.Config
                 }
                 catch (Exception ex)
                 {
-                    throw new DataException(ex.Message+"打开数据库失败:【连接超时】");
+                    throw new DataException(ex.Message + "打开数据库失败:【连接超时】");
                 }
             }
             return data;

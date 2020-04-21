@@ -1,14 +1,14 @@
 ﻿using EntitiesModels.Models.SysModels;
 using FXKJ.Infrastructure.Auth;
 using FXKJ.Infrastructure.Auth.Auth;
-using FXKJ.Infrastructure.Config;
-using FXKJ.Infrastructure.Core.Sql;
+using FXKJ.Infrastructure.Core.Helper;
 using FXKJ.Infrastructure.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Net.Http;
 using System.Web;
 
 namespace FXKJ.Infrastructure.Log
@@ -16,10 +16,10 @@ namespace FXKJ.Infrastructure.Log
     public class OperationLogHandler : BaseHandler<OperateLog>
     {
         /// <summary>
-        /// 操作日志
+        /// 操作浏览日志
         /// </summary>
         /// <param name="httpRequestBase"></param>
-        public OperationLogHandler(HttpRequestBase httpRequestBase)
+        public OperationLogHandler(HttpRequestMessage httpRequestBase)
             : base("OperateLogToDatabase")
         {
 
@@ -31,15 +31,15 @@ namespace FXKJ.Infrastructure.Log
                 authInfo.PhoneNumber = "15255458934";
                 authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
             }
-            var request =HttpContext.Current.Request;
+            var request = HttpContext.Current.Request;
             log = new OperateLog()
             {
                 OperationLogId = Guid.NewGuid(),
                 ServerHost = string.Format("{0}【{1}】", IpBrowserUtil.GetServerHost(), IpBrowserUtil.GetServerHostIp()),
                 ClientHost = string.Format("{0}", IpBrowserUtil.GetClientIp()),
-                RequestContentLength = httpRequestBase.ContentLength,
-                RequestType = httpRequestBase.RequestType,
-                UserAgent = httpRequestBase.UserAgent,
+                RequestContentLength = (int)httpRequestBase.Content.Headers.ContentLength,
+                RequestType = httpRequestBase.Method.ToString(),
+                UserAgent = httpRequestBase.Headers.UserAgent.ToString(),
                 CreateTime = DateTime.Now,
                 CreateUserId = authInfo.GuidId,
                 CreateUserCode = authInfo.PhoneNumber,
@@ -50,14 +50,11 @@ namespace FXKJ.Infrastructure.Log
             var streamReader = new StreamReader(inputStream);
             var requestData = HttpUtility.UrlDecode(streamReader.ReadToEnd());
             log.RequestData = requestData;
-            if (httpRequestBase.Url != null)
+            if (httpRequestBase.RequestUri != null)
             {
-                log.Url = httpRequestBase.Url.ToString();
+                log.Url = httpRequestBase.RequestUri.AbsoluteUri;
             }
-            if (httpRequestBase.UrlReferrer != null)
-            {
-                log.UrlReferrer = httpRequestBase.UrlReferrer.ToString();
-            }
+            log.Version = httpRequestBase.Version.ToString();
         }
 
         /// <summary>
@@ -71,10 +68,9 @@ namespace FXKJ.Infrastructure.Log
         /// <summary>
         /// 页面展示时间
         /// </summary>
-        /// <param name="responseBase"></param>
-        public void ResultExecuted(HttpResponseBase responseBase)
+        public void ResultExecuted()
         {
-            log.ResponseStatus = responseBase.Status;
+            log.ResponseStatus = HttpContext.Current.Response.Status;
             //页面展示时间
             log.ResultExecutionTime = (DateTime.Now - log.CreateTime).TotalSeconds;
         }
@@ -83,7 +79,6 @@ namespace FXKJ.Infrastructure.Log
         public override void WriteLog()
         {
             base.WriteLog();
-
             WriteOperateLog(log);
         }
 
@@ -93,11 +88,11 @@ namespace FXKJ.Infrastructure.Log
         /// </summary>
         private int WriteOperateLog(OperateLog log)
         {
-            int result=0;  //接收sql返回的结果
+            int result = 0;  //接收sql返回的结果
             //写入sql日志
             try
             {
-                string sql = string.Format(@"insert into [dbo].[Log_LoginLog] 
+                string sql = string.Format(@"insert into [dbo].[Log_OperateLog] 
                          (
                           OperationLogId,
                           ServerHost,
@@ -105,6 +100,12 @@ namespace FXKJ.Infrastructure.Log
                           RequestContentLength,
                           RequestType,  
                           UserAgent,
+                          Url,
+                          Version,
+                          RequestData,
+                          ActionExecutionTime,
+                          ResponseStatus,            
+                          ResultExecutionTime,
                           CreateTime,
                           CreateUserId,
                           CreateUserCode,
@@ -117,6 +118,12 @@ namespace FXKJ.Infrastructure.Log
                           @RequestContentLength,
                           @RequestType,  
                           @UserAgent,
+                          @Url,
+                          @Version,
+                          @RequestData,
+                          @ActionExecutionTime,
+                          @ResponseStatus,            
+                          @ResultExecutionTime,
                           @CreateTime,
                           @CreateUserId,
                           @CreateUserCode,
@@ -138,7 +145,34 @@ namespace FXKJ.Infrastructure.Log
                       ParameterName = "UserAgent",
                       Value = log.UserAgent,
                      },
-                        new SqlParameter{
+
+
+                      new SqlParameter{
+                      ParameterName = "Url",
+                      Value = log.Url,
+                     },
+                      new SqlParameter{
+                      ParameterName = "Version",
+                      Value = log.Version,
+                     },
+                     new SqlParameter{
+                      ParameterName = "RequestData",
+                      Value = log.RequestData,
+                     },
+                      new SqlParameter{
+                      ParameterName = "ActionExecutionTime",
+                      Value = log.ActionExecutionTime,
+                     },
+                      new SqlParameter{
+                      ParameterName = "ResponseStatus",
+                      Value = log.ResponseStatus,
+                     },
+                     new SqlParameter{
+                      ParameterName = "ResultExecutionTime",
+                      Value = log.ResultExecutionTime,
+                     },
+
+                      new SqlParameter{
                       ParameterName = "RequestContentLength",
                       Value = log.RequestContentLength,
                      },
@@ -163,7 +197,7 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.CreateUserName,
                      }
                 };
-                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+                result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             }
             catch (Exception ex)
             {

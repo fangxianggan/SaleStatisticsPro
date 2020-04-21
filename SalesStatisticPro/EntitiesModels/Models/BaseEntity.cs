@@ -1,11 +1,6 @@
-﻿using EntitiesModels.DtoModels;
-using FXKJ.Infrastructure.Auth;
-using FXKJ.Infrastructure.Auth.Auth;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Web;
 
 namespace EntitiesModels.Models
 {

@@ -1,6 +1,7 @@
 ﻿using FXKJ.Infrastructure.Core.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 namespace FXKJ.Infrastructure.Dapper
@@ -115,7 +116,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        internal static ModelDes GetModelDes<T>()
+        public static ModelDes GetModelDes<T>()
         {
             return UpdateModelDesCache<T>();
         }
@@ -125,7 +126,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="des"></param>
         /// <param name="add">是否是添加</param>
         /// <returns></returns>
-        internal static IList<ParamColumnModel> GetExecColumns(ModelDes des, bool add = true)
+        public static IList<ParamColumnModel> GetExecColumns(ModelDes des, bool add = true)
         {
             var columns = new List<ParamColumnModel>();
             if (des != null && des.Properties != null)
@@ -154,11 +155,12 @@ namespace FXKJ.Infrastructure.Dapper
         /// </summary>
         /// <param name="des"></param>
         /// <returns></returns>
-        internal static PropertyDes GetPrimary(ModelDes des)
+        public static PropertyDes GetPrimary(ModelDes des)
         {
             var p = des.Properties.FirstOrDefault(m => m.CusAttribute is IdAttribute);
             if (p == null)
             {
+               
                 throw new Exception("没有任何列标记为主键特性");
             }
             return p;
@@ -173,7 +175,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="des"></param>
         /// <param name="expr"></param>
         /// <returns></returns>
-        internal static PropertyDes GetPropertyByExpress<T>(ModelDes des, Expression<Func<T, object>> expr) where T : class
+        public static PropertyDes GetPropertyByExpress<T>(ModelDes des, Expression<Func<T, object>> expr) where T : class
         {
             var pname = "";
             if (expr.Body is UnaryExpression)

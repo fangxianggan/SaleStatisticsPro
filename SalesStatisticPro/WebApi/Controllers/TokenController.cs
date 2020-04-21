@@ -11,20 +11,19 @@ namespace WebApi.Controllers
     /// </summary>
     /// 
     [RoutePrefix("dev-api/Token")]
-
-    //[EnableCors(origins: "http://localhost:9528/", headers: "*", methods: "GET,POST,PUT,DELETE,OPTIONS")]
-   // [ApiException]
     public class TokenController : ApiController
     {
         private readonly ILoginBLL _loginBLL;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loginBLL"></param>
         public TokenController(ILoginBLL loginBLL)
         {
             _loginBLL = loginBLL;
         }
 
         #region  登录
-
-
         /// <summary>
         /// 登录
         /// </summary>
@@ -59,10 +58,14 @@ namespace WebApi.Controllers
             return _loginBLL.SignOut(token);
         }
 
-
         #endregion
 
         #region 注册
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="register"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Register")]
         [ApiDTC]
@@ -74,7 +77,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// 验证手机号是否已经存在
         /// </summary>
-        /// <param name="register"></param>
+        /// <param name="phoneNumber"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("IsExistPhoneNumber")]

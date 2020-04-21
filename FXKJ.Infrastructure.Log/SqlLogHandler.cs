@@ -1,12 +1,12 @@
 ﻿using FXKJ.Infrastructure.Auth;
-using FXKJ.Infrastructure.Config;
 using System;
 using System.Data.SqlClient;
 using EntitiesModels.Models;
-using FXKJ.Infrastructure.Core.Sql;
 using System.Data;
 using System.Collections.Generic;
 using FXKJ.Infrastructure.Auth.Auth;
+using FXKJ.Infrastructure.Core.Helper;
+using FXKJ.Infrastructure.Core.Util;
 
 namespace FXKJ.Infrastructure.Log
 {
@@ -115,7 +115,7 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.CreateUserName,
                      }
                 };
-                result = SqlHelper.ExecuteNonQuery(GlobalParams.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+                result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             }
             catch (Exception ex)
             {

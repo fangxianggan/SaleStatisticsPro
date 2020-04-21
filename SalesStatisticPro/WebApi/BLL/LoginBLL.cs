@@ -11,6 +11,7 @@ using System.Linq;
 using WebApi.IBLL;
 using FXKJ.Infrastructure.Auth.IBLL;
 using FXKJ.Infrastructure.Auth.Auth;
+using FXKJ.Infrastructure.Log;
 
 namespace WebApi.BLL
 {
@@ -92,6 +93,10 @@ namespace WebApi.BLL
                         var data = _tokenBLL.GetJWTData(authInfo, secretKey);
                         if (!string.IsNullOrEmpty(data))
                         {
+                            //登录日志
+                            LoginLogHandler loginLog = new LoginLogHandler();
+                            loginLog.WriteLog();
+
                             //存储redis
                             _tokenBLL.SetRedisToken(ent.MerchantPhone, data);
                             httpReponse.Code = StatusCode.OK;
@@ -112,8 +117,9 @@ namespace WebApi.BLL
                         httpReponse.Message = "密码输入错误";
                     }
                 }
-
             }
+
+           
             return httpReponse;
         }
 
@@ -220,4 +226,6 @@ namespace WebApi.BLL
 
 
     }
+
+   
 }

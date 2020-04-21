@@ -224,6 +224,10 @@
     <Compile Include="Migrations\202004130909268_rr126.Designer.cs">
       <DependentUpon>202004130909268_rr126.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004210900436_ddss.cs" />
+    <Compile Include="Migrations\202004210900436_ddss.Designer.cs">
+      <DependentUpon>202004210900436_ddss.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
@@ -370,16 +374,13 @@
     <EmbeddedResource Include="Migrations\202004130909268_rr126.resx">
       <DependentUpon>202004130909268_rr126.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004210900436_ddss.resx">
+      <DependentUpon>202004210900436_ddss.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="NetDLL\EntityFramework.dll" />
     <Content Include="NetDLL\EntityFramework.SqlServer.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\FXKJ.Infrastructure.Auth\FXKJ.Infrastructure.Auth.csproj">
-      <Project>{ae088ec2-b50d-4564-bdcd-865e4b345093}</Project>
-      <Name>FXKJ.Infrastructure.Auth</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

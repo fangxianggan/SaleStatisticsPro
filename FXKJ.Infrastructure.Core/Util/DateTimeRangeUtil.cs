@@ -1,4 +1,5 @@
-﻿using FXKJ.Infrastructure.Config;
+﻿
+using FXKJ.Infrastructure.Core.Util;
 using System;
 
 namespace FXKJ.Infrastructure.Core.Util
@@ -396,7 +397,7 @@ namespace FXKJ.Infrastructure.Core.Util
         {
             get
             {
-                return Now.ToString(DateTimeConfig.DateFormat);
+                return Now.ToString(DateTimeUtil.DateFormat);
             }
         }
         /// <summary>
@@ -416,7 +417,7 @@ namespace FXKJ.Infrastructure.Core.Util
         {
             get
             {
-                return Now.ToString(DateTimeConfig.DateTimeFormat);
+                return Now.ToString(DateTimeUtil.DateTimeFormat);
             }
         }
         /// <summary>
@@ -426,7 +427,7 @@ namespace FXKJ.Infrastructure.Core.Util
         {
             get
             {
-                return Now.ToString(DateTimeConfig.DateTimeFormatS);
+                return Now.ToString(DateTimeUtil.DateTimeFormatS);
             }
         }
         /// <summary>

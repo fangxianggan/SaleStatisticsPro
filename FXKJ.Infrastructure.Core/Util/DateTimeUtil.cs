@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FXKJ.Infrastructure.Config
+namespace FXKJ.Infrastructure.Core.Util
 {
     /// <summary>
     /// 时间格式
     /// </summary>
-    public class DateTimeConfig
+    public class DateTimeUtil
     {
         /// <summary>
         /// 日期格式

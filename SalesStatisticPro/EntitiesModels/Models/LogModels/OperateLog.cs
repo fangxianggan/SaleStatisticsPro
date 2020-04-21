@@ -42,11 +42,11 @@ namespace EntitiesModels.Models.SysModels
         public string Url { get; set; }
 
         /// <summary>
-        ///     上次请求Url信息
+        ///     版本
         /// </summary>
         /// 
-        [DisplayName("上次请求Url信息"), MaxLength(512)]
-        public string UrlReferrer { get; set; }
+        [DisplayName("版本"), MaxLength(512)]
+        public string Version { get; set; }
 
         /// <summary>
         ///     请求数据

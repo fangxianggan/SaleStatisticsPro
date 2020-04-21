@@ -1,11 +1,12 @@
-﻿using FXKJ.Infrastructure.Config;
-using System;
+﻿using System;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Security;
 using System.Web.Mvc;
 using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Auth.IBLL;
+using FXKJ.Infrastructure.Core.Helper;
+using FXKJ.Infrastructure.Core.Util;
 
 namespace FXKJ.Infrastructure.Auth
 {
@@ -39,7 +40,7 @@ namespace FXKJ.Infrastructure.Auth
             //如果为记住我
             if (rememberMe)
                 //配置文件中读取记住我时间
-                _cookieSaveDays = Convert.ToInt32(GlobalParams.Get("rememberMeDay").ToString());
+                _cookieSaveDays = Convert.ToInt32(GlobalParamsHelper.Get("rememberMeDay").ToString());
             //赋值Cookie信息
             SetAuthCookie(userName, user, rememberMe, _cookieSaveDays);
         }

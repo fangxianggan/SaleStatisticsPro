@@ -34,6 +34,7 @@
       <HintPath>..\SalesStatisticPro\EntitiesModels\NetDLL\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -66,6 +67,10 @@
     <ProjectReference Include="..\FXKJ.Infrastructure.Dapper\FXKJ.Infrastructure.Dapper.csproj">
       <Project>{E8EF2CEF-D651-4DFD-8896-9B81CA107A28}</Project>
       <Name>FXKJ.Infrastructure.Dapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FXKJ.Infrastructure.Log\FXKJ.Infrastructure.Log.csproj">
+      <Project>{3BEF85F5-E1D8-4526-AE3A-416C19D32E81}</Project>
+      <Name>FXKJ.Infrastructure.Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\SalesStatisticPro\EntitiesModels\EntitiesModels.csproj">
       <Project>{fd648777-7297-496b-b4f1-d5d46dfa60e7}</Project>

@@ -266,14 +266,14 @@ namespace WebApi
                 c.CustomProvider((defaultProvider) => new SwaggerControllerDescProvider(defaultProvider, xmlFile));
                 c.UseFullTypeNameInSchemaIds();
 
-                //过滤权限验证
+                ////过滤权限验证
                 c.OperationFilter<HttpAuthHeaderFilter>();
 
             })
             .EnableSwaggerUi("doc/{*assetPath}", b => {
-                //自定义汉化
+            //    //自定义汉化
                 b.InjectJavaScript(Assembly.GetExecutingAssembly(), "WebApi.SwaggerUI.Swagger-Custom.js");
-                //添加权限验证 接口
+            //    //添加权限验证 接口
                 b.EnableApiKeySupport("auth", "header");
             });
 

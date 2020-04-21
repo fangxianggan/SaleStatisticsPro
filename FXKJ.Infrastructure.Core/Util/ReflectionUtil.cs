@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FXKJ.Infrastructure.Core.Util
 {
@@ -19,7 +15,7 @@ namespace FXKJ.Infrastructure.Core.Util
             return type.GetFields(BindingFlags.Public | BindingFlags.Instance);
         }
 
-        public static void SetPropertyValue(Object obj, PropertyInfo property, Object value)
+        public static void SetPropertyValue(object obj, PropertyInfo property, object value)
         {
             //创建Set委托
             var setter = DynamicMethodCompilerUtil.CreateSetHandler(obj.GetType(), property);
@@ -34,7 +30,7 @@ namespace FXKJ.Infrastructure.Core.Util
             setter(obj, value);
         }
 
-        public static Object GetPropertyValue(Object obj, PropertyInfo property)
+        public static object GetPropertyValue(object obj, PropertyInfo property)
         {
             //创建Set委托
             var getter = DynamicMethodCompilerUtil.CreateGetHandler(obj.GetType(), property);
@@ -43,7 +39,7 @@ namespace FXKJ.Infrastructure.Core.Util
             return getter(obj);
         }
 
-        public static void SetFieldValue(Object obj, FieldInfo field, Object value)
+        public static void SetFieldValue(object obj, FieldInfo field, object value)
         {
             //创建Set委托
             var setter = DynamicMethodCompilerUtil.CreateSetHandler(obj.GetType(), field);
@@ -58,7 +54,7 @@ namespace FXKJ.Infrastructure.Core.Util
             setter(obj, value);
         }
 
-        public static Object GetFieldValue(Object obj, FieldInfo field)
+        public static object GetFieldValue(object obj, FieldInfo field)
         {
             //创建Set委托
             var getter = DynamicMethodCompilerUtil.CreateGetHandler(obj.GetType(), field);
