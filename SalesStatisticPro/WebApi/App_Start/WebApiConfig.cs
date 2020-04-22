@@ -45,7 +45,9 @@ namespace WebApi
             );
 
             //过滤器注册
-            config.Filters.Add(new  ApiExceptionAttribute());
+            config.Filters.Add(new ApiExceptionAttribute());
+            config.Filters.Add(new ApiFilterAttribute());
+            
 
             InitJsonConfig.Init(config);
 
@@ -90,9 +92,6 @@ namespace WebApi
     /// </summary>
     public class NullToEmptyStringResolver : DefaultContractResolver
     {
-        /// <summary>
-        /// 
-        /// </summary>
 
         /// <summary>
         /// 

@@ -537,10 +537,11 @@ export default {
           var data = tempData;
           this.$ajax(url, data).then(response => {
             var d = response.data;
-            const index = this.list.findIndex(v => v.id === this.temp.id);
-            this.list.splice(index, 1, d);
+            // const index = this.list.findIndex(v => v.id === this.temp.id);
+            // this.list.splice(index, 1, d);
             this.dialogFormVisible = false;
             myAction.getNotifyFunc(response, this);
+             this.getList();
           });
         }
       });

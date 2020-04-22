@@ -290,7 +290,7 @@ let myAction = {
       orders = [{ field: "ID", isDesc: true }]
     } else {
       $.each(orderArr, function (i, e) {
-        var isDesc = e.order == "descending" ? true : false;
+        var isDesc = e.order == "descing" ? true : false;
         var firstVal = e.prop.substr(0, 1).toUpperCase();
         var otherVal = e.prop.substr(1, e.prop.length - 1);
         var obj = { field: firstVal + otherVal, isDesc: isDesc };

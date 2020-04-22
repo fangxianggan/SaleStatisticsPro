@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AES\AesSecurity.cs" />
+    <Compile Include="Attributes\ActionRecordAttribute.cs" />
     <Compile Include="Attributes\AntiSqlInjectAttribute.cs" />
     <Compile Include="Attributes\BaseAttribute.cs" />
     <Compile Include="Attributes\ByAttribute.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="Extensions\RandomExtension.cs" />
     <Compile Include="Extensions\StringExtension.cs" />
+    <Compile Include="Helper\DbHelper.cs" />
     <Compile Include="Helper\GlobalParamsHelper.cs" />
     <Compile Include="Helper\QueryableSearchFilterHelper.cs" />
     <Compile Include="Helper\RecursiveHelper.cs" />
@@ -115,7 +117,10 @@
     <Compile Include="SystemInfo\NetInfo.cs" />
     <Compile Include="SystemInfo\ProcessInfo.cs" />
     <Compile Include="SystemInfo\SystemInfo.cs" />
+    <Compile Include="Transactions\Transaction.cs" />
+    <Compile Include="Transactions\TransactionScope.cs" />
     <Compile Include="Util\CombUtil.cs" />
+    <Compile Include="Util\CompareModelUtil.cs" />
     <Compile Include="Util\ConfigUtil.cs" />
     <Compile Include="Util\DateTimeUtil.cs" />
     <Compile Include="Util\DateTimeRangeUtil.cs" />

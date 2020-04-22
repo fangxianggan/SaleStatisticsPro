@@ -61,9 +61,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="记录日期" prop="createTime" sortable="custom" width="120px">
+      <el-table-column label="记录日期" prop="createTime" sortable="custom" width="160px">
         <template slot-scope="{row}">
-          <span>{{ row.createTime|formatTime}}</span>
+          <span>{{ row.createTime|formatTime(row.createTime,"yyyy-MM-dd hh:mm:ss")}}</span>
         </template>
       </el-table-column>
 
@@ -158,24 +158,7 @@ var currentData = {
       operator: "And"
     }
   },
-  temp: {
-    exceptionLogId: "",
-    message: "",
-    stackTrace: "",
-    innerException: "",
-    exceptionType: "",
-    serverHost: "",
-    clientHost: "sring",
-    runtime: "",
-    requestUrl: "",
-    requestData: "",
-    userAgent: "",
-    httpMethod: "",
-    createUserId: "",
-    createUserCode: "",
-    createUserName: "",
-    createTime: ""
-  },
+ 
   orderArr: [{ order: "descing", prop: "createTime" }]
 };
 var data = $.extend(true, myAction.setBaseVueData, currentData);
@@ -184,8 +167,8 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    formatTime: function(val) {
-      return myAction.formatTime(val);
+    formatTime: function(val,format) {
+      return myAction.formatTime(val,format);
     }
   },
   data() {
@@ -227,58 +210,6 @@ export default {
       this.orderArr = [];
       this.orderArr.push(data);
       this.handleFilter();
-    },
-    resetTemp() {
-      this.temp = {
-        exceptionLogId: "",
-        message: "",
-        stackTrace: "",
-        innerException: "",
-        exceptionType: "",
-        serverHost: "",
-        clientHost: "",
-        runtime: "",
-        requestUrl: "",
-        requestData: "",
-        userAgent: "",
-        httpMethod: "",
-        createUserId: "",
-        createUserCode: "",
-        createUserName: "",
-        createTime: ""
-      };
-    },
-    //删除数据
-    handleDelete(row, index) {
-      var title = '<span style="color: red;">是否要删除这条数据?</span>';
-      this.$confirm(title, "提示", {
-        dangerouslyUseHTML: true,
-        type: "warning",
-        confirmButtonText: "确定",
-        cancelButtonText: "取消"
-      })
-        .then(() => {
-          this.$ajax(
-            "/ExceptionLog/GetIsDeleteFlag",
-            { code: row.ExceptionLogCode },
-            { method: "get" }
-          ).then(d => {
-            if (d.resultSign == 1) {
-              myAction.getNotifyFunc(d, this);
-              return false;
-            }
-            let url = "/ExceptionLog/_DelData";
-            let data = { id: row.id };
-            this.$ajax(url, data, { method: "get" }).then(response => {
-              if (response.resultSign == 0) {
-                this.list.splice(index, 1);
-                this.total--;
-              }
-              myAction.getNotifyFunc(response, this);
-            });
-          });
-        })
-        .catch(action => {});
     }
   }
 };

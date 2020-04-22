@@ -112,3 +112,21 @@ div:focus {
 {
   width: 100px;
 }
+
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 100%;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 100%;
+}
+.el-form--inline .el-form-item__content  {
+  line-height: 25px !important;
+  position: relative;
+  font-size: 14px;
+}

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Net.Http;
 using System.Web;
 
 namespace FXKJ.Infrastructure.Log
@@ -18,8 +17,8 @@ namespace FXKJ.Infrastructure.Log
         /// <summary>
         /// 操作浏览日志
         /// </summary>
-        /// <param name="httpRequestBase"></param>
-        public OperationLogHandler(HttpRequestMessage httpRequestBase)
+        /// <param name="httpRequest"></param>
+        public OperationLogHandler()
             : base("OperateLogToDatabase")
         {
 
@@ -29,7 +28,7 @@ namespace FXKJ.Infrastructure.Log
                 authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
-                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
             }
             var request = HttpContext.Current.Request;
             log = new OperateLog()
@@ -37,9 +36,9 @@ namespace FXKJ.Infrastructure.Log
                 OperationLogId = Guid.NewGuid(),
                 ServerHost = string.Format("{0}【{1}】", IpBrowserUtil.GetServerHost(), IpBrowserUtil.GetServerHostIp()),
                 ClientHost = string.Format("{0}", IpBrowserUtil.GetClientIp()),
-                RequestContentLength = (int)httpRequestBase.Content.Headers.ContentLength,
-                RequestType = httpRequestBase.Method.ToString(),
-                UserAgent = httpRequestBase.Headers.UserAgent.ToString(),
+                RequestContentLength = (int)request.ContentLength,
+                RequestType = request.HttpMethod,
+                UserAgent = request.Browser.Browser + " - " + request.Browser.Version + " - " + request.Browser.Type,
                 CreateTime = DateTime.Now,
                 CreateUserId = authInfo.GuidId,
                 CreateUserCode = authInfo.PhoneNumber,
@@ -50,11 +49,13 @@ namespace FXKJ.Infrastructure.Log
             var streamReader = new StreamReader(inputStream);
             var requestData = HttpUtility.UrlDecode(streamReader.ReadToEnd());
             log.RequestData = requestData;
-            if (httpRequestBase.RequestUri != null)
+            if (request != null)
             {
-                log.Url = httpRequestBase.RequestUri.AbsoluteUri;
+                log.Url = request.Url.AbsoluteUri;
+                log.UrlReferrer = request.UrlReferrer.AbsoluteUri.ToString();
             }
-            log.Version = httpRequestBase.Version.ToString();
+
+
         }
 
         /// <summary>
@@ -101,11 +102,14 @@ namespace FXKJ.Infrastructure.Log
                           RequestType,  
                           UserAgent,
                           Url,
-                          Version,
+                          UrlReferrer,
                           RequestData,
                           ActionExecutionTime,
                           ResponseStatus,            
                           ResultExecutionTime,
+                          ControllerName,
+                          ActionName,
+                          Describe,
                           CreateTime,
                           CreateUserId,
                           CreateUserCode,
@@ -119,11 +123,14 @@ namespace FXKJ.Infrastructure.Log
                           @RequestType,  
                           @UserAgent,
                           @Url,
-                          @Version,
+                          @UrlReferrer,
                           @RequestData,
                           @ActionExecutionTime,
                           @ResponseStatus,            
                           @ResultExecutionTime,
+                          @ControllerName,
+                          @ActionName,
+                          @Describe,
                           @CreateTime,
                           @CreateUserId,
                           @CreateUserCode,
@@ -152,8 +159,8 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.Url,
                      },
                       new SqlParameter{
-                      ParameterName = "Version",
-                      Value = log.Version,
+                      ParameterName = "UrlReferrer",
+                      Value = log.UrlReferrer,
                      },
                      new SqlParameter{
                       ParameterName = "RequestData",
@@ -171,7 +178,18 @@ namespace FXKJ.Infrastructure.Log
                       ParameterName = "ResultExecutionTime",
                       Value = log.ResultExecutionTime,
                      },
-
+                      new SqlParameter{
+                      ParameterName = "ControllerName",
+                      Value = log.ControllerName,
+                     },
+                     new SqlParameter{
+                      ParameterName = "ActionName",
+                      Value = log.ActionName,
+                     },
+                        new SqlParameter{
+                      ParameterName = "Describe",
+                      Value = log.Describe,
+                     },
                       new SqlParameter{
                       ParameterName = "RequestContentLength",
                       Value = log.RequestContentLength,

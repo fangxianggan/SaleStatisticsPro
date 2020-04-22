@@ -15,6 +15,7 @@ using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.Dapper;
 using FXKJ.Infrastructure.Core.Helper;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FXKJ.Infrastructure.DataAccess
 {
@@ -65,7 +66,7 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-                
+
                 model = _SetPropertiesUpdateData(model);
                 dbContext.Entry(model).State = EntityState.Modified;
                 dbContext.SaveChanges();
@@ -213,21 +214,24 @@ namespace FXKJ.Infrastructure.DataAccess
         private T _SetPropertiesAddData(T t)
         {
             var currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
-            PropertyInfo[] properties = t.GetType().GetProperties();
-            foreach (var item in properties)
+            if (currentMerchantInfo != null)
             {
-                switch (item.Name)
+                PropertyInfo[] properties = t.GetType().GetProperties();
+                foreach (var item in properties)
                 {
-                    case "P_MerchantNo":
-                        item.SetValue(t, currentMerchantInfo.MerchantNo);
-                        break;
-                    case "CreateTime":
-                        item.SetValue(t, DateTime.Now);
-                        break;
-                    case "CreateUserCode":
-                        item.SetValue(t, currentMerchantInfo.PhoneNumber);
-                        break;
-                    default: break;
+                    switch (item.Name)
+                    {
+                        case "P_MerchantNo":
+                            item.SetValue(t, currentMerchantInfo.MerchantNo);
+                            break;
+                        case "CreateTime":
+                            item.SetValue(t, DateTime.Now);
+                            break;
+                        case "CreateUserCode":
+                            item.SetValue(t, currentMerchantInfo.PhoneNumber);
+                            break;
+                        default: break;
+                    }
                 }
             }
             //数据操作日志
@@ -237,18 +241,21 @@ namespace FXKJ.Infrastructure.DataAccess
         private T _SetPropertiesUpdateData(T t)
         {
             var currentMerchantInfo = FormAuthenticationExtension.CurrentAuth();
-            PropertyInfo[] properties = t.GetType().GetProperties();
-            foreach (var item in properties)
+            if (currentMerchantInfo != null)
             {
-                switch (item.Name)
+                PropertyInfo[] properties = t.GetType().GetProperties();
+                foreach (var item in properties)
                 {
-                    case "UpdateTime":
-                        item.SetValue(t, DateTime.Now);
-                        break;
-                    case "UpdateUserCode":
-                        item.SetValue(t, currentMerchantInfo.PhoneNumber);
-                        break;
-                    default: break;
+                    switch (item.Name)
+                    {
+                        case "UpdateTime":
+                            item.SetValue(t, DateTime.Now);
+                            break;
+                        case "UpdateUserCode":
+                            item.SetValue(t, currentMerchantInfo.PhoneNumber);
+                            break;
+                        default: break;
+                    }
                 }
             }
             //数据操作日志
@@ -258,38 +265,46 @@ namespace FXKJ.Infrastructure.DataAccess
 
         private DataLog GetDataLog(T model, OperateType operateType)
         {
-            DbBase db = new DbBase("MyStrConn");
-            var sql = SqlQuery<T>.Builder(db);
-            T t1 = null;//原来
-            T t2 = null;//新的
-            if (operateType == OperateType.Edit)
-            {
-                #region 之前的数据
-                Type Ts = model.GetType();
-                var name = Ts.GetProperties().Where(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Length > 0).FirstOrDefault().Name;
-                var prikey = Ts.GetProperty(name).GetValue(model, null);
-                t1 = GetEntity(prikey);
-                #endregion
+               Type ts = model.GetType();
+               var tableName = ts.GetCustomAttribute<TableAttribute>().Name;
+                
+                T t1 = null;//原来
+                T t2 = null;//新的
 
-                t2 = model;
-            }
-            else if (operateType == OperateType.Delete)
-            {
-                t1 = model;
-            }
-            else {
-                t2 = model;
-            }
-            DataLog datalog = new DataLog
-            {
-                OperateType = operateType.ToString(),
-                OperateTable = sql._ModelDes.TableName,
-                OperationBefore = t1 ==  null?"":JsonUtil.JsonSerialize(t1),
-                OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(t2),
-            };
-            return datalog;
+                DataLog datalog = new DataLog
+                {
+                    OperateType = operateType.ToString(),
+                    OperateTable = tableName
+                };
+                if (operateType == OperateType.Edit)
+                {
+                    #region 之前的数据
+                   
+                    var name = ts.GetProperties().Where(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Length > 0).FirstOrDefault().Name;
+                    var prikey = ts.GetProperty(name).GetValue(model, null);
+                    t1 = GetEntity(prikey);
+                    #endregion
+                    t2 = model;
+                    var ent = CompareModelUtil<T>.CompareModel(t1, t2);
+                    datalog.OperationBefore = t1 == null ? "" : JsonUtil.JsonSerialize(ent.OldModelList);
+                    datalog.OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(ent.NewModelList);
+                }
+                else if (operateType == OperateType.Delete)
+                {
+                    t1 = model;
+                    datalog.OperationBefore = t1 == null ? "" : JsonUtil.JsonSerialize(t1);
+                    datalog.OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(t2);
+                }
+                else
+                {
+                    t2 = model;
+                    datalog.OperationBefore = t1 == null ? "" : JsonUtil.JsonSerialize(t1);
+                    datalog.OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(t2);
+                }
+                return datalog;
+            
         }
-        private void WriteDataLog(DataLog log)
+        private void WriteDataLog(DataLog log,DbContext db=null)
         {
             DataLogHandler handler = new DataLogHandler(log.OperateType, log.OperateTable, log.OperationBefore, log.OperationAfterData);
             handler.WriteLog();

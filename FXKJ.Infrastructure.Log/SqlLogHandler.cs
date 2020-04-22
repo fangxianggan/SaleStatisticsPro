@@ -28,7 +28,7 @@ namespace FXKJ.Infrastructure.Log
                 authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
-                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
             }
             log = new SqlLog
             {

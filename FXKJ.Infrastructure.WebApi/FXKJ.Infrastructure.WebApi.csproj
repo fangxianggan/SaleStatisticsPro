@@ -52,6 +52,7 @@
       <HintPath>..\SalesStatisticPro\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\SalesStatisticPro\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -74,6 +75,7 @@
   <ItemGroup>
     <Compile Include="BaseApiController.cs" />
     <Compile Include="Filter\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Filter\ApiCustmTransactionScopeAttribute.cs" />
     <Compile Include="Filter\ApiMenuAuthAttribute.cs" />
     <Compile Include="Filter\ApiExceptionAttribute.cs" />
     <Compile Include="Filter\ApiDCTAttribute.cs" />
@@ -117,8 +119,6 @@
       <Name>NetRedisUtil</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

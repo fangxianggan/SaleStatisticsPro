@@ -42,11 +42,11 @@ namespace EntitiesModels.Models.SysModels
         public string Url { get; set; }
 
         /// <summary>
-        ///     版本
+        ///     上一次url
         /// </summary>
         /// 
-        [DisplayName("版本"), MaxLength(512)]
-        public string Version { get; set; }
+        [DisplayName("上一次url"), MaxLength(512)]
+        public string UrlReferrer { get; set; }
 
         /// <summary>
         ///     请求数据
@@ -66,7 +66,7 @@ namespace EntitiesModels.Models.SysModels
         ///     控制器名称
         /// </summary>
         /// 
-        [DisplayName("控制器名称"), MaxLength(64)]
+        [DisplayName("控制器名称"), MaxLength(128)]
         public string ControllerName { get; set; }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace EntitiesModels.Models.SysModels
         ///     响应状态
         /// </summary>
         /// 
-        [DisplayName("响应状态"), MaxLength(128)]
+        [DisplayName("响应状态"), MaxLength(64)]
         public string ResponseStatus { get; set; }
 
         /// <summary>

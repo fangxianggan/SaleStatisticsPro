@@ -5,8 +5,10 @@ using FXKJ.Infrastructure.Auth.BLL;
 using FXKJ.Infrastructure.Auth.IBLL;
 using FXKJ.Infrastructure.DataAccess;
 using FXKJ.Infrastructure.Logic;
+using System;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using System.Web.Compilation;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -28,16 +30,47 @@ namespace WebApi
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-           // FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-
             //程序启动注入
              AutoFacBootStrapper.CoreAutoFacInit();
-
             //dto模型注册
             AutoMapperConfig.Register();
-
-
         }
+
+        ///// <summary>
+        ///// 全局错误处理
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //protected void Application_Error(object sender, EventArgs e)
+        //{
+        //    var error = "";
+        //    var errorCode = "";
+        //    try
+        //    {
+        //        Exception exception = Server.GetLastError();
+        //        error = exception != null ? exception.Message : "";
+        //        Response.Clear();
+        //        HttpException httpException = exception as HttpException;
+        //        errorCode = (httpException != null) ? httpException.GetHttpCode().ToString() : "";
+        //        // Clear the error on server.  
+        //        Server.ClearError();
+        //        // Call target Controller and pass the routeData. 
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        error += ex.Message;
+        //    }
+        //    finally
+        //    {
+             
+        //        Response.Flush();
+        //        Response.End();
+
+        //    }
+
+        //}
+
+
 
 
        
@@ -78,9 +111,6 @@ namespace WebApi
                 builder.RegisterAssemblyTypes(assemblys.ToArray()).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
 
                 builder.RegisterType<TokenBLL>().As<ITokenBLL>().InstancePerLifetimeScope();
-               
-
-
             }
         }
     }

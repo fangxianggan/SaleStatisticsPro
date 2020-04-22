@@ -89,6 +89,11 @@ namespace WebApi.BLL
             return httpReponse;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public HttpReponseModel<bool> SetRoleMenuPermission(RoleMenuViewModel model)
         {
             HttpReponseModel<bool> httpReponse = new HttpReponseModel<bool>();

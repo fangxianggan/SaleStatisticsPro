@@ -51,7 +51,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-     <el-table-column label="配置Code" prop="code" sortable="custom" width="180">
+      <el-table-column label="配置Code" prop="code" sortable="custom" width="180">
         <template slot-scope="{row}">
           <span>{{ row.code }}</span>
         </template>
@@ -104,7 +104,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="配置编码" prop="code" :rules="rules.checkNull">
-              <el-input v-model="temp.code"  />
+              <el-input v-model="temp.code" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -294,24 +294,14 @@ export default {
         cancelButtonText: "取消"
       })
         .then(() => {
-          this.$ajax(
-            "/SysConfig/GetIsDeleteFlag",
-            { code: row.SysConfigCode },
-            { method: "get" }
-          ).then(d => {
-            if (d.resultSign == 1) {
-              myAction.getNotifyFunc(d, this);
-              return false;
+          let url = "/SysConfig/_DelData";
+          let data = { id: row.id };
+          this.$ajax(url, data, { method: "get" }).then(response => {
+            if (response.resultSign == 0) {
+              this.list.splice(index, 1);
+              this.total--;
             }
-            let url = "/SysConfig/_DelData";
-            let data = { id: row.id };
-            this.$ajax(url, data, { method: "get" }).then(response => {
-              if (response.resultSign == 0) {
-                this.list.splice(index, 1);
-                this.total--;
-              }
-              myAction.getNotifyFunc(response, this);
-            });
+            myAction.getNotifyFunc(response, this);
           });
         })
         .catch(action => {});

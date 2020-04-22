@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-04-15 15:36
+//        生成时间：2020-04-22 13:13
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels;
@@ -28,31 +28,31 @@ namespace WebApi.Repository
     ///   数据访问层——Product
     /// </summary>
     public partial class ProductRepository : IProductRepository
-    {
-        private readonly string connString = "MyStrConn";
-        private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
-        private string permissionWhere
-        {
-            get
-            {
-                if (authInfo.Roles.Contains("admin"))
-                {
-                    return string.Format(" where 1=1 ");
-                }
-                else
-                {
-                    return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
-                }
-            }
-        }
-        /// <summary>
-        ///   数据——
-        /// </summary>
-        public ProductRepository()
-        {
-            SqlMapperUtil.ConnectionName = connString;
-        }
-
+    { 
+          private readonly string connString = "MyStrConn";
+          private readonly AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+          private string permissionWhere
+          {
+              get
+              {
+                  if (authInfo.Roles.Contains("admin"))
+                  {
+                      return string.Format(" where 1=1 ");
+                  }
+                  else
+                  {
+                      return string.Format(" where a.P_MerchantNo={0} ", authInfo.MerchantNo);
+                  }
+              }
+          }
+            /// <summary>
+           ///   数据——
+          /// </summary>
+         public ProductRepository()
+         {
+           SqlMapperUtil.ConnectionName=connString;
+         }
+         
 
 
 

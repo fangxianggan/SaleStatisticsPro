@@ -7,6 +7,7 @@ using System.Data;
 using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Core.Helper;
 using FXKJ.Infrastructure.Core.Util;
+using EntitiesModels;
 
 namespace FXKJ.Infrastructure.Log
 {/// <summary>
@@ -14,6 +15,8 @@ namespace FXKJ.Infrastructure.Log
  /// </summary>
     public class DataLogHandler : BaseHandler<DataLog>
     {
+
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -29,7 +32,7 @@ namespace FXKJ.Infrastructure.Log
                 authInfo = new AuthInfoViewModel();
                 authInfo.Name = "测试用户";
                 authInfo.PhoneNumber = "15255458934";
-                authInfo.GuidId = new Guid("00000000-0000-0000-0000-00000000");
+                authInfo.GuidId = new Guid("00000000-0000-0000-0000-000000000000");
             }
             log = new DataLog()
             {
@@ -49,7 +52,6 @@ namespace FXKJ.Infrastructure.Log
         public override void WriteLog()
         {
             base.WriteLog();
-
             //加入数据库
             WriteDataLogData(log);
         }
@@ -58,7 +60,6 @@ namespace FXKJ.Infrastructure.Log
         {
             //写入sql日志
             int result = 0;
-
             string sql = string.Format(@"insert into [dbo].[Log_DataLog] 
                          (
                           DataLogId,
@@ -119,9 +120,14 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.CreateUserName,
                      }
                 };
-            result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+            using (var dbContext = new MyContext())
+            {
+                dbContext.DataLog.Add(log);
+                dbContext.SaveChanges();
+            }
 
 
+            // result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             return result;
         }
     }

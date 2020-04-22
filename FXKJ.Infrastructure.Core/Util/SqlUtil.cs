@@ -144,6 +144,7 @@ namespace FXKJ.Infrastructure.Core.Util
             // 设置命令文本(存储过程名或SQL语句) 
             command.CommandText = commandText;
 
+           
             // 分配事务 
             if (transaction != null)
             {
@@ -294,6 +295,8 @@ namespace FXKJ.Infrastructure.Core.Util
             // 创建SqlCommand命令,并进行预处理 
             SqlCommand cmd = new SqlCommand();
             bool mustCloseConnection = false;
+
+           
             PrepareCommand(cmd, connection, (SqlTransaction)null, commandType, commandText, commandParameters, out mustCloseConnection);
 
             // Finally, execute the command 

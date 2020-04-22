@@ -1,7 +1,6 @@
 ﻿using FXKJ.Infrastructure.Log;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
-using System.Web.Mvc;
 
 namespace FXKJ.Infrastructure.WebApi.Filter
 {

@@ -1,10 +1,12 @@
 ﻿using EntitiesModels.Models;
+using FXKJ.Infrastructure.Core.Helper;
 using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.DataAccess;
 using FXKJ.Infrastructure.WebApi;
 using FXKJ.Infrastructure.WebApi.Filter;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Web.Http;
 
 namespace WebApi.Controllers
@@ -42,6 +44,8 @@ namespace WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // GET api/values/5
+        [ApiDTC]
+      //  [ApiCustmTransactionScope]
         public string Get(int id)
         {
 
@@ -53,6 +57,30 @@ namespace WebApi.Controllers
             //business.UpdateTime = DateTime.Now;
             //var aa = _businessEFRepository.Add(business);
 
+
+
+            var sql = string.Format(@"INSERT INTO [dbo].[Business]
+           ([BusinessCode]
+           ,[BusinessName]
+           ,[CreateTime]
+           ,[CreateUserCode]
+           ,[UpdateTime]
+           ,[UpdateUserCode]
+           ,[Remark]
+           ,[P_MerchantNo])
+     VALUES
+           (
+		   '111'
+           ,'2222'
+           ,'2019-09-09'
+           ,'333'
+           ,'2019-09-09'
+           ,'333'
+           ,'4444'
+           ,'55555')");
+            SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql);
+
+
             //Category category = new Category();
             //category.CategoryCode = null;
             //category.CategoryName = "1111";
@@ -63,8 +91,8 @@ namespace WebApi.Controllers
             //    DoRedisHash.SetEntryInHash("auth-token", i.ToString(), i.ToString());
             //}
 
-            int o = 0;
-            int d = 6 / o;
+            //int o = 0;
+            //int d = 6 / o;
             //return d.ToString();
             //var pathUrl = AppDomain.CurrentDomain.SetupInformation.ApplicationBase ;
             // return ConfigUtils.GetKey(pathUrl + "Web.config", "JWTSecretKey");

@@ -50,6 +50,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using WebApi.IBLL;
 using System;
+using FXKJ.Infrastructure.Core.Attributes;
 namespace WebApi.Controllers
 
 {
@@ -76,6 +77,7 @@ namespace WebApi.Controllers
         /// 
         [Route("_GetPageList")]
         [HttpPost]
+        [ActionRecord(Describe = "获取分页数据")] 
         public HttpReponseModel<List<<#= _model.Name #>>> GetPageList([FromBody] QueryModel query)
         {
             return  _<#= _model._Name #>BLL.GetPageList(query);
@@ -88,6 +90,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("_SaveData")]
+        [ActionRecord(Describe = "保存数据")] 
         public HttpReponseModel<<#= _model.Name #>> Post(<#= _model.Name #> <#= _model._Name #>)
         {
             return  _<#= _model._Name #>BLL.SaveData(<#= _model._Name #>);
@@ -101,6 +104,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("_SaveListData")]
+        [ActionRecord(Describe = "保存数据 多条数据 add edit")] 
         public HttpReponseModel<List<<#= _model.Name #>>> PostListData(List<<#= _model.Name #>> <#= _model._Name #>List)
         {
             return  _<#= _model._Name #>BLL.SaveData(<#= _model._Name #>List);
@@ -113,6 +117,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("_DelData")]
+        [ActionRecord(Describe = "删除数据")]
         public HttpReponseModel<int> Delete(<#=_model.KeyTypeName#> id)
         {
             return  _<#= _model._Name #>BLL.DelData(id);

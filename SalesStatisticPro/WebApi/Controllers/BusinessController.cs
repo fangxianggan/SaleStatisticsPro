@@ -1,5 +1,6 @@
 ﻿using EntitiesModels.DtoModels;
 using EntitiesModels.HttpResponse;
+using FXKJ.Infrastructure.Core.Attributes;
 using FXKJ.Infrastructure.WebApi.Filter;
 using System.Collections.Generic;
 using System.Web.Http;
@@ -24,6 +25,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetSelectViewModelList")]
+        [ActionRecord(Describe = "获取转运仓select数据")] 
         public HttpReponseModel<List<SelectViewModel>> GetSelectViewModelList()
         {
 

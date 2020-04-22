@@ -228,6 +228,10 @@
     <Compile Include="Migrations\202004210900436_ddss.Designer.cs">
       <DependentUpon>202004210900436_ddss.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004220353570_fffa.cs" />
+    <Compile Include="Migrations\202004220353570_fffa.Designer.cs">
+      <DependentUpon>202004220353570_fffa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
@@ -376,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004210900436_ddss.resx">
       <DependentUpon>202004210900436_ddss.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004220353570_fffa.resx">
+      <DependentUpon>202004220353570_fffa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-04-15 15:36
+//        生成时间：2020-04-22 13:13
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using WebApi.IBLL;
 using System;
+using FXKJ.Infrastructure.Core.Attributes;
 namespace WebApi.Controllers
 
 {
@@ -47,6 +48,7 @@ namespace WebApi.Controllers
         /// 
         [Route("_GetPageList")]
         [HttpPost]
+        [ActionRecord(Describe = "获取分页数据")] 
         public HttpReponseModel<List<Role>> GetPageList([FromBody] QueryModel query)
         {
             return  _roleBLL.GetPageList(query);
@@ -59,6 +61,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("_SaveData")]
+        [ActionRecord(Describe = "保存数据")] 
         public HttpReponseModel<Role> Post(Role role)
         {
             return  _roleBLL.SaveData(role);
@@ -72,6 +75,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("_SaveListData")]
+        [ActionRecord(Describe = "保存数据 多条数据 add edit")] 
         public HttpReponseModel<List<Role>> PostListData(List<Role> roleList)
         {
             return  _roleBLL.SaveData(roleList);
@@ -84,6 +88,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("_DelData")]
+        [ActionRecord(Describe = "删除数据")]
         public HttpReponseModel<int> Delete(Int32 id)
         {
             return  _roleBLL.DelData(id);
