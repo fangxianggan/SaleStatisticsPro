@@ -12,15 +12,20 @@ using WebApi.IBLL;
 using FXKJ.Infrastructure.Auth.IBLL;
 using FXKJ.Infrastructure.Auth.Auth;
 using FXKJ.Infrastructure.Log;
+using System.Diagnostics;
+using FXKJ.Infrastructure.Log.LogModel;
+using FXKJ.Infrastructure.Log.Log4NetWrite;
 
 namespace WebApi.BLL
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class LoginBLL : ILoginBLL
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly IEFRepository<MerchantInfo> _merchantInfoEFRepository;
+       
+      //  private readonly IEFRepository<MerchantInfo> _merchantInfoEFRepository;
         /// <summary>
         /// 
         /// </summary>
@@ -32,13 +37,22 @@ namespace WebApi.BLL
 
         private readonly ITokenBLL _tokenBLL;
 
-       
-         /// <summary>
-         /// 秘钥
-         /// </summary>
-        private readonly string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
+        private readonly IDapperRepository<MerchantInfo> _merchantInfoEFRepository;
+        
 
-        public LoginBLL(ITokenBLL tokenBLL, IEFRepository<MerchantInfo> merchantInfoEFRepository, IEFRepository<Role> roleEFRepository, IEFRepository<MerchantRole> merchantRoleEFRepository)
+
+        /// <summary>
+        /// 秘钥
+        /// </summary>
+        private readonly string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokenBLL"></param>
+        /// <param name="merchantInfoEFRepository"></param>
+        /// <param name="roleEFRepository"></param>
+        /// <param name="merchantRoleEFRepository"></param>
+        public LoginBLL(ITokenBLL tokenBLL, IDapperRepository<MerchantInfo> merchantInfoEFRepository, IEFRepository<Role> roleEFRepository, IEFRepository<MerchantRole> merchantRoleEFRepository)
         {
             _merchantInfoEFRepository = merchantInfoEFRepository;
             _roleEFRepository = roleEFRepository;
@@ -53,6 +67,7 @@ namespace WebApi.BLL
         /// <returns></returns>
         public HttpReponseModel<string> CheckLogin(LoginRequestViewModel loginRequest)
         {
+           
             HttpReponseModel<string> httpReponse = new HttpReponseModel<string>();
             if (loginRequest.UserName.IsNullOrEmpty())
             {
@@ -66,7 +81,12 @@ namespace WebApi.BLL
             }
             else
             {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
                 var ent = _merchantInfoEFRepository.GetEntity(p => p.MerchantPhone == loginRequest.UserName);
+                stopwatch.Stop();
+                var ss1 = stopwatch.Elapsed.TotalSeconds;
+                LogWriter.WriteLog(FolderName.Info, "f1---" + ss1.ToString());
                 if (ent == null)
                 {
                     httpReponse.ResultSign = ResultSign.Warning;
@@ -74,11 +94,13 @@ namespace WebApi.BLL
                 }
                 else
                 {
+                  
                     var password = DEncryptUtil.Md5Encrypt(loginRequest.Password);
                     if (ent.MerchantPassword == password)
                     {
                         List<string> roles = _merchantRoleEFRepository.GetList(p => p.MerchantNo == ent.MerchantNo).Select(p => p.RoleCode).ToList();
                         var isAdmin = roles.Where(p => p == "admin").Count() > 0 ? true : false;
+                       
                         AuthInfoViewModel authInfo = new AuthInfoViewModel
                         {
                             PhoneNumber = loginRequest.UserName,
@@ -89,8 +111,10 @@ namespace WebApi.BLL
                             RefreshDateTime = DateTime.Now.AddHours(3),
                          
                         };
+                      
                         //口令加密秘钥
                         var data = _tokenBLL.GetJWTData(authInfo, secretKey);
+                        
                         if (!string.IsNullOrEmpty(data))
                         {
                             //登录日志
@@ -98,7 +122,9 @@ namespace WebApi.BLL
                             loginLog.WriteLog();
 
                             //存储redis
-                            _tokenBLL.SetRedisToken(ent.MerchantPhone, data);
+                             _tokenBLL.SetRedisToken(ent.MerchantPhone, data);
+
+
                             httpReponse.Code = StatusCode.OK;
                             httpReponse.Token = data;
                             httpReponse.ResultSign = ResultSign.Successful;

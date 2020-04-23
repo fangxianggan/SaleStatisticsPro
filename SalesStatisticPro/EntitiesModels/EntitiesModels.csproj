@@ -232,11 +232,16 @@
     <Compile Include="Migrations\202004220353570_fffa.Designer.cs">
       <DependentUpon>202004220353570_fffa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004231033259_v1.11.cs" />
+    <Compile Include="Migrations\202004231033259_v1.11.Designer.cs">
+      <DependentUpon>202004231033259_v1.11.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
     <Compile Include="Models\BaseEntityPermission.cs" />
     <Compile Include="Models\Business.cs" />
+    <Compile Include="Models\DataBackup.cs" />
     <Compile Include="Models\LogModels\SqlLog.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\MerchantRole.cs" />
@@ -383,6 +388,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004220353570_fffa.resx">
       <DependentUpon>202004220353570_fffa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004231033259_v1.11.resx">
+      <DependentUpon>202004231033259_v1.11.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -56,7 +56,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         /// 
      
-        //[ApiDTC]
+        [ApiDTC]
         [HttpPost]
         [Route("SetRoleMenuPermission")]
         public HttpReponseModel<bool> SetRoleMenuPermission(RoleMenuViewModel model)

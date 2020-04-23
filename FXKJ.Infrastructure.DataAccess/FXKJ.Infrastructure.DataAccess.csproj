@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdoRepository.cs" />
+    <Compile Include="IDapperRepository.cs" />
+    <Compile Include="DapperRepository.cs" />
     <Compile Include="EFRepository.cs" />
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DapperAsyncRepository.cs" />

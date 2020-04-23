@@ -120,14 +120,7 @@ namespace FXKJ.Infrastructure.Log
                       Value = log.CreateUserName,
                      }
                 };
-            using (var dbContext = new MyContext())
-            {
-                dbContext.DataLog.Add(log);
-                dbContext.SaveChanges();
-            }
-
-
-            // result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
+            result = SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql, list.ToArray());
             return result;
         }
     }

@@ -206,6 +206,7 @@
     <Compile Include="BLL\RoleBLL.cs" />
     <Compile Include="BLL\_BusinessBLL.cs" />
     <Compile Include="BLL\_CategoryBLL.cs" />
+    <Compile Include="BLL\_DataBackupBLL.cs" />
     <Compile Include="BLL\_DataLogBLL.cs" />
     <Compile Include="BLL\_ExceptionLogBLL.cs" />
     <Compile Include="BLL\_ExpressCompanyBLL.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Controllers\MerchantInfoController.cs" />
     <Compile Include="Controllers\_BusinessController.cs" />
     <Compile Include="Controllers\_CategoryController.cs" />
+    <Compile Include="Controllers\_DataBackupController.cs" />
     <Compile Include="Controllers\_DataLogController.cs" />
     <Compile Include="Controllers\_ExceptionLogController.cs" />
     <Compile Include="Controllers\_ExpressCompanyController.cs" />
@@ -281,6 +283,7 @@
     <Compile Include="IBLL\IRoleBLL.cs" />
     <Compile Include="IBLL\_IBusinessBLL.cs" />
     <Compile Include="IBLL\_ICategoryBLL.cs" />
+    <Compile Include="IBLL\_IDataBackupBLL.cs" />
     <Compile Include="IBLL\_IDataLogBLL.cs" />
     <Compile Include="IBLL\_IExceptionLogBLL.cs" />
     <Compile Include="IBLL\_IExpressCompanyBLL.cs" />
@@ -307,6 +310,7 @@
     <Compile Include="IRepository\ISaleOrderRepository.cs" />
     <Compile Include="IRepository\_IBusinessRepository.cs" />
     <Compile Include="IRepository\_ICategoryRepository.cs" />
+    <Compile Include="IRepository\_IDataBackupRepository.cs" />
     <Compile Include="IRepository\_IDataLogRepository.cs" />
     <Compile Include="IRepository\_IExceptionLogRepository.cs" />
     <Compile Include="IRepository\_IExpressCompanyRepository.cs" />
@@ -335,6 +339,7 @@
     <Compile Include="Repository\SaleOrderRepository.cs" />
     <Compile Include="Repository\_BusinessRepository.cs" />
     <Compile Include="Repository\_CategoryRepository.cs" />
+    <Compile Include="Repository\_DataBackupRepository.cs" />
     <Compile Include="Repository\_DataLogRepository.cs" />
     <Compile Include="Repository\_ExceptionLogRepository.cs" />
     <Compile Include="Repository\_ExpressCompanyRepository.cs" />
@@ -404,6 +409,7 @@
       <LastOutputs>
 ..\..\BLL\_BusinessBLL.cs
 ..\..\BLL\_CategoryBLL.cs
+..\..\BLL\_DataBackupBLL.cs
 ..\..\BLL\_DataLogBLL.cs
 ..\..\BLL\_ExceptionLogBLL.cs
 ..\..\BLL\_ExpressCompanyBLL.cs
@@ -425,6 +431,7 @@
 ..\..\BLL\_UserInfoBLL.cs
 ..\..\Controllers\_BusinessController.cs
 ..\..\Controllers\_CategoryController.cs
+..\..\Controllers\_DataBackupController.cs
 ..\..\Controllers\_DataLogController.cs
 ..\..\Controllers\_ExceptionLogController.cs
 ..\..\Controllers\_ExpressCompanyController.cs
@@ -447,6 +454,7 @@
 ..\..\EntitiesModels\Context.cs
 ..\..\IBLL\_IBusinessBLL.cs
 ..\..\IBLL\_ICategoryBLL.cs
+..\..\IBLL\_IDataBackupBLL.cs
 ..\..\IBLL\_IDataLogBLL.cs
 ..\..\IBLL\_IExceptionLogBLL.cs
 ..\..\IBLL\_IExpressCompanyBLL.cs
@@ -468,6 +476,7 @@
 ..\..\IBLL\_IUserInfoBLL.cs
 ..\..\IRepository\_IBusinessRepository.cs
 ..\..\IRepository\_ICategoryRepository.cs
+..\..\IRepository\_IDataBackupRepository.cs
 ..\..\IRepository\_IDataLogRepository.cs
 ..\..\IRepository\_IExceptionLogRepository.cs
 ..\..\IRepository\_IExpressCompanyRepository.cs
@@ -489,6 +498,7 @@
 ..\..\IRepository\_IUserInfoRepository.cs
 ..\..\Repository\_BusinessRepository.cs
 ..\..\Repository\_CategoryRepository.cs
+..\..\Repository\_DataBackupRepository.cs
 ..\..\Repository\_DataLogRepository.cs
 ..\..\Repository\_ExceptionLogRepository.cs
 ..\..\Repository\_ExpressCompanyRepository.cs

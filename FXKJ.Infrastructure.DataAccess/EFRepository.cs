@@ -35,6 +35,8 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 model = _SetPropertiesAddData(model);
                 dbContext.Set<T>().Add(model);
+                //操作日志
+                WriteDataLog(GetDataLog(model, OperateType.Add));
                 dbContext.SaveChanges();
                 return model;
             }
@@ -46,6 +48,8 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 model = _SetPropertiesAddData(model);
                 dbContext.Set<T>().Add(model);
+                //操作日志
+                WriteDataLog(GetDataLog(model, OperateType.Add));
                 return dbContext.SaveChanges() > 0 ? true : false;
             }
         }
@@ -54,10 +58,15 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
+                List<T> qL = new List<T>();
                 foreach (var _model in list)
                 {
-                    dbContext.Set<T>().Add(_SetPropertiesAddData(_model));
+                    var t = _SetPropertiesAddData(_model);
+                    qL.Add(t);
+                    dbContext.Set<T>().Add(t);
                 }
+                //数据操作日志 
+                WriteDataLog(GetDataLog(qL.AsQueryable(), OperateType.Add));
                 dbContext.SaveChanges();
                 return list.ToList();
             }
@@ -66,9 +75,10 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
-
                 model = _SetPropertiesUpdateData(model);
                 dbContext.Entry(model).State = EntityState.Modified;
+                //数据操作日志 
+                WriteDataLog(GetDataLog(model, OperateType.Edit));
                 dbContext.SaveChanges();
                 return model;
             }
@@ -79,6 +89,8 @@ namespace FXKJ.Infrastructure.DataAccess
             {
                 model = _SetPropertiesUpdateData(model);
                 dbContext.Entry(model).State = EntityState.Modified;
+                //数据操作日志 
+                WriteDataLog(GetDataLog(model, OperateType.Edit));
                 return dbContext.SaveChanges() > 0 ? true : false;
             }
         }
@@ -86,10 +98,15 @@ namespace FXKJ.Infrastructure.DataAccess
         {
             using (var dbContext = new MyContext())
             {
+                IList<T> qL = new List<T>();
                 foreach (var model in list)
                 {
-                    dbContext.Entry(_SetPropertiesUpdateData(model)).State = EntityState.Modified;
+                    var t = _SetPropertiesUpdateData(model);
+                    qL.Add(t);
+                    dbContext.Entry(t).State = EntityState.Modified;
                 }
+                //数据操作日志 批量操作
+                WriteDataLog(GetDataLog(qL.AsQueryable(), OperateType.Edit));
                 dbContext.SaveChanges();
                 return list.ToList();
             }
@@ -112,10 +129,10 @@ namespace FXKJ.Infrastructure.DataAccess
             using (var dbContext = new MyContext())
             {
                 var _modelList = dbContext.Set<T>().Where(whereLambda);
+                //数据操作日志 批量操作
+                WriteDataLog(GetDataLog(_modelList, OperateType.Delete));
                 foreach (var _model in _modelList)
                 {
-                    //数据操作日志
-                    WriteDataLog(GetDataLog(_model, OperateType.Delete));
                     dbContext.Set<T>().Remove(_model);
                 }
                 return dbContext.SaveChanges();
@@ -234,8 +251,7 @@ namespace FXKJ.Infrastructure.DataAccess
                     }
                 }
             }
-            //数据操作日志
-            WriteDataLog(GetDataLog(t, OperateType.Add));
+           
             return t;
         }
         private T _SetPropertiesUpdateData(T t)
@@ -258,8 +274,7 @@ namespace FXKJ.Infrastructure.DataAccess
                     }
                 }
             }
-            //数据操作日志
-            WriteDataLog(GetDataLog(t, OperateType.Edit));
+          
             return t;
         }
 
@@ -304,7 +319,58 @@ namespace FXKJ.Infrastructure.DataAccess
                 return datalog;
             
         }
-        private void WriteDataLog(DataLog log,DbContext db=null)
+
+        private DataLog GetDataLog(IQueryable<T> list, OperateType operateType)
+        {
+
+            Type t = typeof(T);
+            var tableName = t.GetCustomAttribute<TableAttribute>().Name;
+
+            IQueryable<T> t1 = null;//原来
+            IQueryable<T> t2 = null;//新的
+
+            DataLog datalog = new DataLog
+            {
+                OperateType = operateType.ToString(),
+                OperateTable = tableName
+            };
+            if (operateType == OperateType.Edit)
+            {
+                #region 之前的数据
+                Dictionary<string, object> oldDic = new Dictionary<string, object>();
+                Dictionary<string, object> newDic = new Dictionary<string, object>();
+                t2 = list;
+                foreach (var item in list)
+                {
+                    var ts = item.GetType();
+                    var name = ts.GetProperties().Where(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Length > 0).FirstOrDefault().Name;
+                    var prikey = ts.GetProperty(name).GetValue(item, null);
+                    var oldT = GetEntity(prikey);
+                    #endregion
+                    var ent = CompareModelUtil<T>.CompareModel(oldT, item);
+                    oldDic.Add(prikey.ToString(), ent.OldModelList);
+                    newDic.Add(prikey.ToString(), ent.NewModelList);
+                }
+               
+                datalog.OperationBefore = t2 == null ? "" : JsonUtil.JsonSerialize(oldDic);
+                datalog.OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(newDic);
+            }
+            else if (operateType == OperateType.Delete)
+            {
+                t1 = list;
+                datalog.OperationBefore = t1 == null ? "" : JsonUtil.JsonSerialize(t1);
+                datalog.OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(t2);
+            }
+            else
+            {
+                t2 = list;
+                datalog.OperationBefore = t1 == null ? "" : JsonUtil.JsonSerialize(t1);
+                datalog.OperationAfterData = t2 == null ? "" : JsonUtil.JsonSerialize(t2);
+            }
+            return datalog;
+
+        }
+        private void WriteDataLog(DataLog log)
         {
             DataLogHandler handler = new DataLogHandler(log.OperateType, log.OperateTable, log.OperationBefore, log.OperationAfterData);
             handler.WriteLog();

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FXKJ.Infrastructure.Dapper
+namespace FXKJ.Infrastructure.Core.ModelToSql
 {
     /// <summary>
     /// 转换实体对象描述

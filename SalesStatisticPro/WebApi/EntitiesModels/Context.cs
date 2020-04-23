@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-04-22 13:13
+//        生成时间：2020-04-23 18:35
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -35,6 +35,11 @@ namespace EntitiesModels
        ///   Business
       /// </summary>
        public DbSet<Business> Business { get; set; }
+
+               /// <summary>
+       ///   DataBackup
+      /// </summary>
+       public DbSet<DataBackup> DataBackup { get; set; }
 
                /// <summary>
        ///   SqlLog

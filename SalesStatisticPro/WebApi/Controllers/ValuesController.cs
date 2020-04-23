@@ -1,12 +1,16 @@
-﻿using EntitiesModels.Models;
+﻿using EntitiesModels;
+using EntitiesModels.Models;
 using FXKJ.Infrastructure.Core.Helper;
 using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.DataAccess;
+using FXKJ.Infrastructure.Log.Log4NetWrite;
+using FXKJ.Infrastructure.Log.LogModel;
 using FXKJ.Infrastructure.WebApi;
 using FXKJ.Infrastructure.WebApi.Filter;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Transactions;
 using System.Web.Http;
 
 namespace WebApi.Controllers
@@ -26,15 +30,16 @@ namespace WebApi.Controllers
         }
         // GET api/values
 
-            /// <summary>
-            /// gggg
-            /// </summary>
-            /// <returns></returns>
+        /// <summary>
+        /// gggg
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<string> Get()
         {
-            
-           // FileUtil.GetFileNames();
 
+            // FileUtil.GetFileNames();
+            //写入文本记录
+            LogWriter.WriteLog(FolderName.Info, "3333333");
             return new string[] { "value1", "value2" };
         }
 
@@ -44,42 +49,38 @@ namespace WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // GET api/values/5
-        [ApiDTC]
-      //  [ApiCustmTransactionScope]
+          [ApiDTC]
+        //  [ApiCustmTransactionScope]
         public string Get(int id)
         {
 
-
-            //Business business = new Business();
-            //business.BusinessCode = "111";
-            //business.BusinessName = "111";
-            //business.CreateTime = DateTime.Now;
-            //business.UpdateTime = DateTime.Now;
-            //var aa = _businessEFRepository.Add(business);
-
-
-
             var sql = string.Format(@"INSERT INTO [dbo].[Business]
-           ([BusinessCode]
-           ,[BusinessName]
-           ,[CreateTime]
-           ,[CreateUserCode]
-           ,[UpdateTime]
-           ,[UpdateUserCode]
-           ,[Remark]
-           ,[P_MerchantNo])
-     VALUES
-           (
-		   '111'
-           ,'2222'
-           ,'2019-09-09'
-           ,'333'
-           ,'2019-09-09'
-           ,'333'
-           ,'4444'
-           ,'55555')");
+                  ([BusinessCode]
+                  ,[BusinessName]
+                  ,[CreateTime]
+                  ,[CreateUserCode]
+                  ,[UpdateTime]
+                  ,[UpdateUserCode]
+                  ,[Remark]
+                  ,[P_MerchantNo])
+            VALUES
+                  (
+            '111'
+                  ,'2222'
+                  ,'2019-09-09'
+                  ,'333'
+                  ,'2019-09-09'
+                  ,'333'
+                  ,'4444'
+                  ,'55555')");
             SqlUtil.ExecuteNonQuery(GlobalParamsHelper.ReadConnectionString(), CommandType.Text, sql);
 
+            Business business = new Business();
+            business.BusinessCode = "111";
+            business.BusinessName = "111";
+            business.CreateTime = DateTime.Now;
+            business.UpdateTime = DateTime.Now;
+            var aa = _businessEFRepository.Add(business);
 
             //Category category = new Category();
             //category.CategoryCode = null;

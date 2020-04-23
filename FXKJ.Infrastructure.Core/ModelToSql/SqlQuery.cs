@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace FXKJ.Infrastructure.Dapper
+namespace FXKJ.Infrastructure.Core.ModelToSql
 {
 
     public abstract class SqlQuery
@@ -13,7 +13,7 @@ namespace FXKJ.Infrastructure.Dapper
         private static object objLock = new object();
         protected int _TopNum; //查询TOP
         protected QueryOrder _Order;  //排序
-        protected StringBuilder _Sql; //组装的SQL WHERE部分
+        public StringBuilder _Sql; //组装的SQL WHERE部分
         protected IList<DynamicPropertyModel> _Param;  //参数动态类
         protected string ParamPrefix = "@"; //参数前缀
         public ModelDes _ModelDes;//处理的实体对象描述
@@ -41,7 +41,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// SQL字符串,只表示包括Where部分
         /// </summary>
-        internal virtual string WhereSql
+        public virtual string WhereSql
         {
             get
             {
@@ -70,7 +70,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 排序
         /// </summary>
-        internal virtual string OrderSql
+        public virtual string OrderSql
         {
             get
             {
@@ -91,7 +91,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 查询参数对象
         /// </summary>
-        internal object Param
+        public object Param
         {
             get
             {
@@ -135,7 +135,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 插入语句SQL
         /// </summary>
-        internal virtual string InsertSql
+        public virtual string InsertSql
         {
             get
             {
@@ -162,7 +162,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 删除SQL
         /// </summary>
-        internal virtual string DeleteSql
+        public virtual string DeleteSql
         {
             get
             {
@@ -173,7 +173,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 删除SQL
         /// </summary>
-        internal virtual string DeleteSqlById
+        public virtual string DeleteSqlById
         {
             get
             {
@@ -194,7 +194,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 删除SQL
         /// </summary>
-        internal virtual string DeleteSqlByIds
+        public virtual string DeleteSqlByIds
         {
             get
             {
@@ -215,7 +215,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 修改SQL
         /// </summary>
-        internal virtual string UpdateSql
+        public virtual string UpdateSql
         {
             get
             {
@@ -252,7 +252,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 查询SQL
         /// </summary>
-        internal virtual string QuerySql
+        public virtual string QuerySql
         {
             get
             {
@@ -283,7 +283,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 查询多个
         /// </summary>
-        internal virtual string QuerySqlByIds
+        public virtual string QuerySqlByIds
         {
             get {
                 StringBuilder sql = new StringBuilder();
@@ -303,7 +303,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 查询SQL
         /// </summary>
-        internal virtual string QuerySqlById
+        public virtual string QuerySqlById
         {
             get
             {
@@ -345,7 +345,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 分页SQL
         /// </summary>
-        internal virtual string PageSql
+        public virtual string PageSql
         {
             get
             {
@@ -378,7 +378,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <summary>
         /// 数据总是SQL
         /// </summary>
-        internal virtual string CountSql
+        public virtual string CountSql
         {
             get
             {
@@ -406,7 +406,7 @@ namespace FXKJ.Infrastructure.Dapper
         /// <typeparam name="T"></typeparam>
         /// <param name="t"></param>
         /// <returns></returns>
-        internal SqlQuery AppendParam<T>(T t) where T : class
+        public SqlQuery AppendParam<T>(T t) where T : class
         {
             if (_Param == null)
             {
@@ -432,9 +432,9 @@ namespace FXKJ.Infrastructure.Dapper
         /// <param name="pindex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public SqlQuery Page(int pindex, int pageSize)
+        public SqlQuery Page(int pageIndex, int pageSize)
         {
-            _PageIndex = pindex;
+            _PageIndex = pageIndex;
             _PageSize = pageSize;
             return this;
         }

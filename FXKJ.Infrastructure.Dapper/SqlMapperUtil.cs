@@ -1,5 +1,6 @@
 ﻿using EntitiesModels.QueryModels;
 using FXKJ.Infrastructure.Core.Helper;
+using FXKJ.Infrastructure.Core.ModelToSql;
 using System;
 using System.Collections.Generic;
 using System.Data;

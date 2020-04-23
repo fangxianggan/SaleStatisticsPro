@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FXKJ.Infrastructure.Dapper
+namespace FXKJ.Infrastructure.Core.ModelToSql
 {
     /// <summary>
     /// 用于动态生成类的一个属性

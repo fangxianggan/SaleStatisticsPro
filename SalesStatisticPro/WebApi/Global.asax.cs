@@ -106,6 +106,7 @@ namespace WebApi
                 builder.RegisterGeneric(typeof(AsyncEFRepository<>)).As(typeof(IAsyncEFRepository<>)).InstancePerDependency();
                 builder.RegisterGeneric(typeof(Logic<>)).As(typeof(ILogic<>)).InstancePerDependency();
                 builder.RegisterGeneric(typeof(EFRepository<>)).As(typeof(IEFRepository<>)).InstancePerDependency();
+                builder.RegisterGeneric(typeof(DapperRepository<>)).As(typeof(IDapperRepository<>)).InstancePerDependency();
                 var assemblys = BuildManager.GetReferencedAssemblies().Cast<Assembly>().ToList();
                 builder.RegisterAssemblyTypes(assemblys.ToArray()).Where(t => t.Name.EndsWith("BLL")).AsImplementedInterfaces();
                 builder.RegisterAssemblyTypes(assemblys.ToArray()).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();

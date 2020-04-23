@@ -85,7 +85,7 @@ namespace FXKJ.Infrastructure.Log
             //    EmailUtil email = new EmailUtil(toAccount, fromAccount, "错误接受者", "系统错误提醒", "系统发生错误", exceptionHtml, true);
             //    email.SetSmtp(fromPwd, toSmtp, toSmtpSsl);
             //}
-            //写入文本
+            //写入文本记录
             LogWriter.WriteLog(FolderName.Exception, exceptionHtml);
         }
 

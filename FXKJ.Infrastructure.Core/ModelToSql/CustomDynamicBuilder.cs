@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace FXKJ.Infrastructure.Dapper
+namespace FXKJ.Infrastructure.Core.ModelToSql
 {
     public class CustomDynamicBuilder
     {

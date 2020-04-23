@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
-namespace FXKJ.Infrastructure.Dapper
+namespace FXKJ.Infrastructure.Core.ModelToSql
 {
     public static class DapperCacheCommon
     {

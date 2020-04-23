@@ -12,6 +12,7 @@ using EntitiesModels.Models;
 using EntitiesModels.Enum;
 using FXKJ.Infrastructure.Core.Attributes;
 using FXKJ.Infrastructure.Core.Util;
+using FXKJ.Infrastructure.Core.ModelToSql;
 
 namespace FXKJ.Infrastructure.Dapper
 {

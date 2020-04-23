@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Common;
 
-namespace FXKJ.Infrastructure.Dapper
+namespace FXKJ.Infrastructure.Core.ModelToSql
 {
     public class DbBase : IDisposable
     {
@@ -62,7 +62,7 @@ namespace FXKJ.Infrastructure.Dapper
             _dbConnecttion.ConnectionString = connStr;
             _dbConnecttion.Open();
             SetParamPrefix();
-           
+
         }
 
 
@@ -132,13 +132,5 @@ namespace FXKJ.Infrastructure.Dapper
             }
         }
     }
-    public enum DBType
-    {
-        SqlServer,
-        SqlServerCE,
-        MySql,
-        PostgreSQL,
-        Oracle,
-        SQLite
-    }
+
 }
