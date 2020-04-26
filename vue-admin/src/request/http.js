@@ -9,7 +9,7 @@ import qs from 'qs'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   withCredentials: false, // send cookies when cross-domain requests
-  timeout: 5000, // request timeout
+  timeout: 115000, // request timeout
   responseType: 'json',
   headers: {
     'content-type': 'application/json;charset=UTF-8'   //转换为key=value的格式必须增加content-type
@@ -38,7 +38,7 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
+  //  console.log(error) // for debug
     return Promise.reject(error)
   }
 )
@@ -60,28 +60,47 @@ service.interceptors.response.use(
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
+
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      if (res.code === 401) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
+        var i = 5;
+        var txt = i;
+        var mes = "长时间未操作页面已经失效<span style='font-size:20px;' id='aa'>" + txt + "</span>秒后跳回登录页面！"
+        Message({
+          message: mes,
+          type: 'error',
+          dangerouslyUseHTMLString: true,
+          duration: i * 1000
+        })
+        var dd = setInterval(function () {
+          $("#aa").html(txt--);
+          // console.log("ffff")
+        }, 1000);
+
+        setTimeout(function () {
+          clearInterval(dd);
           store.dispatch('user/resetToken').then(() => {
             location.reload()
           })
+        }, i * 1000);
+
+
+      } else {
+        Message({
+          message: res.message || 'Error',
+          type: 'error',
+          duration: 5 * 1000
         })
       }
+
+
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
+      //console.log(res.token)
       if (res.token != "") {
+        console.log("eeeeee")
         setToken(res.token)
       }
       return res

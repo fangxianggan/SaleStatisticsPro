@@ -47,7 +47,8 @@ namespace WebApi
             //过滤器注册
             config.Filters.Add(new ApiExceptionAttribute());
             config.Filters.Add(new ApiFilterAttribute());
-            
+            config.Filters.Add(new ApiAuthorizeAttribute());
+
 
             InitJsonConfig.Init(config);
 

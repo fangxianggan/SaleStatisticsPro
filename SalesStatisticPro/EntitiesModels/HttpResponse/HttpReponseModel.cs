@@ -15,10 +15,11 @@ namespace EntitiesModels.HttpResponse
             Code=StatusCode.OK;
             RequestParams = null;
             Flag = true;
-            var o = HttpContext.Current.Request.RequestContext.RouteData.Values["X-Token"];
-            if (o != null)
+           
+            var token = HttpContext.Current.Request.RequestContext.RouteData.Values["X-Token"];
+            if (token != null)
             {
-                Token = o.ToString();
+                Token = token.ToString();
             }
             else {
                 Token = "";

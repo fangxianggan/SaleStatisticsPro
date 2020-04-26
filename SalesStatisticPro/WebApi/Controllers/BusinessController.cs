@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
-    [ApiAuthorize]
+    
     public partial class BusinessController : ApiController
     {
         /// <summary>

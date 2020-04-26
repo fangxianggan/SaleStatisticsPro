@@ -31,6 +31,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Login")]
+        [AllowAnonymous]
         public HttpReponseModel<string> Login([FromBody] LoginRequestViewModel loginRequest)
         {
             return _loginBLL.CheckLogin(loginRequest);

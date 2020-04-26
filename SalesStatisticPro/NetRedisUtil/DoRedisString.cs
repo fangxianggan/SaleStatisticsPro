@@ -8,6 +8,10 @@ namespace NetRedisUtil
 {
     public class DoRedisString : RedisBase
     {
+          //过期时间的设置
+        //TimeSpan ts = new TimeSpan(0, 2, 10);
+        //byte[] intbit = BitConverter.GetBytes(1);
+        //redis.Add("key", "value", ts);
         #region 赋值
         /// <summary>
         /// 设置key的value

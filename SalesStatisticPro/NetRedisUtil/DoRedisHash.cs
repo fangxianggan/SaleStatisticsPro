@@ -19,6 +19,8 @@ namespace NetRedisUtil
         {
             return Core.SetEntryInHash(hashid, key, value);
         }
+
+       
         /// <summary>
         /// 如果hashid集合中存在key/value则不添加返回false，如果不存在在添加key/value,返回true
         /// </summary>
