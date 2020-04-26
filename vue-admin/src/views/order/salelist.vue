@@ -133,6 +133,7 @@
       @expand-change="getSaleOrderInfoViewModelList"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
+       
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="expand">

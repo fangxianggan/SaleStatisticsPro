@@ -206,6 +206,7 @@
     <Compile Include="BLL\RoleBLL.cs" />
     <Compile Include="BLL\_BusinessBLL.cs" />
     <Compile Include="BLL\_CategoryBLL.cs" />
+    <Compile Include="BLL\DataBackupBLL.cs" />
     <Compile Include="BLL\_DataBackupBLL.cs" />
     <Compile Include="BLL\_DataLogBLL.cs" />
     <Compile Include="BLL\_ExceptionLogBLL.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Controllers\MerchantInfoController.cs" />
     <Compile Include="Controllers\_BusinessController.cs" />
     <Compile Include="Controllers\_CategoryController.cs" />
+    <Compile Include="Controllers\DataBackupController.cs" />
     <Compile Include="Controllers\_DataBackupController.cs" />
     <Compile Include="Controllers\_DataLogController.cs" />
     <Compile Include="Controllers\_ExceptionLogController.cs" />
@@ -283,6 +285,7 @@
     <Compile Include="IBLL\IRoleBLL.cs" />
     <Compile Include="IBLL\_IBusinessBLL.cs" />
     <Compile Include="IBLL\_ICategoryBLL.cs" />
+    <Compile Include="IBLL\IDataBackupBLL.cs" />
     <Compile Include="IBLL\_IDataBackupBLL.cs" />
     <Compile Include="IBLL\_IDataLogBLL.cs" />
     <Compile Include="IBLL\_IExceptionLogBLL.cs" />

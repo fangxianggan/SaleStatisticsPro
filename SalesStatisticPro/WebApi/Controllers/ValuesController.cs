@@ -37,10 +37,11 @@ namespace WebApi.Controllers
         public IEnumerable<string> Get()
         {
 
+           var dd=  FileUtil.CreateDir("kg");
             // FileUtil.GetFileNames();
             //写入文本记录
-            LogWriter.WriteLog(FolderName.Info, "3333333");
-            return new string[] { "value1", "value2" };
+           // LogWriter.WriteLog(FolderName.Info, "3333333");
+           return new string[] { "value1", "value2" ,dd};
         }
 
         /// <summary>

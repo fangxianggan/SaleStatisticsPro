@@ -91,7 +91,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("_SaveData")]
         [ActionRecord(Describe = "保存数据")] 
-        public HttpReponseModel<<#= _model.Name #>> Post(<#= _model.Name #> <#= _model._Name #>)
+        public HttpReponseModel<<#= _model.Name #>> Post([FromBody] <#= _model.Name #> <#= _model._Name #>)
         {
             return  _<#= _model._Name #>BLL.SaveData(<#= _model._Name #>);
         }

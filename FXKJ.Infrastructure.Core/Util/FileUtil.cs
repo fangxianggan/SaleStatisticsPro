@@ -457,14 +457,18 @@ namespace FXKJ.Infrastructure.Core.Util
 
         #region 相对目录创建目录
         /// <summary>
-        /// 创建目录  
+        /// 创建相对目录  
         /// </summary>
         /// <param name="dir">要创建的目录路径包括目录名</param>
-        public static void CreateDir(string dir)
+        public static string CreateDir(string dir)
         {
-            if (dir.Length == 0) return;
-            if (!Directory.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir))
-                Directory.CreateDirectory(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\" + dir);
+            if (dir.Length == 0) return"";
+
+            var path = HttpContext.Current.Request.PhysicalApplicationPath  + dir;
+            if (!Directory.Exists(path))
+               Directory.CreateDirectory(path);
+
+            return path;
         }
         #endregion
 
@@ -806,8 +810,6 @@ namespace FXKJ.Infrastructure.Core.Util
         }
         #endregion
 
-       
-
         #region 创建一个文件
         /// <summary>
         /// 创建一个文件。
@@ -884,7 +886,6 @@ namespace FXKJ.Infrastructure.Core.Util
             return rows.Length;
         }
         #endregion
-
 
         #region 获取指定目录中的子目录列表
         /// <summary>

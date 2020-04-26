@@ -105,7 +105,7 @@
     <Compile Include="Helper\QueryableSearchFilterHelper.cs" />
     <Compile Include="Helper\RecursiveHelper.cs" />
     <Compile Include="Helper\SearchFilterHelper.cs" />
-    <Compile Include="Helper\SqlHelper.cs" />
+    <Compile Include="Helper\DataBaseHelper.cs" />
     <Compile Include="Helper\ZipFloHelper.cs" />
     <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="ModelToSql\CustomDynamicBuilder.cs" />

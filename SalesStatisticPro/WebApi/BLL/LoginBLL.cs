@@ -25,7 +25,7 @@ namespace WebApi.BLL
     public partial class LoginBLL : ILoginBLL
     {
        
-      //  private readonly IEFRepository<MerchantInfo> _merchantInfoEFRepository;
+        private readonly IEFRepository<MerchantInfo> _merchantInfoEFRepository;
         /// <summary>
         /// 
         /// </summary>
@@ -37,7 +37,7 @@ namespace WebApi.BLL
 
         private readonly ITokenBLL _tokenBLL;
 
-        private readonly IDapperRepository<MerchantInfo> _merchantInfoEFRepository;
+      // private readonly IDapperRepository<MerchantInfo> _merchantInfoEFRepository;
         
 
 
@@ -52,7 +52,7 @@ namespace WebApi.BLL
         /// <param name="merchantInfoEFRepository"></param>
         /// <param name="roleEFRepository"></param>
         /// <param name="merchantRoleEFRepository"></param>
-        public LoginBLL(ITokenBLL tokenBLL, IDapperRepository<MerchantInfo> merchantInfoEFRepository, IEFRepository<Role> roleEFRepository, IEFRepository<MerchantRole> merchantRoleEFRepository)
+        public LoginBLL(ITokenBLL tokenBLL, IEFRepository<MerchantInfo> merchantInfoEFRepository, IEFRepository<Role> roleEFRepository, IEFRepository<MerchantRole> merchantRoleEFRepository)
         {
             _merchantInfoEFRepository = merchantInfoEFRepository;
             _roleEFRepository = roleEFRepository;

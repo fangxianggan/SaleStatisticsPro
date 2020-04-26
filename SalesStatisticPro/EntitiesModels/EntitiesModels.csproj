@@ -236,6 +236,18 @@
     <Compile Include="Migrations\202004231033259_v1.11.Designer.cs">
       <DependentUpon>202004231033259_v1.11.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004240558170_fff.cs" />
+    <Compile Include="Migrations\202004240558170_fff.Designer.cs">
+      <DependentUpon>202004240558170_fff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004240757401_fff2.cs" />
+    <Compile Include="Migrations\202004240757401_fff2.Designer.cs">
+      <DependentUpon>202004240757401_fff2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004240950161_fff3.cs" />
+    <Compile Include="Migrations\202004240950161_fff3.Designer.cs">
+      <DependentUpon>202004240950161_fff3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
@@ -391,6 +403,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004231033259_v1.11.resx">
       <DependentUpon>202004231033259_v1.11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004240558170_fff.resx">
+      <DependentUpon>202004240558170_fff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004240757401_fff2.resx">
+      <DependentUpon>202004240757401_fff2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004240950161_fff3.resx">
+      <DependentUpon>202004240950161_fff3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

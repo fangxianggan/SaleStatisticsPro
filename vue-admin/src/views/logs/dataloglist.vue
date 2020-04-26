@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-collapse accordion v-model="activeName">
+    <div class="filter-container " >
+      <el-collapse accordion v-model="activeName" >
         <el-collapse-item title="查询条件" name="1">
           <el-form :inline="true" :model="filterModel">
             <el-form-item label="记录时间">
@@ -40,6 +40,7 @@
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
+     
     >
       <!-- <el-table-column label="DataLogId" prop="DataLogId" sortable="custom" width="120">
         <template slot-scope="{row}">

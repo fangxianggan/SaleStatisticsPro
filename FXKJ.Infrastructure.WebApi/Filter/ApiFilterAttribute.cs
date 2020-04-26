@@ -21,10 +21,10 @@ namespace FXKJ.Infrastructure.WebApi.Filter
             actionContext.Request.Properties[key] = DateTime.Now.ToBinary();
            
             //数据验证 存储
-            if (!actionContext.ModelState.IsValid)
-            {
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, actionContext.ModelState);
-            }
+            //if (!actionContext.ModelState.IsValid)
+            //{
+            //    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, actionContext.ModelState);
+            //}
             base.OnActionExecuting(actionContext);
         }
 
@@ -44,9 +44,6 @@ namespace FXKJ.Infrastructure.WebApi.Filter
                 _operationLogHandler.log.Describe = actionRecord == null ? "" : actionRecord.Describe;
                 _operationLogHandler.WriteLog();
             }
-
-           
-            
             base.OnActionExecuted(actionExecutedContext);
         }
     }

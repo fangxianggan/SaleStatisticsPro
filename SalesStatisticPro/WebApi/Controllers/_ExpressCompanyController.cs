@@ -10,7 +10,7 @@
 //        Copyright(c)2013 GMFCN.All rights reserved.
 //        CLR版本：4.0.30319.239
 //        开发组织：yxd
-//        生成时间：2020-04-23 18:35
+//        生成时间：2020-04-24 14:10
 // </copyright>
 //------------------------------------------------------------------------------
 using EntitiesModels.Models;
@@ -62,7 +62,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("_SaveData")]
         [ActionRecord(Describe = "保存数据")] 
-        public HttpReponseModel<ExpressCompany> Post(ExpressCompany expressCompany)
+        public HttpReponseModel<ExpressCompany> Post([FromBody] ExpressCompany expressCompany)
         {
             return  _expressCompanyBLL.SaveData(expressCompany);
         }
