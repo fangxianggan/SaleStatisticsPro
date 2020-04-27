@@ -372,7 +372,7 @@
       :visible.sync="dialogFormVisible"
       fit
       width="100%"
-      fullscreen="true"
+      :fullscreen="true"
     >
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <fieldset>

@@ -50,13 +50,13 @@ namespace EntitiesModels.Models
         /// <summary>
         /// 产品简码
         /// </summary>
-        [MaxLength(50),Required, DisplayName("产品简码")]
+        [MaxLength(64),Required, DisplayName("产品简码")]
         public string SimpleCode { set; get; }
 
         /// <summary>
         /// 产品名称
         /// </summary>
-        [MaxLength(50),Required,DisplayName("产品名称")]
+        [MaxLength(64),Required,DisplayName("产品名称")]
         public string ProductName { set; get; }
 
 

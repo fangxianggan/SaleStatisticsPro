@@ -67,6 +67,8 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="register"></param>
         /// <returns></returns>
+        /// 
+        [AllowAnonymous]
         [HttpPost]
         [Route("Register")]
         [ApiDTC]
@@ -80,6 +82,8 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="phoneNumber"></param>
         /// <returns></returns>
+        /// 
+        [AllowAnonymous]
         [HttpGet]
         [Route("IsExistPhoneNumber")]
         public HttpReponseModel<bool> IsExistPhoneNumber(string phoneNumber)

@@ -241,7 +241,7 @@
       v-el-drag-dialog
       :title="dialogTitle"
       :visible.sync="dialogFormVisible"
-      fullscreen="true"
+      :fullscreen="true"
       width="100%"
     >
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">

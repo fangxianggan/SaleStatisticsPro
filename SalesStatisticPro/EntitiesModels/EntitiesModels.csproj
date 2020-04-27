@@ -248,6 +248,10 @@
     <Compile Include="Migrations\202004240950161_fff3.Designer.cs">
       <DependentUpon>202004240950161_fff3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004270959206_v1111.cs" />
+    <Compile Include="Migrations\202004270959206_v1111.Designer.cs">
+      <DependentUpon>202004270959206_v1111.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseEntityGuid.cs" />
@@ -412,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004240950161_fff3.resx">
       <DependentUpon>202004240950161_fff3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004270959206_v1111.resx">
+      <DependentUpon>202004270959206_v1111.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -202,12 +202,16 @@ namespace WebApi.BLL
                merchantInfo.MerchantNo = RandomExtension.GetRandomNumberString(new Random(), 8);
             }
             merchantInfo.MerchantPhone = register.PhoneNumber;
+            merchantInfo.CreateTime = DateTime.Now;
+            merchantInfo.UpdateTime = DateTime.Now;
             merchantInfo.MerchantPassword= DEncryptUtil.Md5Encrypt(register.Password);
             httpReponse.Data= _merchantInfoEFRepository.Add(merchantInfo,true);
 
             MerchantRole merchantRole = new MerchantRole();
             merchantRole.MerchantNo = merchantInfo.MerchantNo;
             merchantRole.RoleCode = "merchant_1";//普通商户角色
+            merchantRole.CreateTime = DateTime.Now;
+            merchantRole.UpdateTime = DateTime.Now;
             _merchantRoleEFRepository.Add(merchantRole,true);
 
             if (httpReponse.Data) {
