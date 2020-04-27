@@ -203,6 +203,17 @@ namespace WebApi.BLL
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public HttpReponseModel<List<ProductStatisticsViewModel>> GetBarChart()
+        {
+            HttpReponseModel<List<ProductStatisticsViewModel>> httpReponse = new HttpReponseModel<List<ProductStatisticsViewModel>>();
+            httpReponse.Data = _productRepository.GetBarChart() as List<ProductStatisticsViewModel>;
+            return httpReponse;
+        }
+
+        /// <summary>
         /// 导出excel
         /// </summary>
         /// <param name="model"></param>

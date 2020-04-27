@@ -1,20 +1,19 @@
 
 //import { getJson } from ''
 import echarts from 'echarts'
-import chartOptionsTemplate from '@/echarttemplate/chart'
 class MyEcharts {
-  constructor(echartId, url, param, callBackObj) {
+  constructor(echartId,options,callBackObj) {
     this.echartId = echartId;
-    this.url = url;
-    this.param = param;
+
     this.callBackObj = callBackObj;
+    this.options=options;
   }
 
   initEcharts() {
     let callBackObj = this.callBackObj;
     let container = document.getElementById(this.echartId);
     let myChart = echarts.init(container);
-    let options = chartOptionsTemplate.histogram_one;
+    let options =this.options;
     myChart.setOption(options);
     //getJson(this.url, this.param).then(response => {
     //  myChart.setOption(chartOptionsTemplate.histogram_one);

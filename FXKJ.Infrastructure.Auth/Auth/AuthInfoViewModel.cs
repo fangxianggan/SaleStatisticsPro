@@ -41,7 +41,7 @@ namespace FXKJ.Infrastructure.Auth.Auth
         public DateTime? ExpiryDateTime { get; set; }
 
         /// <summary>
-        /// 刷新时间
+        /// 刷新时间()
         /// </summary>
         public DateTime? RefreshDateTime { get; set; }
 

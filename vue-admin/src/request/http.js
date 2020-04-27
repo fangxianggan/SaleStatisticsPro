@@ -100,7 +100,7 @@ service.interceptors.response.use(
     } else {
       //console.log(res.token)
       if (res.token != "") {
-        console.log("eeeeee")
+        console.log(res.token)
         setToken(res.token)
       }
       return res

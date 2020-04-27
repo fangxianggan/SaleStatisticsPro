@@ -3,9 +3,7 @@
     <div class="filter-container">
       <el-collapse accordion v-model="activeName">
         <el-collapse-item title="查询条件" name="1">
-
           <el-form :inline="true" :model="filterModel">
-
             <el-form-item label="订单号">
               <el-input
                 v-model="filterModel.pOrderNum.value"
@@ -193,7 +191,6 @@
                 </el-select>
               </el-input>
             </el-form-item>
-            
           </el-form>
         </el-collapse-item>
       </el-collapse>
@@ -375,6 +372,7 @@
       :visible.sync="dialogFormVisible"
       fit
       width="100%"
+      fullscreen="true"
     >
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <fieldset>

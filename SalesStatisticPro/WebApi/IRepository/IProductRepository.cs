@@ -42,6 +42,16 @@ namespace WebApi.IRepository
         /// <returns></returns>
         IEnumerable<ProductStatisticsViewModel> GetProductStatisticsViewModelPageList(QueryModel model);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ProductStatisticsViewModel> GetBarChart();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         DataTable GetProductStatisticsViewModelDataTable(QueryModel model);
         
 

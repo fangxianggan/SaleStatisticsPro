@@ -373,16 +373,6 @@ export default {
         cancelButtonText: "取消"
       })
         .then(() => {
-          this.$ajax(
-            "/UserInfo/GetIsDeleteFlag",
-            { phoneNumber: row.phoneNumber },
-            { method: "get" }
-          ).then(d => {
-            if (d.resultSign == 1) {
-              myAction.getNotifyFunc(d, this);
-              return false;
-            }
-
             let url = "/UserInfo/_DelData";
             let data = { id: row.id };
             this.$ajax(url, data, { method: "get" }).then(response => {
@@ -392,8 +382,7 @@ export default {
               }
               myAction.getNotifyFunc(response, this);
             });
-          });
-        })
+          })
         .catch(action => {});
     }
   }

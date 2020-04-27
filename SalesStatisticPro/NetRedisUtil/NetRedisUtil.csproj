@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DoRedisHash.cs" />
+    <Compile Include="DoRedisList.cs" />
     <Compile Include="DoRedisSet.cs" />
     <Compile Include="DoRedisString.cs" />
     <Compile Include="DoRedisZSet.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="RedisBase.cs" />
     <Compile Include="RedisConfig.cs" />
     <Compile Include="RedisManager.cs" />
+    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NetDLL\ServiceStack.Common.dll" />

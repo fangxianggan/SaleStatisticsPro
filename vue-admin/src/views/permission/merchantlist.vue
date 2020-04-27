@@ -343,24 +343,14 @@ export default {
         cancelButtonText: "取消"
       })
         .then(() => {
-          this.$ajax(
-            "/Merchant/GetIsDeleteFlag",
-            { code: row.merchantCode },
-            { method: "get" }
-          ).then(d => {
-            if (d.resultSign == 1) {
-              myAction.getNotifyFunc(d, this);
-              return false;
+          let url = "/Merchant/_DelData";
+          let data = { id: row.id };
+          this.$ajax(url, data, { method: "get" }).then(response => {
+            if (response.resultSign == 0) {
+              this.list.splice(index, 1);
+              this.total--;
             }
-            let url = "/Merchant/_DelData";
-            let data = { id: row.id };
-            this.$ajax(url, data, { method: "get" }).then(response => {
-              if (response.resultSign == 0) {
-                this.list.splice(index, 1);
-                this.total--;
-              }
-              myAction.getNotifyFunc(response, this);
-            });
+            myAction.getNotifyFunc(response, this);
           });
         })
         .catch(action => {});

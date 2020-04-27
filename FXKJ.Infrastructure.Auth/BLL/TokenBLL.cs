@@ -5,11 +5,20 @@ using System.Text;
 using FXKJ.Infrastructure.Auth.Auth;
 using NetRedisUtil;
 using FXKJ.Infrastructure.Auth.IBLL;
+using System;
 
 namespace FXKJ.Infrastructure.Auth.BLL
 {
     public partial class TokenBLL : ITokenBLL
     {
+        private readonly DoRedisList doRedisList;
+
+        private readonly DoRedisHash doRedisHash;
+        public TokenBLL()
+        {
+            doRedisList = new DoRedisList();
+            doRedisHash = new DoRedisHash();
+        }
         public string GetJWTData(AuthInfoViewModel authInfo, string secretKey)
         {
             byte[] key = Encoding.UTF8.GetBytes(secretKey);
@@ -23,7 +32,7 @@ namespace FXKJ.Infrastructure.Auth.BLL
 
         public bool SetRedisToken(string key, string value)
         {
-            return DoRedisHash.SetEntryInHash("auth-token", key, value);
+            return doRedisHash.SetEntryInHash("auth-token", key, value);
         }
 
         public AuthInfoViewModel DecoderToken(string token, string secretKey)
@@ -42,7 +51,7 @@ namespace FXKJ.Infrastructure.Auth.BLL
         public bool VerifyRedisToken(string key, string value)
         {
             var flag = false;
-            string token = DoRedisHash.GetValueFromHash("auth-token", key);
+            string token = doRedisHash.GetValueFromHash("auth-token", key);
             if (token == value)
             {
                 flag = true;
@@ -52,7 +61,27 @@ namespace FXKJ.Infrastructure.Auth.BLL
 
         public bool RemoveRedisToken(string key, string value)
         {
-            return DoRedisHash.RemoveEntryFromHash("auth-token", key);
+            return doRedisHash.RemoveEntryFromHash("auth-token", key);
+        }
+
+        public void SetListTempToken(string key, string value, TimeSpan sp)
+        {
+            doRedisList.LPush(key, value, sp);
+        }
+
+        public bool GetListTempToken(string key, string value)
+        {
+            var flag = false;
+            var list = doRedisList.Get(key);
+            foreach (var item in list)
+            {
+                if (item == value)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            return flag;
         }
 
     }

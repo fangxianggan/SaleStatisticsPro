@@ -35,31 +35,42 @@ namespace FXKJ.Infrastructure.WebApi.Filter
                 {
                     return false;
                 }
-                else if (auth.ExpiryDateTime < DateTime.Now && auth.RefreshDateTime > DateTime.Now)
+                else if (auth.ExpiryDateTime > DateTime.Now && auth.RefreshDateTime < DateTime.Now)
                 {
-                    //一次请求头里是不是验证过了
-                    var x_token = HttpContext.Current.Request.RequestContext.RouteData.Values["X-Token"];
-                    if (x_token == null)
+
+                    var authHeader = from t in actionContext.Request.Headers where t.Key == "X-Token" select t.Value.FirstOrDefault();
+                    string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
+                    string token = authHeader.FirstOrDefault();//获取token
+                    var _tokenBLL = DependencyResolver.Current.GetService<ITokenBLL>();
+
+                    //先验证临时存储的token存不存在  存在放行
+                    var _flag = _tokenBLL.GetListTempToken(auth.PhoneNumber, token);
+                    if (_flag)
                     {
-                        var authHeader = from t in actionContext.Request.Headers where t.Key == "X-Token" select t.Value.FirstOrDefault();
-                        string secretKey = ConfigUtils.GetKey(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Web.config", "JWTSecretKey");
-                        string token = authHeader.FirstOrDefault();//获取token
-                        var _tokenBLL = DependencyResolver.Current.GetService<ITokenBLL>();
+                        return true;
+                    }
+                    else
+                    {
                         //验证token是不是合法的
                         var flag = _tokenBLL.VerifyRedisToken(auth.PhoneNumber, token);
                         if (flag)
                         {
 
-                            auth.ExpiryDateTime = DateTime.Now.AddSeconds(10);
-                            auth.RefreshDateTime = DateTime.Now.AddSeconds(600);
-                            //auth.ExpiryDateTime = DateTime.Now.AddMinutes(15);
-                            //auth.RefreshDateTime = DateTime.Now.AddHours(3);
+                            TimeSpan sp = new TimeSpan(0, 0, 1);
+                            //存储临时token  1秒存在
+                            _tokenBLL.SetListTempToken(auth.PhoneNumber, token, sp);
+
+                            //auth.RefreshDateTime = DateTime.Now.AddSeconds(10);
+                            //auth.ExpiryDateTime = DateTime.Now.AddSeconds(30);
+                            auth.ExpiryDateTime = DateTime.Now.AddHours(3);
+                            auth.RefreshDateTime = DateTime.Now.AddMinutes(30);
+                          
                             //重新生成token 
                             var fefreshToken = _tokenBLL.GetJWTData(auth, secretKey);
                             //存储redis
                             _tokenBLL.SetRedisToken(auth.PhoneNumber, fefreshToken);
 
-                            // actionContext.RequestContext.RouteData.Values.Add("X-Token", fefreshToken);
+
                             //返回到页面上 并且重新赋值
                             HttpContext.Current.Request.RequestContext.RouteData.Values.Add("X-Token", fefreshToken);
                             return true;
@@ -69,22 +80,20 @@ namespace FXKJ.Infrastructure.WebApi.Filter
                             return false;
                         }
                     }
-                    else {
-                        return true;
-                    }
                 }
                 else
                 {
                     return true;
                 }
             }
-            else {
+            else
+            {
                 return false;
             }
         }
 
 
-       
+
         /// <summary>
         /// 处理授权失败的请求
         /// </summary>

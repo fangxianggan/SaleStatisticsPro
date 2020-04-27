@@ -18,7 +18,7 @@
                 v-model="filterModel.sOrderCreateTime.value"
                 :picker-options="daterangeOptions"
                 value-format="yyyy-MM-dd"
-                 style="width: 250px;"
+                style="width: 250px;"
                 range-separator="至"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
@@ -37,7 +37,7 @@
               />
             </el-form-item>
 
-  <el-form-item label="产品名称">
+            <el-form-item label="产品名称">
               <el-input
                 v-model="filterModel.productName.value"
                 placeholder="产品名称"
@@ -94,8 +94,6 @@
                 </el-select>
               </el-input>
             </el-form-item>
-
-
           </el-form>
         </el-collapse-item>
       </el-collapse>
@@ -133,7 +131,6 @@
       @expand-change="getSaleOrderInfoViewModelList"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
-       
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="expand">
@@ -240,7 +237,13 @@
       @pagination="getList"
     />
 
-    <el-dialog v-el-drag-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="100%">
+    <el-dialog
+      v-el-drag-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogFormVisible"
+      fullscreen="true"
+      width="100%"
+    >
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <fieldset>
           <legend>订单信息</legend>
@@ -565,7 +568,7 @@ export default {
           prefix: "M.",
           operator: "And"
         },
-         productName: {
+        productName: {
           field: "ProductName",
           method: "Contains",
           value: "",

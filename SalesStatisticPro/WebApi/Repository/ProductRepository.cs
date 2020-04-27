@@ -97,6 +97,58 @@ LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode  " + permissionWhere 
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ProductStatisticsViewModel> GetBarChart()
+        {
+            var p = string.Format(@"SELECT 
+a.PProductCode AS ProductCode,
+SUM(a.PurchaseCount) AS PurchaseCount  ,
+SUM(a.PurchaseAmount) AS PurchaseAmount ,
+SUM(a.DomesticFreightAmount+a.InternationFreightAmount) AS PurchaseFreightAmount,
+SUM(a.Amount) AS AllPurchaseAmount,
+sum(a.PurchaseSettlementAmount) as PurchaseSettlementAmount
+FROM [dbo].[PurchaseOrderInfo]  AS a WITH (NOLOCK)
+GROUP BY a.PProductCode");
+            var s = string.Format(@"SELECT 
+a.SProductCode AS ProductCode,
+SUM(a.SaleCount) AS SaleCount,
+SUM(a.SaleAmount) AS SaleAmount,
+SUM(a.SaleFreightAmount) AS SaleFreightAmount,
+SUM(a.SaleSumAmount) AS AllSaleAmount,
+sum(a.SaleSettlementAmount) as SaleSettlementAmount
+ FROM  [dbo].[SaleOrderInfo] AS a WITH (NOLOCK)
+GROUP BY a.SProductCode");
+            var sql = string.Format(@"select * from (
+SELECT 
+ROW_NUMBER() OVER (ORDER BY a.ID) AS ID,
+p.ProductCode,
+p.PurchaseCount,
+p.PurchaseAmount,
+p.PurchaseFreightAmount,
+p.PurchaseSettlementAmount,
+p.AllPurchaseAmount,
+(CASE WHEN  s.SaleCount IS NULL THEN 0 ELSE s.SaleCount END) AS SaleCount ,
+(CASE WHEN  s.SaleAmount IS NULL THEN 0 ELSE s.SaleAmount END) AS SaleAmount ,
+(CASE WHEN  s.SaleFreightAmount IS NULL THEN 0 ELSE s.SaleFreightAmount END) AS SaleFreightAmount ,
+(CASE WHEN  s.AllSaleAmount IS NULL THEN 0 ELSE s.AllSaleAmount END) AS AllSaleAmount ,
+(CASE WHEN  s.SaleSettlementAmount IS NULL THEN 0 ELSE s.SaleSettlementAmount END) AS SaleSettlementAmount ,
+a.SimpleCode,
+a.ProductName,
+(p.PurchaseCount - (CASE WHEN  s.SaleCount IS NULL THEN 0 ELSE s.SaleCount END )) AS Stock,
+((CASE WHEN s.AllSaleAmount IS NULL THEN 0 ELSE s.AllSaleAmount END)- p.AllPurchaseAmount) AS ProfitAmount
+FROM ({0}) as p LEFT JOIN ({1}) as s ON p.ProductCode=s.ProductCode
+LEFT JOIN dbo.Product AS a ON  p.ProductCode=a.ProductCode  " + permissionWhere + " ) as cc  ", p, s);
+            var list = SqlMapperUtil.SqlWithParams<ProductStatisticsViewModel>(sql);
+            return list;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public DataTable GetProductStatisticsViewModelDataTable(QueryModel model)
         {
             var sql = @"  WITH  p as(

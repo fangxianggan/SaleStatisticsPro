@@ -74,5 +74,16 @@ namespace WebApi.Controllers
             return _userInfoBLL.GetPanelGroupViewModelData();
         }
 
+        /// <summary>
+        /// 柱状图 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetBarChart")]
+        public HttpReponseModel<List<ProductStatisticsViewModel>> GetBarChart()
+        {
+            return _productBLL.GetBarChart();
+        }
+
     }
 }

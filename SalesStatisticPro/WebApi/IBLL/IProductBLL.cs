@@ -67,6 +67,12 @@ namespace WebApi.IBLL
         /// <returns></returns>
         HttpReponseModel<FileStreamViewModel> GetProductStatisticsViewModelExportExcel(QueryModel model);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        HttpReponseModel<List<ProductStatisticsViewModel>> GetBarChart();
+
     }
 }
 

@@ -107,12 +107,12 @@ namespace WebApi.BLL
                             MerchantNo = ent.MerchantNo,
                             Roles = roles,
                             IsAdmin = isAdmin,
-                            ExpiryDateTime = DateTime.Now.AddSeconds(20),
-                            RefreshDateTime = DateTime.Now.AddSeconds(600)
-                        //ExpiryDateTime = DateTime.Now.AddMinutes(20),
-                        //RefreshDateTime = DateTime.Now.AddHours(3),
+                            //ExpiryDateTime = DateTime.Now.AddSeconds(30),
+                            //RefreshDateTime = DateTime.Now.AddSeconds(10)
+                            ExpiryDateTime = DateTime.Now.AddHours(3),
+                            RefreshDateTime = DateTime.Now.AddMinutes(30),
 
-                    };
+                        };
                       
                         //口令加密秘钥
                         var data = _tokenBLL.GetJWTData(authInfo, secretKey);

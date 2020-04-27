@@ -1,4 +1,5 @@
 ﻿using FXKJ.Infrastructure.Auth.Auth;
+using System;
 
 namespace FXKJ.Infrastructure.Auth.IBLL
 {
@@ -42,7 +43,14 @@ namespace FXKJ.Infrastructure.Auth.IBLL
         /// <returns></returns>
         bool RemoveRedisToken(string key, string value);
 
+        /// <summary>
+        /// 设置一个临时的token存储
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="sp"></param>
+        void SetListTempToken(string key, string value, TimeSpan sp);
 
-        
+        bool GetListTempToken(string key, string value);
     }
 }

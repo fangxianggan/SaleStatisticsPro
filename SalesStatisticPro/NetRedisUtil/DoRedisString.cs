@@ -8,38 +8,34 @@ namespace NetRedisUtil
 {
     public class DoRedisString : RedisBase
     {
-          //过期时间的设置
-        //TimeSpan ts = new TimeSpan(0, 2, 10);
-        //byte[] intbit = BitConverter.GetBytes(1);
-        //redis.Add("key", "value", ts);
         #region 赋值
         /// <summary>
         /// 设置key的value
         /// </summary>
         public bool Set(string key, string value)
         {
-            return Core.Set<string>(key, value);
+            return RedisBase.Core.Set<string>(key, value);
         }
         /// <summary>
         /// 设置key的value并设置过期时间
         /// </summary>
         public bool Set(string key, string value, DateTime dt)
         {
-            return Core.Set<string>(key, value, dt);
+            return RedisBase.Core.Set<string>(key, value, dt);
         }
         /// <summary>
         /// 设置key的value并设置过期时间
         /// </summary>
         public bool Set(string key, string value, TimeSpan sp)
         {
-            return Core.Set<string>(key, value, sp);
+            return RedisBase.Core.Set<string>(key, value, sp);
         }
         /// <summary>
         /// 设置多个key/value
         /// </summary>
         public void Set(Dictionary<string, string> dic)
         {
-            Core.SetAll(dic);
+            RedisBase.Core.SetAll(dic);
         }
 
         #endregion
@@ -49,7 +45,7 @@ namespace NetRedisUtil
         /// </summary>
         public long Append(string key, string value)
         {
-            return Core.AppendToValue(key, value);
+            return RedisBase.Core.AppendToValue(key, value);
         }
         #endregion
         #region 获取值
@@ -58,21 +54,21 @@ namespace NetRedisUtil
         /// </summary>
         public string Get(string key)
         {
-            return Core.GetValue(key);
+            return RedisBase.Core.GetValue(key);
         }
         /// <summary>
         /// 获取多个key的value值
         /// </summary>
         public List<string> Get(List<string> keys)
         {
-            return Core.GetValues(keys);
+            return RedisBase.Core.GetValues(keys);
         }
         /// <summary>
         /// 获取多个key的value值
         /// </summary>
         public List<T> Get<T>(List<string> keys)
         {
-            return Core.GetValues<T>(keys);
+            return RedisBase.Core.GetValues<T>(keys);
         }
         #endregion
         #region 获取旧值赋上新值
@@ -81,7 +77,7 @@ namespace NetRedisUtil
         /// </summary>
         public string GetAndSetValue(string key, string value)
         {
-            return Core.GetAndSetValue(key, value);
+            return RedisBase.Core.GetAndSetValue(key, value);
         }
         #endregion
         #region 辅助方法
@@ -90,28 +86,28 @@ namespace NetRedisUtil
         /// </summary>
         public long GetCount(string key)
         {
-            return Core.GetStringCount(key);
+            return RedisBase.Core.GetStringCount(key);
         }
         /// <summary>
         /// 自增1，返回自增后的值
         /// </summary>
         public long Incr(string key)
         {
-            return Core.IncrementValue(key);
+            return RedisBase.Core.IncrementValue(key);
         }
         /// <summary>
         /// 自增count，返回自增后的值
         /// </summary>
         public double IncrBy(string key, double count)
         {
-            return Core.IncrementValueBy(key, count);
+            return RedisBase.Core.IncrementValueBy(key, count);
         }
         /// <summary>
         /// 自减1，返回自减后的值
         /// </summary>
         public long Decr(string key)
         {
-            return Core.DecrementValue(key);
+            return RedisBase.Core.DecrementValue(key);
         }
         /// <summary>
         /// 自减count ，返回自减后的值
@@ -121,7 +117,7 @@ namespace NetRedisUtil
         /// <returns></returns>
         public long DecrBy(string key, int count)
         {
-            return Core.DecrementValueBy(key, count);
+            return RedisBase.Core.DecrementValueBy(key, count);
         }
         #endregion
     }
