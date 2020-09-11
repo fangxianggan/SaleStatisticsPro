@@ -41,7 +41,8 @@ namespace FXKJ.Infrastructure.Log.Log4NetWrite
             try
             {
 
-                AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
+                AuthInfoViewModel authInfo = new AuthInfoViewModel();
+              // AuthInfoViewModel authInfo = FormAuthenticationExtension.CurrentAuth();
                 if (authInfo == null)
                 {
                     authInfo = new AuthInfoViewModel();

@@ -5,10 +5,12 @@ using FXKJ.Infrastructure.Auth.BLL;
 using FXKJ.Infrastructure.Auth.IBLL;
 using FXKJ.Infrastructure.DataAccess;
 using FXKJ.Infrastructure.Logic;
-using System;
+using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Compilation;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -34,6 +36,15 @@ namespace WebApi
              AutoFacBootStrapper.CoreAutoFacInit();
             //dto模型注册
             AutoMapperConfig.Register();
+
+            //解决ef首次加载很慢的
+            using (var dbcontext = new EntitiesModels.MyContext())
+            {
+                var objectContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
+                var mappingCollection = (StorageMappingItemCollection)objectContext.MetadataWorkspace.GetItemCollection(DataSpace.CSSpace);
+                mappingCollection.GenerateViews(new List<EdmSchemaError>());
+            }
+
         }
 
         ///// <summary>

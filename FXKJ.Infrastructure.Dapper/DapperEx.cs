@@ -1,6 +1,5 @@
 ﻿using FXKJ.Infrastructure.Core.Extensions;
 using FXKJ.Infrastructure.Log;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,6 +12,7 @@ using EntitiesModels.Enum;
 using FXKJ.Infrastructure.Core.Attributes;
 using FXKJ.Infrastructure.Core.Util;
 using FXKJ.Infrastructure.Core.ModelToSql;
+using Newtonsoft.Json;
 
 namespace FXKJ.Infrastructure.Dapper
 {

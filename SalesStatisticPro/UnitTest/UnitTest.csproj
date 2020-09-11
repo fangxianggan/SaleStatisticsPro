@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AE088EC2-B50D-4564-BDCD-865E4B345093}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FXKJ.Infrastructure.Auth</RootNamespace>
-    <AssemblyName>FXKJ.Infrastructure.Auth</AssemblyName>
+    <ProjectGuid>{09A993F2-12B9-431A-9CA4-63CEB623E713}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>UnitTest</RootNamespace>
+    <AssemblyName>UnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,16 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JWT">
-      <HintPath>..\FXKJ.Infrastructure.WebApi\NetDLL\JWT.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Mvc">
-      <HintPath>..\FXKJ.Infrastructure.Core\NetDLL\System.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,32 +42,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\AuthInfoViewModel.cs" />
-    <Compile Include="Auth\FormAuthenticationExtension.cs" />
-    <Compile Include="Auth\PrincipalUser.cs" />
-    <Compile Include="BLL\TokenBLL.cs" />
-    <Compile Include="IBLL\ITokenBLL.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FXKJ.Infrastructure.Core\FXKJ.Infrastructure.Core.csproj">
-      <Project>{77CF037D-57B0-4338-93EC-7415DD9B40CE}</Project>
-      <Name>FXKJ.Infrastructure.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SalesStatisticPro\NetRedisUtil\NetRedisUtil.csproj">
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetRedisUtil\NetRedisUtil.csproj">
       <Project>{7f890a1a-ee96-486f-957f-9656a4e308de}</Project>
       <Name>NetRedisUtil</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SalesStatisticPro\NetStackExchangeRedisUtil\NetStackExchangeRedisUtil.csproj">
+    <ProjectReference Include="..\NetStackExchangeRedisUtil\NetStackExchangeRedisUtil.csproj">
       <Project>{382e912c-2413-43a9-9ae3-536a36b752f4}</Project>
       <Name>NetStackExchangeRedisUtil</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NetDLL\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

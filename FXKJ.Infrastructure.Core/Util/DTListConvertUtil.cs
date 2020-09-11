@@ -15,6 +15,7 @@ namespace FXKJ.Infrastructure.Core.Util
     public static class DTListConvertUtil<T> where T : new()
     {
         public static object ReflectionUtils { get; private set; }
+
         #region DataTable转换成实体类
 
         /// <summary>

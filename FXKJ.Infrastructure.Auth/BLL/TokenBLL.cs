@@ -6,18 +6,24 @@ using FXKJ.Infrastructure.Auth.Auth;
 using NetRedisUtil;
 using FXKJ.Infrastructure.Auth.IBLL;
 using System;
+using NetStackExchangeRedisUtil;
+using System.Collections.Generic;
 
 namespace FXKJ.Infrastructure.Auth.BLL
 {
     public partial class TokenBLL : ITokenBLL
     {
-        private readonly DoRedisList doRedisList;
+        //private readonly DoRedisList doRedisList;
 
-        private readonly DoRedisHash doRedisHash;
+        //private readonly DoRedisHash doRedisHash;
+
+        private readonly RedisUtil redisUtil;
         public TokenBLL()
         {
-            doRedisList = new DoRedisList();
-            doRedisHash = new DoRedisHash();
+           // doRedisList = new DoRedisList();
+          //  doRedisHash = new DoRedisHash();
+
+            redisUtil = new RedisUtil();
         }
         public string GetJWTData(AuthInfoViewModel authInfo, string secretKey)
         {
@@ -30,10 +36,7 @@ namespace FXKJ.Infrastructure.Auth.BLL
             return token;
         }
 
-        public bool SetRedisToken(string key, string value)
-        {
-            return doRedisHash.SetEntryInHash("auth-token", key, value);
-        }
+      
 
         public AuthInfoViewModel DecoderToken(string token, string secretKey)
         {
@@ -48,10 +51,17 @@ namespace FXKJ.Infrastructure.Auth.BLL
             return json;
         }
 
+        public bool SetRedisToken(string key, string value)
+        {
+            return redisUtil.HashSet("auth-token", key, value);
+            //return doRedisHash.SetEntryInHash("auth-token", key, value);
+        }
+
         public bool VerifyRedisToken(string key, string value)
         {
             var flag = false;
-            string token = doRedisHash.GetValueFromHash("auth-token", key);
+            string token = redisUtil.HashGet("auth-token", key);
+            // string token = doRedisHash.GetValueFromHash("auth-token", key);
             if (token == value)
             {
                 flag = true;
@@ -61,18 +71,26 @@ namespace FXKJ.Infrastructure.Auth.BLL
 
         public bool RemoveRedisToken(string key, string value)
         {
-            return doRedisHash.RemoveEntryFromHash("auth-token", key);
+            var flag = true;
+            //return flag;
+            var d = "auth-token";
+            var f= redisUtil.HashDelete(d, key);
+
+            return f;
+           // return doRedisHash.RemoveEntryFromHash("auth-token", key);
         }
 
         public void SetListTempToken(string key, string value, TimeSpan sp)
         {
-            doRedisList.LPush(key, value, sp);
+            redisUtil.StringSet(key,value,sp);
+           // doRedisList.LPush(key, value, sp);
         }
 
         public bool GetListTempToken(string key, string value)
         {
             var flag = false;
-            var list = doRedisList.Get(key);
+            var list = redisUtil.ListRange<string>(key);
+            //var list = doRedisList.Get(key);
             foreach (var item in list)
             {
                 if (item == value)

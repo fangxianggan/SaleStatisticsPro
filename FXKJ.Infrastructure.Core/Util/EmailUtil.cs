@@ -529,7 +529,7 @@ namespace FXKJ.Infrastructure.Core.Util
 
             #endregion
 
-            #region 设置邮件地址
+        #region 设置邮件地址
 
             /// <summary>
             ///     设置更多收件人

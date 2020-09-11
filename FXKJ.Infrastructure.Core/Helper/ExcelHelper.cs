@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Web;
 
 namespace FXKJ.Infrastructure.Core.Helper
@@ -377,7 +378,7 @@ namespace FXKJ.Infrastructure.Core.Helper
                         cellSheet.Cells[rowIndex, colIndex].PutValue(dt1.Rows[i][j].ToString());
                         colIndex++;
                     }
-                    
+
                 }
                 rowIndex++;
             }
@@ -391,7 +392,7 @@ namespace FXKJ.Infrastructure.Core.Helper
             foreach (DataRow item in dt2.Rows)
             {
                 //查询母表下子表的条数
-                RowNum = dt1.Select(" "+ columnCode + " = '" + item[columnCode].ToString() + "'").Length;
+                RowNum = dt1.Select(" " + columnCode + " = '" + item[columnCode].ToString() + "'").Length;
                 for (var i = 0; i < colCount2; i++)
                 {
                     cellSheet.Cells.Merge(1 + q, i, RowNum, 1);
@@ -403,5 +404,244 @@ namespace FXKJ.Infrastructure.Core.Helper
         }
 
 
+        public static DataTable ReadExcel(string path)
+        {
+            Workbook book = new Workbook();
+            book.Open(path);
+            Worksheet sheet = book.Worksheets[0];
+            Cells cells = sheet.Cells;
+            return cells.ExportDataTableAsString(0, 0, cells.MaxDataRow + 1, cells.MaxDataColumn + 1, true);
+        }
+        public static DataTable ReadMergedExcel(string path)
+        {
+            DataTable dt = new DataTable();
+            Workbook workbook = new Workbook();
+            workbook.Open(path);
+            Cells cells = workbook.Worksheets[0].Cells;
+            //获取第一行
+            Row headrow = cells.GetRow(0);
+            //创建列
+            for (int i =0; i < cells.MaxDataColumn+1; i++)
+            {
+                Cell cell = headrow.GetCellOrNull(i);
+                dt.Columns.Add(cell.StringValue.ToString());
+            }
+            //读取每行,从第二行起
+            for (int r = 1; r <= cells.MaxDataRow; r++)
+            {
+                bool result = false;
+                DataRow dr = dt.NewRow();
+                //获取当前行
+                Row row = cells.GetRow(r);
+                //读取每列
+                for (int j = 0; j < cells.MaxDataColumn+1; j++)
+                {
+                    Cell cell = row.GetCellOrNull(j); //一个单元格
+                    if (cell != null)
+                    {
+                        if (cell.IsMerged && r > 1)  //检测列的单元格是否合并
+                        {
+                            dr[j] = dt.Rows[r - 2][j];
+                        }
+                        else
+                        {
+                            dr[j] = cell.StringValue.ToString(); //获取单元格的值
+
+                            if (string.IsNullOrWhiteSpace(dr[j].ToString()) && j > 0)
+                            {
+                                dr[j] = dr[j - 1];
+                            }
+                        }
+                        if (dr[j].ToString() != "")//全为空则不取
+                        {
+                            result = true;
+                        }
+                    }
+                    else {
+                        dr[j] = "";
+                    }
+                }
+                if (result == true)
+                {
+                    dt.Rows.Add(dr); //把每行追加到DataTable
+                }
+            }
+            return dt;
+        }
+
+
+
+
+        /// <summary>
+        /// DataTable分组
+        /// </summary>
+        /// <param name="source">数据源（要拆分的数据）类型转换</param>
+        /// <param name="destination">分组结果</param>
+        /// <param name="groupByFields">分组条件</param>
+        /// <param name="fieldIndex">条件个数</param>
+        /// <param name="schema">数据源（要拆分的数据）</param>
+        public static void GroupDataRows(IEnumerable<DataRow> source, List<DataTable> destination, string[] groupByFields, int fieldIndex, DataTable schema)
+        {
+            if (fieldIndex >= groupByFields.Length || fieldIndex < 0)
+            {
+                DataTable dt = schema.Clone();
+                foreach (DataRow row in source)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr.ItemArray = row.ItemArray;
+                    dt.Rows.Add(dr);
+                }
+                destination.Add(dt);
+                return;
+            }
+
+            var results = source.GroupBy(o => o[groupByFields[fieldIndex]]);
+            foreach (var rows in results)
+            {
+                GroupDataRows(rows, destination, groupByFields, fieldIndex + 1, schema);
+            }
+            fieldIndex++;
+        }
+
+        #region 测试数据
+
+        /// <summary>
+        /// 数据源表结构
+        /// </summary>
+        /// <returns></returns>
+        private static DataTable CreateTb()
+        {
+            DataTable tb = new DataTable();
+            tb.Columns.Add("UUID");
+            tb.Columns.Add("PARENT_UUID");
+            tb.Columns.Add("MASTER_DESC1");
+            tb.Columns.Add("MASTER_DESC2");
+            tb.Columns.Add("SUB_DESC1");
+            tb.Columns.Add("SUB_DESC2");
+            tb.Columns.Add("SUB_DESC3");
+            return tb;
+        }
+
+        /// <summary>
+        /// 拆分后主表数据结构
+        /// </summary>
+        /// <returns></returns>
+        private static DataTable CreateParentTb()
+        {
+            DataTable tb = new DataTable();
+            tb.Columns.Add("UUID");
+            tb.Columns.Add("PARENT_UUID");
+            tb.Columns.Add("MASTER_DESC1");
+            tb.Columns.Add("MASTER_DESC2");
+            return tb;
+        }
+
+        /// <summary>
+        /// 拆分后子表结构
+        /// </summary>
+        /// <returns></returns>
+        private static DataTable CreateSupTb()
+        {
+            DataTable tb = new DataTable();
+            tb.Columns.Add("UUID");
+            tb.Columns.Add("PARENT_UUID");
+            tb.Columns.Add("SUB_DESC1");
+            tb.Columns.Add("SUB_DESC2");
+            tb.Columns.Add("SUB_DESC3");
+            return tb;
+        }
+
+        /// <summary>
+        /// 数据源（待拆分的数据）
+        /// </summary>
+        /// <returns></returns>
+        private static DataTable retDt()
+        {
+            DataTable dt = CreateTb();
+            DataRow row = null;
+            for (int i = 0; i < 7; i++)
+            {
+                int j = 0;
+                if (i % 2 == 0)//PARENT_UUID 的值，按PARENT_UUIDsss1、PARENT_UUIDsss2分组
+                    j = 0;
+                else
+                    j = 1;
+                row = dt.NewRow();
+                row["UUID"] = System.Guid.NewGuid().ToString();
+                row["PARENT_UUID"] = "PARENT_UUID_ " + j.ToString();
+                row["MASTER_DESC1"] = "MASTER_DESC1_ " + i.ToString();
+                row["MASTER_DESC2"] = "MASTER_DESC2_ " + i.ToString();
+                row["SUB_DESC1"] = "SUB_DESC1_ " + i.ToString();
+                row["SUB_DESC2"] = "SUB_DESC2_ " + i.ToString();
+                row["SUB_DESC3"] = "SUB_DESC3_ " + i.ToString();
+                dt.Rows.Add(row);
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// 测试
+        /// </summary>
+        /// <param name="marstData">返回主表</param>
+        /// <param name="subData">返回子表</param>
+        /// <param name="mesg">返回信息</param>
+        public  static void SeparateDt(ref DataTable marstData, ref DataTable subData, out string mesg)
+        {
+            mesg = string.Empty;
+            DataTable sourceData = retDt().Copy();
+            DataTable parentDt = CreateParentTb();
+            DataTable subDt = CreateSupTb();
+            string parentUuid = string.Empty;
+            string subUuid = string.Empty;
+
+            try
+            {
+                #region 方法
+                DataTable source = new DataTable();
+                string[] fileds = new string[] { "PARENT_UUID" }; // 分组条件
+                List<DataTable> grouped = new List<DataTable>(); // 存储分组结果
+                source = sourceData;
+                GroupDataRows(source.Rows.Cast<DataRow>(), grouped, fileds, 0, source);
+
+                string mesga = string.Empty;
+                // 输出分组
+                foreach (DataTable dt in grouped)
+                {
+                    int i = 0;
+                    //处理主表数据
+                    DataRow parentRow = parentDt.NewRow();
+                    parentUuid = System.Guid.NewGuid().ToString();
+                    parentRow["UUID"] = parentUuid;
+                    parentRow["PARENT_UUID"] = dt.Rows[i]["PARENT_UUID"].ToString();
+                    parentRow["MASTER_DESC1"] = dt.Rows[i]["MASTER_DESC1"].ToString();
+                    parentRow["MASTER_DESC2"] = dt.Rows[i]["MASTER_DESC2"].ToString();
+
+                    parentDt.Rows.Add(parentRow);
+                    //处理子表数据
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        DataRow subRow = subDt.NewRow();
+                        subUuid = System.Guid.NewGuid().ToString();
+
+                        subRow["UUID"] = subUuid;
+                        subRow["PARENT_UUID"] = parentUuid;
+                        subRow["SUB_DESC1"] = row["SUB_DESC1"].ToString();
+                        subRow["SUB_DESC2"] = row["SUB_DESC2"].ToString(); ;
+                        subRow["SUB_DESC3"] = row["SUB_DESC3"].ToString(); ;
+                        subDt.Rows.Add(subRow);
+                    }
+                }
+                #endregion
+                marstData = parentDt.Copy();
+                subData = subDt.Copy();
+            }
+            catch (Exception ex)
+            {
+                mesg = "程序有问题：" + ex.Message;
+            }
+        }
+        #endregion
+
     }
 }
+    

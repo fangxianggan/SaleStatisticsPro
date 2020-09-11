@@ -52,7 +52,11 @@ namespace FXKJ.Infrastructure.Log
             if (request != null)
             {
                 log.Url = request.Url.AbsoluteUri;
-                log.UrlReferrer = request.UrlReferrer.AbsoluteUri.ToString();
+                if (request.UrlReferrer != null)
+                {
+                    log.UrlReferrer = request.UrlReferrer.AbsoluteUri.ToString();
+                }
+
             }
 
 

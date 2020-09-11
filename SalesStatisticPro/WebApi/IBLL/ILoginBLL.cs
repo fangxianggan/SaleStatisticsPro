@@ -3,7 +3,7 @@ using EntitiesModels.HttpResponse;
 
 namespace WebApi.IBLL
 {
-    public  partial interface ILoginBLL
+    public   interface ILoginBLL
     {
         /// <summary>
         /// 登录验证

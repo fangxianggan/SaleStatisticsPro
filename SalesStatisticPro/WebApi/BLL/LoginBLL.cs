@@ -22,7 +22,7 @@ namespace WebApi.BLL
     /// <summary>
     /// 
     /// </summary>
-    public partial class LoginBLL : ILoginBLL
+    public  class LoginBLL : ILoginBLL
     {
        
         private readonly IEFRepository<MerchantInfo> _merchantInfoEFRepository;
@@ -83,6 +83,7 @@ namespace WebApi.BLL
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
+             
                 var ent = _merchantInfoEFRepository.GetEntity(p => p.MerchantPhone == loginRequest.UserName);
                 stopwatch.Stop();
                 var ss1 = stopwatch.Elapsed.TotalSeconds;

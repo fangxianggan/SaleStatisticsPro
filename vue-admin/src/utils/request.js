@@ -9,7 +9,7 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   withCredentials: false, // send cookies when cross-domain requests
-  timeout: 5000, // request timeout
+  timeout: 30000, // request timeout
   responseType: 'json',
   headers: {
     'content-type': 'application/x-www-form-urlencoded;charset=UTF-8'   //转换为key=value的格式必须增加content-type
